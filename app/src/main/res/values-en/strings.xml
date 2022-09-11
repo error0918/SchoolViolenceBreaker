@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">School Violence Breaker</string>
+    <string name="app_explanation">TODO</string>
+
+    <string name="main_subtitle">School Violence Breaker - 20616 Jeong Taeyeon</string>
+
+    <string name="report">Report</string>
+
+    <string name="svinfo">Information</string>
+    <string name="solution">Solution</string>
+    <string name="helpful">Helpful Site</string>
+
+    <string name="refresh">Refresh</string>
+    <string name="edit">Edit</string>
+    <string name="edit_rules">
+        Editing Rules\n
+        1. It must be a number in the correct form.\n
+        2. The range of the number is %1$s. %2$s\n
+        3. If the number does not match the rules, it is automatically changed to the initial value(%3$s).
+    </string>
+    <string name="edit_rules_settings">
+        Editing Rules\n
+        1. It must be a number in the correct form.\n
+        2. The range of the number is %1$s\n
+    </string>
+    <string name="number_can_go_out_of_bounds_message">May be bigger than the end value of the range.</string>
+    <string name="error_message">Error Message: %1$s</string>
+    <string name="edit_too_small_error_message">The number is too small.</string>
+    <string name="edit_too_big_error_message">The number is too small.</string>
+    <string name="edit_for_input_string_error_message">The number is too large.</string>
+    <string name="edit_multiple_points_error_message">There are multiple points.</string>
+    <string name="edit_empty_string_error_message">Empty value.</string>
+    <string name="edit_message">Please enter the value to be edited.</string>
+
+    <string name="value_error">Value Error</string>
+    <string name="value_error_message">
+        There is a problem with the value. (%1$s)\n
+        Do you want to change to the initial value(%2$s)?
+    </string>
+    <string name="value_error_message_settings">
+        There is a problem with the value. (%1$s)
+    </string>
+    <string name="value_reedit">Value Re-edit</string>
+
+    <string name="dismiss">Dismiss</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="settings_restart_message">It works fine after restarting the app.</string>
+
+    <string name="settings_preview_title">Preview</string>
+    <string name="settings_preview_refresh">Refresh</string>
+    <string name="settings_preview_image">IMAGE</string>
+    <string name="settings_preview_image_description">Image Description</string>
+    <string name="settings_preview_edit">Edit</string>
+    <string name="settings_preview_add">Add</string>
+    <string name="settings_preview_tab_image">Image</string>
+    <string name="settings_preview_tab_file">File</string>
+    <string name="settings_preview_tab_account">Account</string>
+
+    <string name="settings_title_theme">Theme</string>
+    <string name="settings_title_dark_mode">Dark Mode</string>
+    <string name="settings_title_dark_mode_light_mode">Light Mode</string>
+    <string name="settings_title_dark_mode_dark_mode">Dark Mode</string>
+    <string name="settings_title_dark_mode_system_settings">System Settings</string>
+    <string name="settings_title_fullscreen_mode">Fullscreen</string>
+    <string name="settings_title_screen_always_on">Screen Always On</string>
+    <string name="settings_title_color">Color</string>
+    <string name="settings_title_color_default_mode">Default Mode</string>
+    <string name="settings_title_color_dynamic_mode">Dynamic Mode</string>
+
+    <string name="settings_title_about_solve_problem">Solve Problem</string>
+    <string name="settings_title_restart_app">Restart App</string>
+    <string name="settings_title_initialize_app">Initialize App</string>
+    <string name="settings_title_initialize_app_restart">App Restart</string>
+
+    <string name="settings_title_about_application">About App</string>
+    <string name="settings_title_system_settings">System Settings</string>
+
+    <string name="license">License</string>
+
+    <string name="show_full">Show Full License</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string name="info">Application Info</string>
+
+    <string name="info_name">Application Name</string>
+    <string name="info_package">Application Package</string>
+    <string name="info_version_name">Application Version</string>
+    <string name="info_version_code">Application Version Code</string>
+    <string name="info_maker">Application Maker</string>
+    <string name="info_explanation">Application Explanation</string>
+
+    <string name="load_data_message">Data has been loaded.</string>
+
+    <string name="error_happen">Error Happen (%1$s)</string>
+    <string name="copy_toast_message">%1$s copied</string>
+    <string name="copy_toast_message_with_label">%2$s copied to %1$s</string>
+</resources>
