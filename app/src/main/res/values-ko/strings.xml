@@ -52,6 +52,13 @@
 
     <string name="settings_restart_message">앱 재시작 후 정상 작동합니다.</string>
 
+    <string name="settings_title_general">일반</string>
+    <string name="settings_title_show_tip">팁 보여주기</string>
+    <string name="settings_title_shake_to_report">흔들어 신고하기</string>
+    <string name="settings_title_shake_time">흔드는 횟수</string>
+    <string name="settings_title_wait_time">신고 대기 시간</string>
+    <string name="settings_title_report_double_check">신고 재확인</string>
+
     <string name="settings_preview_title">미리보기</string>
     <string name="settings_preview_refresh">새로고침</string>
     <string name="settings_preview_image">이미지</string>
@@ -77,6 +84,7 @@
     <string name="settings_title_restart_app">앱 재시작</string>
     <string name="settings_title_initialize_app">앱 초기화</string>
     <string name="settings_title_initialize_app_restart">앱 재시작</string>
+
     <string name="settings_title_about_application">앱에 관해서</string>
     <string name="settings_title_system_settings">시스템 설정</string>
 

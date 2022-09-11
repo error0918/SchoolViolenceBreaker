@@ -29,7 +29,13 @@ object Settings {
             FullScreenMode = false,
             ScreenAlwaysOn = false,
             DarkMode = SYSTEM_MODE,
-            DynamicColor = false
+            DynamicColor = false,
+
+            ShowTip = true,
+            ShakeToReport = true,
+            ShakeTime = 3,
+            WaitTime = 5,
+            ReportDoubleCheck = true
         )
         get() {
             return field.clone()
@@ -41,7 +47,12 @@ object Settings {
         FullScreenMode: Boolean = INITIAL_SETTINGS_DATA.FullScreenMode,
         ScreenAlwaysOn: Boolean = INITIAL_SETTINGS_DATA.ScreenAlwaysOn,
         DarkMode: Int = INITIAL_SETTINGS_DATA.DarkMode,
-        DynamicColor: Boolean = INITIAL_SETTINGS_DATA.DynamicColor
+        DynamicColor: Boolean = INITIAL_SETTINGS_DATA.DynamicColor,
+        ShowTip: Boolean = INITIAL_SETTINGS_DATA.ShowTip,
+        ShakeToReport: Boolean = INITIAL_SETTINGS_DATA.ShakeToReport,
+        ShakeTime: Int = INITIAL_SETTINGS_DATA.ShakeTime,
+        WaitTime: Int = INITIAL_SETTINGS_DATA.WaitTime,
+        ReportDoubleCheck: Boolean = INITIAL_SETTINGS_DATA.ReportDoubleCheck
     ) : Cloneable {
         var FullScreenMode: Boolean = false
             set(value) {
@@ -63,6 +74,31 @@ object Settings {
                 field = value
                 saveSettings()
             }
+        var ShowTip: Boolean = true
+            set(value) {
+                field = value
+                saveSettings()
+            }
+        var ShakeToReport: Boolean = true
+            set(value) {
+                field = value
+                saveSettings()
+            }
+        var ShakeTime: Int = 3
+            set(value) {
+                field = value
+                saveSettings()
+            }
+        var WaitTime: Int = 5
+            set(value) {
+                field = value
+                saveSettings()
+            }
+        var ReportDoubleCheck: Boolean = true
+            set(value) {
+                field = value
+                saveSettings()
+            }
 
         init {
             this.FullScreenMode = FullScreenMode
@@ -71,6 +107,11 @@ object Settings {
                 if (DarkMode == SYSTEM_MODE || DarkMode == LIGHT_MODE || DarkMode == DARK_MODE) DarkMode
                 else if (INITIAL_SETTINGS_DATA.DarkMode == SYSTEM_MODE || INITIAL_SETTINGS_DATA.DarkMode == LIGHT_MODE || INITIAL_SETTINGS_DATA.DarkMode == DARK_MODE) INITIAL_SETTINGS_DATA.DarkMode else SYSTEM_MODE
             this.DynamicColor = DynamicColor
+            this.ShowTip = ShowTip
+            this.ShakeToReport = ShakeToReport
+            this.ShakeTime = ShakeTime
+            this.WaitTime = WaitTime
+            this.ReportDoubleCheck = ReportDoubleCheck
         }
 
         public override fun clone(): SettingsData {

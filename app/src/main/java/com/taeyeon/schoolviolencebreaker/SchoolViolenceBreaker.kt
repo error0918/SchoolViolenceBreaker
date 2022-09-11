@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Notifications
@@ -23,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -36,11 +34,11 @@ var fullScreenMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.FullScreenMo
 var screenAlwaysOn by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ScreenAlwaysOn)
 var darkMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.DarkMode)
 var dynamicColor by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.DynamicColor)
-var showTip by mutableStateOf(true) //TODO
-var shakeToReport by mutableStateOf(true)
-var shakeTime by mutableStateOf(3)
-var waitTime by mutableStateOf(5)
-var reportDoubleCheck by mutableStateOf(true)
+var showTip by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShowTip)
+var shakeToReport by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeToReport)
+var shakeTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeTime)
+var waitTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.WaitTime)
+var reportDoubleCheck by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ReportDoubleCheck)
 
 var isReporting by mutableStateOf(false)
 
@@ -51,6 +49,11 @@ fun load() {
     screenAlwaysOn = Settings.settingsData.ScreenAlwaysOn
     darkMode = Settings.settingsData.DarkMode
     dynamicColor = Settings.settingsData.DynamicColor
+    showTip = Settings.settingsData.ShowTip
+    shakeToReport = Settings.settingsData.ShakeToReport
+    shakeTime = Settings.settingsData.ShakeTime
+    waitTime = Settings.settingsData.WaitTime
+    reportDoubleCheck = Settings.settingsData.ReportDoubleCheck
 }
 
 fun save() {
@@ -58,6 +61,11 @@ fun save() {
     Settings.settingsData.ScreenAlwaysOn = screenAlwaysOn
     Settings.settingsData.DarkMode = darkMode
     Settings.settingsData.DynamicColor = dynamicColor
+    Settings.settingsData.ShowTip = showTip
+    Settings.settingsData.ShakeToReport = shakeToReport
+    Settings.settingsData.ShakeTime = shakeTime
+    Settings.settingsData.WaitTime = waitTime
+    Settings.settingsData.ReportDoubleCheck = reportDoubleCheck
 
     Settings.saveSettings()
 }
@@ -168,11 +176,6 @@ fun wait(coroutineScope: CoroutineScope, remainingTime: MutableState<Int>) {
 }
 
 object Report {
-
-    @Composable
-    fun a() {
-        //
-    }
 
     private fun call(phone: String) {
         // TODO
@@ -335,7 +338,7 @@ object MyView {
                 )
 
                 if (hasAction) {
-                    androidx.compose.material3.TextButton(
+                    TextButton(
                         onClick = onActionButtonClick!!,
                         modifier = Modifier
                             .fillMaxWidth()

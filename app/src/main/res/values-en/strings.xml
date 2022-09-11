@@ -53,6 +53,13 @@
 
     <string name="settings_restart_message">It works fine after restarting the app.</string>
 
+    <string name="settings_title_general">General</string>
+    <string name="settings_title_show_tip">Show Tip</string>
+    <string name="settings_title_shake_to_report">Shake To Report</string>
+    <string name="settings_title_shake_time">Shake Time</string>
+    <string name="settings_title_wait_time">Report Wait Time</string>
+    <string name="settings_title_report_double_check">Report Double Check</string>
+
     <string name="settings_preview_title">Preview</string>
     <string name="settings_preview_refresh">Refresh</string>
     <string name="settings_preview_image">IMAGE</string>

@@ -176,6 +176,64 @@ object Settings {
         ) {
             val settingsUnits = listOf(
                 SettingsUnit.SettingsUnit(
+                    title = stringResource(id = R.string.settings_title_general),
+                    settingsComposable = listOf(
+                        {
+                            SettingsUnit.SwitchUnit(
+                                title = stringResource(id = R.string.settings_title_show_tip),
+                                checked = showTip,
+                                onCheckedChange = { checked ->
+                                    showTip = checked
+                                    save()
+                                }
+                            )
+                        },
+                        {
+                            SettingsUnit.SwitchUnit(
+                                title = stringResource(id = R.string.settings_title_shake_to_report),
+                                checked = shakeToReport,
+                                onCheckedChange = { checked ->
+                                    shakeToReport = checked
+                                    save()
+                                }
+                            )
+                        },
+                        {
+                            SettingsUnit.EditIntUnit(
+                                title = stringResource(id = R.string.settings_title_shake_time),
+                                value = shakeTime,
+                                valueRange = 2..10,
+                                onValueChange = { value ->
+                                    shakeTime = value
+                                    save()
+                                }
+                            )
+                        },
+                        {
+                            SettingsUnit.EditIntUnit(
+                                title = stringResource(id = R.string.settings_title_wait_time),
+                                value = waitTime,
+                                valueRange = 5..60,
+                                onValueChange = { value ->
+                                    waitTime = value
+                                    save()
+                                }
+                            )
+                        },
+                        {
+                            SettingsUnit.SwitchUnit(
+                                title = stringResource(id = R.string.settings_title_report_double_check),
+                                checked = reportDoubleCheck,
+                                onCheckedChange = { checked ->
+                                    reportDoubleCheck = checked
+                                    save()
+                                }
+                            )
+                        }
+                    )
+                ),
+
+                SettingsUnit.SettingsUnit(
                     title = stringResource(id = R.string.settings_title_theme),
                     settingsComposable = arrayListOf<@Composable () -> Unit>(
                         {
