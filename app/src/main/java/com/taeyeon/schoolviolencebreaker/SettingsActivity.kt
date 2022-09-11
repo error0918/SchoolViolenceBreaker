@@ -1,9 +1,8 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class,
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class
+@file:OptIn(
+    ExperimentalComposeUiApi::class,
+    ExperimentalMaterial3Api::class
 )
-@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED", "EXPERIMENTAL_IS_NOT_ENABLED",
-    "EXPERIMENTAL_IS_NOT_ENABLED"
-)
+@file:Suppress("OPT_IN_IS_NOT_ENABLED", "OPT_IN_IS_NOT_ENABLED")
 
 package com.taeyeon.schoolviolencebreaker
 
@@ -103,6 +102,7 @@ object Settings {
     private lateinit var scope: CoroutineScope
     val snackbarHostState = SnackbarHostState()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Settings() {
         scope = rememberCoroutineScope()
