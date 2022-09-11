@@ -120,6 +120,15 @@ object Helpful {
                 link = "https://www.cyber1388.kr:447"
             ),
             Helpful(
+                imageBitmap = getImageFromWeb("https://www.law.go.kr/LSW/images/common/poplogo.gif"),
+                imageBitmapBackground = Color(0xFF328DDF),
+                title = "학교폭력예방 및 대책에 관한 법률",
+                description = """
+                     법제처 국가법력정보센터 학교폭력예방 및 대책에 관한 법률 (약칭 학교폭력예방법)
+                """.trimIndent(),
+                link = "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%ED%95%99%EA%B5%90%ED%8F%AD%EB%A0%A5%EC%98%88%EB%B0%A9%EB%B0%8F%EB%8C%80%EC%B1%85%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0"
+            ),
+            Helpful(
                 imageBitmap = getImageFromWeb("https://www.edunet.net/nedu/images/common_c/edunet_newlogo.png"),
                 imageBitmapBackground = Color.White,
                 title = "에듀넷·티-클리어",
