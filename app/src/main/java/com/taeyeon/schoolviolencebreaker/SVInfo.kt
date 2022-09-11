@@ -7,15 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.imageResource
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
+import java.util.*
 
 object SVInfo {
 
@@ -32,23 +30,28 @@ object SVInfo {
         ) {
             var showingTip by rememberSaveable { mutableStateOf(showTip) }
 
-            if (showingTip) {
-                Tip(
-                    tip = "asfddfsa",
-                    tipImageDescription = "",
-                    title = "adsf",
-                    message = "adfs".repeat(10),
+            val tipInformation = listOf(
+                MyView.TipInformation(
+                    title = "알고 계셨나요?",
+                    message = "학교 폭력은 진짜 나쁘답니다!",
                     onCloseButtonClick = {
                         showingTip = false
                     },
-                    closeImageDescription = "daf",
-                    imageBitmap = ImageBitmap.imageResource(id = R.drawable.ic_launcher_round),
-                    imageBitmapDescription = "",
-                    actionButtonTitle = "sasdfA",
-                    onActionButtonClick = {
-                        Utils.toast("adsf")
-                    }
+                    closeImageDescription = "닫기"
+                ),
+                MyView.TipInformation(
+                    title = "알고 계셨나요?",
+                    message = "학교 폭력 멈춰!",
+                    onCloseButtonClick = {
+                        showingTip = false
+                    },
+                    closeImageDescription = "닫기"
                 )
+            )
+
+            if (showingTip) {
+                val tipIndex by rememberSaveable { mutableStateOf(Random().nextInt(tipInformation.size)) }
+                Tip(tipInformation[tipIndex])
             }
 
             Text(
@@ -58,15 +61,4 @@ object SVInfo {
         }
     }
 
-}
-
-@Preview(
-    name = "SVInfo",
-    showBackground = true,
-    uiMode = UI_MODE_NIGHT_YES,
-    device = Devices.PIXEL_4_XL
-)
-@Composable
-fun SVInfoPreview() {
-    SVInfo.SVInfo()
 }

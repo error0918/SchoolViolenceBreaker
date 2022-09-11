@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -181,6 +182,37 @@ object Report {
 
 object MyView {
 
+    data class TipInformation(
+        val tip: String = Core.getContext().resources.getString(R.string.tip),
+        val tipImageDescription: String = tip,
+        val title: String,
+        val message: String,
+        val closeImageDescription: String? = null,
+        val onCloseButtonClick: (() -> Unit)? = null,
+        val imageBitmap: ImageBitmap? = null,
+        val imageBitmapDescription: String? = null,
+        val actionButtonTitle: String? = null,
+        val onActionButtonClick: (() -> Unit)? = null,
+        val modifier: Modifier = Modifier
+    )
+
+    @Composable
+    fun Tip(tipInformation: TipInformation) {
+        Tip(
+            tip = tipInformation.tip,
+            tipImageDescription = tipInformation.tipImageDescription,
+            title = tipInformation.title,
+            message = tipInformation.message,
+            closeImageDescription = tipInformation.closeImageDescription,
+            onCloseButtonClick = tipInformation.onCloseButtonClick,
+            imageBitmap = tipInformation.imageBitmap,
+            imageBitmapDescription = tipInformation.imageBitmapDescription,
+            actionButtonTitle = tipInformation.actionButtonTitle,
+            onActionButtonClick = tipInformation.onActionButtonClick,
+            modifier = tipInformation.modifier
+        )
+    }
+
     @SuppressLint("ModifierParameter")
     @Composable
     fun Tip(
@@ -188,8 +220,8 @@ object MyView {
         tipImageDescription: String? = null,
         title: String,
         message: String,
-        onCloseButtonClick: (() -> Unit)? = null,
         closeImageDescription: String? = null,
+        onCloseButtonClick: (() -> Unit)? = null,
         imageBitmap: ImageBitmap? = null,
         imageBitmapDescription: String? = null,
         actionButtonTitle: String? = null,
@@ -197,7 +229,7 @@ object MyView {
         modifier: Modifier = Modifier
     ) {
         val hasCloseButton = onCloseButtonClick != null
-        val hasImage = imageBitmap != null && imageBitmapDescription != null
+        val hasImage = imageBitmap != null
         val hasAction = actionButtonTitle != null && onActionButtonClick != null
 
         Card(
