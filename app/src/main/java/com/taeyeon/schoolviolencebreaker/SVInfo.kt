@@ -1,5 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED")
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:Suppress("EXPERIMENTAL_IS_NOT_ENABLED", "OPT_IN_IS_NOT_ENABLED")
 
 package com.taeyeon.schoolviolencebreaker
 
@@ -59,7 +59,7 @@ object SVInfo {
             )
             Text(
                 modifier = Modifier.fillMaxSize(),
-                text = "정태연".repeat(100)
+                text = "정태연 ".repeat(100)
             )
         }
     }
