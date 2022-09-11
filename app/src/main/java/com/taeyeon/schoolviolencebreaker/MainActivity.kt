@@ -36,6 +36,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.pager.*
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
+import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.ui.theme.Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -90,6 +91,7 @@ class MainActivity : ComponentActivity() {
                                 shakeTime = currentTime
                                 if (++shake >= shakeTime) {
                                     if (shakeToReport) {
+                                        Utils.vibrate(50)
                                         isReporting = true
                                     }
                                     shake = 0
@@ -130,8 +132,8 @@ object Main {
     private val data by lazy {
         listOf(
             Data(Icons.Filled.Info, Icons.Outlined.Info, Core.getContext().getString(R.string.svinfo)) { paddingValues -> SVInfo.SVInfo(paddingValues) },
-            Data(Icons.Filled.ReportProblem, Icons.Outlined.ReportProblem, Core.getContext().getString(R.string.svinfo)) { paddingValues -> Solution.Solution(paddingValues) },
-            Data(Icons.Filled.Help, Icons.Outlined.HelpOutline, Core.getContext().getString(R.string.svinfo)) { paddingValues -> Helpful.Helpful(paddingValues) },
+            Data(Icons.Filled.ReportProblem, Icons.Outlined.ReportProblem, Core.getContext().getString(R.string.solution)) { paddingValues -> Solution.Solution(paddingValues) },
+            Data(Icons.Filled.Help, Icons.Outlined.HelpOutline, Core.getContext().getString(R.string.helpful)) { paddingValues -> Helpful.Helpful(paddingValues) },
         )
     }
 

@@ -242,8 +242,8 @@ object MyView {
                     .height(IntrinsicSize.Min)
             )
         ) {
-            var cornerRadius: Dp = 0.dp
-            MaterialTheme.shapes.medium.let {
+            val cornerRadius = MaterialTheme.shapes.medium.let {
+                var cornerRadius: Dp = 0.dp
                 val size = Size.Unspecified
                 with(LocalDensity.current) {
                     val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
@@ -251,6 +251,7 @@ object MyView {
                         cornerRadius += corner.toPx(size, this).toDp() / corners.size
                     }
                 }
+                cornerRadius
             }
             val tipIconSize = MaterialTheme.typography.labelSmall.fontSize.value.dp
 
@@ -259,7 +260,7 @@ object MyView {
                     .fillMaxSize()
                     .padding(cornerRadius)
             ) {
-                val (closeIconButton, tipIcon, tipText, titleText, text, image, actionButton) = createRefs()
+                val (closeIconButton, tipIcon, tipText, titleText, messageText, image, actionButton) = createRefs()
 
                 if (hasCloseButton) {
                     IconButton(
@@ -331,7 +332,7 @@ object MyView {
                     text = message,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
-                        .constrainAs(text) {
+                        .constrainAs(messageText) {
                             top.linkTo(if (hasImage) image.bottom else titleText.bottom, margin = 10.dp)
                             start.linkTo(parent.start)
                         }
@@ -344,7 +345,7 @@ object MyView {
                             .fillMaxWidth()
                             .height(20.dp)
                             .constrainAs(actionButton) {
-                                top.linkTo(text.bottom, margin = 10.dp)
+                                top.linkTo(messageText.bottom, margin = 10.dp)
                                 start.linkTo(parent.start)
                                 end.linkTo(parent.end)
                             },

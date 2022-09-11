@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
 package com.taeyeon.schoolviolencebreaker
@@ -125,7 +125,7 @@ object License {
             link = license.link
         )
     }
-    //TODO
+
     @Composable
     fun LicenseViewer(
         title: String,

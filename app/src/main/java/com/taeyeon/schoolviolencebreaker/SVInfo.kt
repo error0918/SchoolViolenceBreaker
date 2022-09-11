@@ -25,7 +25,12 @@ object SVInfo {
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            var showTip by rememberSaveable { mutableStateOf(showTip) }
             var showingTip by rememberSaveable { mutableStateOf(showTip) }
+            if (showTip != com.taeyeon.schoolviolencebreaker.showTip) {
+                showingTip = com.taeyeon.schoolviolencebreaker.showTip
+                showTip = com.taeyeon.schoolviolencebreaker.showTip
+            }
 
             val tipInformation = listOf(
                 MyView.TipInformation(
