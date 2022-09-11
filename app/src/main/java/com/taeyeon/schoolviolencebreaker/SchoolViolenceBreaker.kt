@@ -1,24 +1,32 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+
 package com.taeyeon.schoolviolencebreaker
 
+import android.annotation.SuppressLint
 import android.graphics.Point
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
 import kotlinx.coroutines.*
@@ -27,7 +35,8 @@ var fullScreenMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.FullScreenMo
 var screenAlwaysOn by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ScreenAlwaysOn)
 var darkMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.DarkMode)
 var dynamicColor by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.DynamicColor)
-var shakeToReport by mutableStateOf(true) //TODO
+var showTip by mutableStateOf(true) //TODO
+var shakeToReport by mutableStateOf(true)
 var shakeTime by mutableStateOf(3)
 var waitTime by mutableStateOf(5)
 var reportDoubleCheck by mutableStateOf(true)
@@ -166,6 +175,152 @@ object Report {
 
     private fun call(phone: String) {
         // TODO
+    }
+
+}
+
+object MyView {
+
+    @SuppressLint("ModifierParameter")
+    @Composable
+    fun Tip(
+        tip: String,
+        tipImageDescription: String? = null,
+        title: String,
+        message: String,
+        onCloseButtonClick: (() -> Unit)? = null,
+        closeImageDescription: String? = null,
+        imageBitmap: ImageBitmap? = null,
+        imageBitmapDescription: String? = null,
+        actionButtonTitle: String? = null,
+        onActionButtonClick: (() -> Unit)? = null,
+        modifier: Modifier = Modifier
+    ) {
+        val hasCloseButton = onCloseButtonClick != null
+        val hasImage = imageBitmap != null && imageBitmapDescription != null
+        val hasAction = actionButtonTitle != null && onActionButtonClick != null
+
+        Card(
+            modifier = modifier.then(
+                Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min)
+            )
+        ) {
+            var cornerRadius: Dp = 0.dp
+            MaterialTheme.shapes.medium.let {
+                val size = Size.Unspecified
+                with(LocalDensity.current) {
+                    val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
+                    corners.forEach { corner ->
+                        cornerRadius += corner.toPx(size, this).toDp() / corners.size
+                    }
+                }
+            }
+            val tipIconSize = MaterialTheme.typography.labelSmall.fontSize.value.dp
+
+            ConstraintLayout(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(cornerRadius)
+            ) {
+                val (closeIconButton, tipIcon, tipText, titleText, text, image, actionButton) = createRefs()
+
+                if (hasCloseButton) {
+                    IconButton(
+                        onClick = onCloseButtonClick!!,
+                        modifier = Modifier
+                            .constrainAs(closeIconButton) {
+                                top.linkTo(parent.top)
+                                end.linkTo(parent.end)
+                            }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = closeImageDescription
+                        )
+                    }
+                }
+
+                Icon(
+                    imageVector = Icons.Filled.Notifications,
+                    contentDescription = tipImageDescription,
+                    modifier = Modifier
+                        .size(tipIconSize)
+                        .constrainAs(tipIcon) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                        }
+                )
+
+                Text(
+                    text = tip,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier
+                        .constrainAs(tipText) {
+                            top.linkTo(tipIcon.top)
+                            bottom.linkTo(tipIcon.bottom)
+                            start.linkTo(tipIcon.end, margin = tipIconSize / 2)
+                        }
+                )
+
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .constrainAs(titleText) {
+                            top.linkTo(tipIcon.bottom, margin = 10.dp)
+                            start.linkTo(parent.start)
+                        }
+                )
+
+                if (hasImage) {
+                    Image(
+                        bitmap = imageBitmap!!,
+                        contentDescription = imageBitmapDescription,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .constrainAs(image) {
+                                top.linkTo(titleText.bottom, margin = 10.dp)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                            .background(
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                                shape = MaterialTheme.shapes.medium
+                            )
+                    )
+                }
+
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .constrainAs(text) {
+                            top.linkTo(if (hasImage) image.bottom else titleText.bottom, margin = 10.dp)
+                            start.linkTo(parent.start)
+                        }
+                )
+
+                if (hasAction) {
+                    androidx.compose.material3.TextButton(
+                        onClick = onActionButtonClick!!,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(20.dp)
+                            .constrainAs(actionButton) {
+                                top.linkTo(text.bottom, margin = 10.dp)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            },
+                        contentPadding = PaddingValues()
+                    ) {
+                        Text(text = actionButtonTitle!!)
+                    }
+                }
+
+            }
+        }
     }
 
 }
