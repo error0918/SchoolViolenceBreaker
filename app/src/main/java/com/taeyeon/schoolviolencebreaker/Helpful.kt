@@ -5,10 +5,7 @@ package com.taeyeon.schoolviolencebreaker
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.drawable.VectorDrawable
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,7 +26,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -38,13 +34,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import com.taeyeon.core.Core
-import com.taeyeon.core.Utils
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.net.HttpURLConnection
 import java.net.URL
 
 object Helpful {
@@ -58,14 +48,6 @@ object Helpful {
     )
 
     private val helpfulList by lazy {
-        val drawableToImageBitmap = { id: Int ->
-            val drawable = ContextCompat.getDrawable(Core.getContext(), id)
-            val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            bitmap.asImageBitmap()
-        }
         val getImageFromWeb = { link: String ->
             var imageBitmap: ImageBitmap? = null
             val thread = Thread {
@@ -78,14 +60,6 @@ object Helpful {
             imageBitmap!!
         }
 
-        val todo = Helpful(
-            imageBitmap = drawableToImageBitmap(R.drawable.ic_launcher_round),
-            title = "a",
-            description = """
-                asdasd
-            """.trimIndent(),
-            link = "https://naver.com/"
-        )
         listOf(
             Helpful(
                 imageBitmap = getImageFromWeb("https://www.moe.go.kr/img/2021Renewal/content/mi_2_1.png"),
