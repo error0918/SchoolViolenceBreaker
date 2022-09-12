@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Base64
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,8 +20,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.SharedPreferencesManager
+import java.io.ByteArrayOutputStream
 import java.net.URL
 
 object Helpful {
@@ -62,17 +62,33 @@ object Helpful {
             bitmap!!
         }
 
-        val sharedPreferencesManagerName = "LINK_IMAGE"
-        val sharedPreferencesManager = SharedPreferencesManager(sharedPreferencesManagerName)
         val getImage = { link: String ->
-            val defaultBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            val getStringFromBitmap = { bitmap: Bitmap ->
+                val byteArrayBitmapStream = ByteArrayOutputStream()
+                bitmap.compress(
+                    Bitmap.CompressFormat.PNG, 100,
+                    byteArrayBitmapStream
+                )
+                val b = byteArrayBitmapStream.toByteArray()
+                Base64.encodeToString(b, Base64.DEFAULT)
+            }
+
+            val getBitmapFromString = { string: String ->
+                val decodedString = Base64.decode(string, Base64.DEFAULT)
+                BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+            }
+
+            val sharedPreferencesManagerName = "LINK_IMAGE"
+            val sharedPreferencesManager = SharedPreferencesManager(sharedPreferencesManagerName)
+
+            val defaultBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
             var bitmap = defaultBitmap
             if (sharedPreferencesManager.contains(link)) {
-                bitmap = sharedPreferencesManager.getAny(link, Bitmap::class.java, defaultBitmap)
+                bitmap = getBitmapFromString(sharedPreferencesManager.getString(link, getStringFromBitmap(defaultBitmap)))
             }
             if (!sharedPreferencesManager.contains(link) || bitmap == defaultBitmap) {
                 bitmap = getImageFromWeb(link)
-                sharedPreferencesManager.putAny(link, bitmap)
+                sharedPreferencesManager.putString(link, getStringFromBitmap(bitmap))
             }
             bitmap.asImageBitmap()
         }
