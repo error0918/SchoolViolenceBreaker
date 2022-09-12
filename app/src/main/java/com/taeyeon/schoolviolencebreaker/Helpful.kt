@@ -5,9 +5,9 @@ package com.taeyeon.schoolviolencebreaker
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.util.TypedValue
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -37,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
+import com.taeyeon.core.SharedPreferencesManager
 import java.net.URL
 
 object Helpful {
@@ -49,22 +49,37 @@ object Helpful {
         val link: String,
     )
 
-    private val helpfulList by lazy {
+    val helpfulList by lazy {
         val getImageFromWeb = { link: String ->
-            var imageBitmap: ImageBitmap? = null
+            var bitmap: Bitmap? = null
             val thread = Thread {
-                imageBitmap = BitmapFactory.decodeStream(
+                bitmap = BitmapFactory.decodeStream(
                     URL(link).openConnection().inputStream
-                ).asImageBitmap()
+                )
             }
             thread.start()
             thread.join()
-            imageBitmap!!
+            bitmap!!
+        }
+
+        val sharedPreferencesManagerName = "LINK_IMAGE"
+        val sharedPreferencesManager = SharedPreferencesManager(sharedPreferencesManagerName)
+        val getImage = { link: String ->
+            val defaultBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            var bitmap = defaultBitmap
+            if (sharedPreferencesManager.contains(link)) {
+                bitmap = sharedPreferencesManager.getAny(link, Bitmap::class.java, defaultBitmap)
+            }
+            if (!sharedPreferencesManager.contains(link) || bitmap == defaultBitmap) {
+                bitmap = getImageFromWeb(link)
+                sharedPreferencesManager.putAny(link, bitmap)
+            }
+            bitmap.asImageBitmap()
         }
 
         listOf(
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.moe.go.kr/img/2021Renewal/content/mi_2_1.png"),
+                imageBitmap = getImage("https://www.moe.go.kr/img/2021Renewal/content/mi_2_1.png"),
                 imageBitmapBackground = Color.White,
                 title = "교육부",
                 description = """
@@ -73,7 +88,7 @@ object Helpful {
                 link = "https://www.moe.go.kr/main.do?s=moe"
             ),
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.police.go.kr/resources/common/images/sub/txt_kcc.png"),
+                imageBitmap = getImage("https://www.police.go.kr/resources/common/images/sub/txt_kcc.png"),
                 imageBitmapBackground = Color.White,
                 title = "경찰청",
                 description = """
@@ -82,7 +97,7 @@ object Helpful {
                 link = "https://www.police.go.kr/index.do"
             ),
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.kyci.or.kr/userSite/images/common/logo.png"),
+                imageBitmap = getImage("https://www.kyci.or.kr/userSite/images/common/logo.png"),
                 imageBitmapBackground = Color.White,
                 title = "한국청소년상담복지개발원",
                 description = """
@@ -92,7 +107,7 @@ object Helpful {
                 link = "https://www.kyci.or.kr/userSite/index.asp"
             ),
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.safe182.go.kr/static/home/new_images/logo.png"),
+                imageBitmap = getImage("https://www.safe182.go.kr/static/home/new_images/logo.png"),
                 imageBitmapBackground = Color.White,
                 title = "안전Dream",
                 description = """
@@ -102,7 +117,7 @@ object Helpful {
                 link = "https://www.safe182.go.kr/index.do"
             ),
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.btf.or.kr/images/common/logo02.png"),
+                imageBitmap = getImage("https://www.btf.or.kr/images/common/logo02.png"),
                 imageBitmapBackground = Color.White,
                 title = "푸른나무재단",
                 description = """
@@ -113,7 +128,7 @@ object Helpful {
                 link = "https://www.btf.or.kr"
             ),
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.cyber1388.kr:447/images/common/logo_renew.png"),
+                imageBitmap = getImage("https://www.cyber1388.kr:447/images/common/logo_renew.png"),
                 imageBitmapBackground = Color.White,
                 title = "청소년사이버상담센터",
                 description = """
@@ -122,7 +137,7 @@ object Helpful {
                 link = "https://www.cyber1388.kr:447"
             ),
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.law.go.kr/LSW/images/common/poplogo.gif"),
+                imageBitmap = getImage("https://www.law.go.kr/LSW/images/common/poplogo.gif"),
                 imageBitmapBackground = Color(0xFF328DDF),
                 title = "학교폭력예방 및 대책에 관한 법률",
                 description = """
@@ -131,7 +146,7 @@ object Helpful {
                 link = "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%ED%95%99%EA%B5%90%ED%8F%AD%EB%A0%A5%EC%98%88%EB%B0%A9%EB%B0%8F%EB%8C%80%EC%B1%85%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0"
             ),
             Helpful(
-                imageBitmap = getImageFromWeb("https://www.edunet.net/nedu/images/common_c/edunet_newlogo.png"),
+                imageBitmap = getImage("https://www.edunet.net/nedu/images/common_c/edunet_newlogo.png"),
                 imageBitmapBackground = Color.White,
                 title = "에듀넷·티-클리어",
                 description = """

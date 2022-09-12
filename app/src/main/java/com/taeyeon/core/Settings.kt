@@ -121,7 +121,7 @@ object Settings {
     }
 
     fun loadSettings() {
-        settingsData = sharedPreferencesManager.getAny<SettingsData>(SETTINGS_KEY, SettingsData::class.java, INITIAL_SETTINGS_DATA.clone()).clone()
+        settingsData = sharedPreferencesManager.getAny(SETTINGS_KEY, SettingsData::class.java, INITIAL_SETTINGS_DATA.clone()).clone()
     }
 
     fun saveSettings() {
