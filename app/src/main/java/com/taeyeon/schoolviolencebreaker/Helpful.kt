@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class
+)
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
 package com.taeyeon.schoolviolencebreaker
@@ -9,9 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,9 +33,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.SharedPreferencesManager
+import com.taeyeon.core.Utils
 import java.io.ByteArrayOutputStream
 import java.net.URL
 
@@ -214,17 +216,46 @@ object Helpful {
     ) {
         val hasImage = imageBitmap != null
 
+        var showingWorkDialog by remember { mutableStateOf(false) }
+        var showingInfoDialog by remember { mutableStateOf(false) }
+
+        if (showingWorkDialog) {
+            // TODO
+            Dialog(
+                onDismissRequest = { showingWorkDialog = false }
+            ) {
+            }
+        }
+
+        if (showingInfoDialog) {
+            // TODO
+            Dialog(
+                onDismissRequest = { showingInfoDialog = false }
+            ) {
+            }
+        }
+
         Card(
             modifier = modifier.then(
                 Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min)
-                    .clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                        Core
-                            .getActivity()
-                            .startActivity(intent)
-                    }
+                    .combinedClickable(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                            Core
+                                .getActivity()
+                                .startActivity(intent)
+                        },
+                        onLongClick = {
+                            Utils.vibrate(50)
+                            showingWorkDialog = true
+                        },
+                        onDoubleClick = {
+                            Utils.vibrate(50)
+                            showingInfoDialog = true
+                        }
+                    )
             )
         ) {
             val cornerRadius = MaterialTheme.shapes.medium.let {
