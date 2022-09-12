@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -160,7 +162,7 @@ object License {
                         tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .size(
-                                MaterialTheme.typography.labelMedium.fontSize.value.dp
+                                LocalDensity.current.run { MaterialTheme.typography.labelMedium.fontSize.toPx().toDp() }
                                         + ButtonDefaults.TextButtonContentPadding.calculateTopPadding()
                                         + ButtonDefaults.TextButtonContentPadding.calculateBottomPadding()
                             )

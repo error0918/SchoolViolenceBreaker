@@ -7,6 +7,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.TypedValue
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -113,9 +115,9 @@ object Helpful {
             Helpful(
                 imageBitmap = getImageFromWeb("https://www.cyber1388.kr:447/images/common/logo_renew.png"),
                 imageBitmapBackground = Color.White,
-                title = "전청소년사이버상담센터",
+                title = "청소년사이버상담센터",
                 description = """
-                     전청소년사이버상담센터는 지난 10여 년간 수십만 명의 청소년들과 함께 아래와 같이 성장해 왔습니다. 1999년, PC 보급과 인터넷 발전이라는 시대적 상황에 발맞춰 우리나라 사이버상담의 일대 도약의 문을 열게 되었습니다. 2011년, 청소년사이버상담센터의 개소로 보다 많은 청소년들이 이용할 수 있도록 접근성을 높였으며, 최근에는 누리소통망(SNS)의 확산과 비대면 일상생활의 사회적 현상을 고려한 찾아가는 상담(사이버아웃리치)과 카카오톡 및 문자 메시지상담까지 확대 운영하고 있습니다.
+                     청소년사이버상담센터는 지난 10여 년간 수십만 명의 청소년들과 함께 아래와 같이 성장해 왔습니다. 1999년, PC 보급과 인터넷 발전이라는 시대적 상황에 발맞춰 우리나라 사이버상담의 일대 도약의 문을 열게 되었습니다. 2011년, 청소년사이버상담센터의 개소로 보다 많은 청소년들이 이용할 수 있도록 접근성을 높였으며, 최근에는 누리소통망(SNS)의 확산과 비대면 일상생활의 사회적 현상을 고려한 찾아가는 상담(사이버아웃리치)과 카카오톡 및 문자 메시지상담까지 확대 운영하고 있습니다.
                 """.trimIndent(),
                 link = "https://www.cyber1388.kr:447"
             ),
@@ -188,7 +190,9 @@ object Helpful {
                     .height(IntrinsicSize.Min)
                     .clickable {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                        Core.getActivity().startActivity(intent)
+                        Core
+                            .getActivity()
+                            .startActivity(intent)
                     }
             )
         ) {
@@ -219,7 +223,7 @@ object Helpful {
                         contentDescription = imageBitmapDescription,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(with (LocalDensity.current) { imageWidth.toDp() / 3 })
+                            .height(with(LocalDensity.current) { imageWidth.toDp() / 3 })
                             .constrainAs(image) {
                                 top.linkTo(parent.top)
                                 start.linkTo(parent.start)
@@ -229,7 +233,8 @@ object Helpful {
                                 imageWidth = intSize.width
                             }
                             .background(
-                                color = imageBitmapBackground ?: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                                color = imageBitmapBackground
+                                    ?: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
                                 shape = MaterialTheme.shapes.medium
                             )
                             .padding(5.dp)
@@ -246,12 +251,17 @@ object Helpful {
                         }
                 )
 
+                var didOverflowHeight by remember { mutableStateOf(false) }
+
                 Text(
                     text = description,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                     maxLines = if (textMoreSee) 100 else 2,
                     overflow = TextOverflow.Ellipsis,
+                    onTextLayout = { textLayoutResult ->
+                        didOverflowHeight = textLayoutResult.didOverflowHeight
+                    },
                     modifier = Modifier
                         .constrainAs(descriptionText) {
                             top.linkTo(titleText.bottom, margin = 10.dp)
@@ -259,25 +269,29 @@ object Helpful {
                         }
                 )
 
-                Button(
-                    onClick = { textMoreSee = !textMoreSee },
-                    contentPadding = PaddingValues(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    ),
-                    modifier = Modifier
-                        .constrainAs(seeMoreButton) {
-                            top.linkTo(descriptionText.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
-                        }
-                ) {
-                    Icon(
-                        imageVector = if (textMoreSee) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                        contentDescription = if (textMoreSee) stringResource(id = R.string.close) else stringResource(id = R.string.open),
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                if (didOverflowHeight || textMoreSee) {
+                    Button(
+                        onClick = { textMoreSee = !textMoreSee },
+                        contentPadding = PaddingValues(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        ),
+                        modifier = Modifier
+                            .constrainAs(seeMoreButton) {
+                                top.linkTo(descriptionText.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                    ) {
+                        Icon(
+                            imageVector = if (textMoreSee) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                            contentDescription = if (textMoreSee) stringResource(id = R.string.close) else stringResource(
+                                id = R.string.open
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
 
             }
