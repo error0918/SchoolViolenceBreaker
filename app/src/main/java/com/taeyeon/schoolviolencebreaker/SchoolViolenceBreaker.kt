@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
@@ -78,16 +79,16 @@ fun Report() {
         isDoubleChecking = false
 
         Dialog(onDismissRequest = { isReporting = false }) {
-            val display = Core.getActivity().windowManager.defaultDisplay
             val size = Point()
-            display.getRealSize(size)
+            Core.getActivity().windowManager.defaultDisplay.getRealSize(size)
             val displayWidth = with (LocalDensity.current) { size.x.toDp() }
             Surface(
                 modifier = Modifier
                     .requiredWidthIn(
                         min = if (displayWidth >= 280.dp) 280.dp else 0.dp,
                         max = if (displayWidth >= 560.dp) 560.dp else displayWidth
-                    ),
+                    )
+                    .padding(10.dp),
                 shape = RoundedCornerShape(28.dp),
                 tonalElevation = 2.dp
             ) {
@@ -143,7 +144,10 @@ fun Report() {
                                 }
                             }
                         }
-                        Divider(modifier = Modifier.fillMaxWidth())
+                        Divider(
+                            color = MaterialTheme.colorScheme.outline,
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

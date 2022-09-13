@@ -15,12 +15,14 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -32,8 +34,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.Popup
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.SharedPreferencesManager
@@ -177,6 +181,8 @@ object Helpful {
 
     @Composable
     fun Helpful(paddingValues: PaddingValues = PaddingValues()) {
+        PopupHelp()
+
         LazyColumn(
             modifier = Modifier.padding(
                 top = paddingValues.calculateTopPadding(),
@@ -221,7 +227,7 @@ object Helpful {
 
         if (showingWorkDialog) {
             // TODO
-            Dialog(
+            /*Dialog(
                 onDismissRequest = { showingWorkDialog = false }
             ) {
             }
@@ -232,7 +238,7 @@ object Helpful {
             Dialog(
                 onDismissRequest = { showingInfoDialog = false }
             ) {
-            }
+            }*/
         }
 
         Card(
@@ -356,6 +362,23 @@ object Helpful {
                     }
                 }
 
+            }
+        }
+    }
+
+    @Composable
+    fun PopupHelp() {
+        val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
+        Popup(
+            alignment = Alignment.BottomCenter,
+            offset = IntOffset(0, -bottomNavigationBarHeight.toInt())
+        ) {
+            Surface(
+                shape = RoundedCornerShape(5.dp),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(5.dp)).padding(5.dp)
+            ) {
+                Text("TODO")
             }
         }
     }
