@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Notifications
@@ -182,7 +183,7 @@ object Helpful {
 
     @Composable
     fun Helpful(paddingValues: PaddingValues = PaddingValues()) {
-        PopupHelp()
+        PopupTip()
 
         LazyColumn(
             modifier = Modifier.padding(
@@ -368,7 +369,7 @@ object Helpful {
     }
 
     @Composable
-    fun PopupHelp() {
+    fun PopupTip() {
         val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
         Popup(
             alignment = Alignment.BottomCenter,
@@ -376,7 +377,7 @@ object Helpful {
         ) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f),
                 modifier = Modifier.padding(20.dp)
             ) {
                 val tipIconSize = LocalDensity.current.run { MaterialTheme.typography.labelSmall.fontSize.toPx().toDp() }
@@ -384,7 +385,7 @@ object Helpful {
                 ConstraintLayout(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    val (tipIcon, tipText, messageText) = createRefs()
+                    val (tipIcon, tipText, closeText, closeIconButton, messageText) = createRefs()
 
                     Icon(
                         imageVector = Icons.Filled.Notifications,
@@ -407,7 +408,43 @@ object Helpful {
                                 start.linkTo(tipIcon.end, margin = tipIconSize / 2)
                             }
                     )
-                    Text(text = "TODO")
+
+                    Text(
+                        text = "3", // TODO
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier
+                            .constrainAs(closeText) {
+                                top.linkTo(tipIcon.top)
+                                bottom.linkTo(tipIcon.bottom)
+                                end.linkTo(closeIconButton.start, margin = tipIconSize / 2)
+                            }
+                    )
+
+                    IconButton(
+                        onClick = {  }, // TODO
+                        modifier = Modifier
+                            .size(tipIconSize)
+                            .constrainAs(closeIconButton) {
+                                top.linkTo(tipIcon.top)
+                                bottom.linkTo(tipIcon.bottom)
+                                end.linkTo(parent.end)
+                            }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Close,
+                            contentDescription = stringResource(id = R.string.close)
+                        )
+                    }
+
+                    Text(
+                        text = "카드를 클릭해보고, 길게 클릭해보고, 두번 클릭해보세요!",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .constrainAs(messageText) {
+                                top.linkTo(tipIcon.bottom, margin = 10.dp)
+                                start.linkTo(parent.start)
+                            }
+                    )
                 }
             }
         }
