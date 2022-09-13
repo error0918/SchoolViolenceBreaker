@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.SharedPreferencesManager
@@ -373,12 +374,15 @@ object Helpful {
         val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
         Popup(
             alignment = Alignment.BottomCenter,
-            offset = IntOffset(0, -bottomNavigationBarHeight.toInt())
+            offset = IntOffset(0, -bottomNavigationBarHeight.toInt()),
+            onDismissRequest = {}
         ) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f),
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier
+                    .padding(20.dp)
+                    .clickable {  } // TODO
             ) {
                 val tipIconSize = LocalDensity.current.run { MaterialTheme.typography.labelSmall.fontSize.toPx().toDp() }
 
