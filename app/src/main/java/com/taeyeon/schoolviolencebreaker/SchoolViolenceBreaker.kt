@@ -257,7 +257,7 @@ object MyView {
                 }
                 cornerRadius
             }
-            val tipIconSize = MaterialTheme.typography.labelSmall.fontSize.value.dp
+            val tipIconSize = LocalDensity.current.run { MaterialTheme.typography.labelSmall.fontSize.toPx().toDp() }
 
             ConstraintLayout(
                 modifier = Modifier

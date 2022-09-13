@@ -1,5 +1,5 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
 )
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -374,11 +375,40 @@ object Helpful {
             offset = IntOffset(0, -bottomNavigationBarHeight.toInt())
         ) {
             Surface(
-                shape = RoundedCornerShape(5.dp),
+                shape = RoundedCornerShape(20.dp),
                 color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer, shape = RoundedCornerShape(5.dp)).padding(5.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
-                Text("TODO")
+                val tipIconSize = LocalDensity.current.run { MaterialTheme.typography.labelSmall.fontSize.toPx().toDp() }
+
+                ConstraintLayout(
+                    modifier = Modifier.padding(20.dp)
+                ) {
+                    val (tipIcon, tipText, messageText) = createRefs()
+
+                    Icon(
+                        imageVector = Icons.Filled.Notifications,
+                        contentDescription = stringResource(id = R.string.tip),
+                        modifier = Modifier
+                            .size(tipIconSize)
+                            .constrainAs(tipIcon) {
+                                top.linkTo(parent.top)
+                                start.linkTo(parent.start)
+                            }
+                    )
+
+                    Text(
+                        text = stringResource(id = R.string.tip),
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier
+                            .constrainAs(tipText) {
+                                top.linkTo(tipIcon.top)
+                                bottom.linkTo(tipIcon.bottom)
+                                start.linkTo(tipIcon.end, margin = tipIconSize / 2)
+                            }
+                    )
+                    Text(text = "TODO")
+                }
             }
         }
     }
