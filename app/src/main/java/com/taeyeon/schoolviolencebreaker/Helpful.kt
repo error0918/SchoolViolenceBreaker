@@ -56,6 +56,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.SharedPreferencesManager
 import com.taeyeon.core.Utils
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.net.URL
 import kotlin.math.roundToInt
@@ -383,6 +385,16 @@ object Helpful {
 
     @Composable
     fun PopupTip() {
+        var leftTIme by remember { mutableStateOf(3) }
+        LaunchedEffect(leftTIme) {
+            if (leftTIme > 0) {
+                delay(1000)
+                leftTIme--
+            } else {
+                // TODO
+            }
+        }
+
         val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
         Popup(
             alignment = Alignment.BottomCenter,
@@ -479,7 +491,7 @@ object Helpful {
                         )
 
                         Text(
-                            text = "3", // TODO
+                            text = "$leftTIme",
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
                                 .constrainAs(closeText) {
