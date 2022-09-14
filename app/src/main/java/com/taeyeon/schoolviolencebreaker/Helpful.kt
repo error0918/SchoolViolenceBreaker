@@ -12,6 +12,9 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -47,6 +50,7 @@ import com.taeyeon.core.SharedPreferencesManager
 import com.taeyeon.core.Utils
 import java.io.ByteArrayOutputStream
 import java.net.URL
+import kotlin.math.roundToInt
 
 object Helpful {
 
@@ -371,18 +375,25 @@ object Helpful {
 
     @Composable
     fun PopupTip() {
+        var offsetX by remember { mutableStateOf(0f) }
         val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
         Popup(
             alignment = Alignment.BottomCenter,
-            offset = IntOffset(0, -bottomNavigationBarHeight.toInt()),
+            offset = IntOffset(offsetX.roundToInt(), -bottomNavigationBarHeight.toInt()),
             onDismissRequest = {}
         ) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.8f),
+                color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
                 modifier = Modifier
                     .padding(20.dp)
-                    .clickable {  } // TODO
+                    .clickable { } // TODO
+                    .draggable(
+                        orientation = Orientation.Horizontal,
+                        state = rememberDraggableState { delta ->
+                            offsetX += delta
+                        }
+                    )
             ) {
                 val tipIconSize = LocalDensity.current.run { MaterialTheme.typography.labelSmall.fontSize.toPx().toDp() }
 
