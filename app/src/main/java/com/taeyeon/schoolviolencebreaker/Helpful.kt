@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
-    ExperimentalMaterialApi::class
+    ExperimentalMaterialApi::class, ExperimentalAnimationApi::class
 )
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
@@ -12,6 +12,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -407,7 +409,11 @@ object Helpful {
                 state = dismissState,
                 dismissThresholds = { FractionalThreshold(0.2f) },
                 background = {
-                    if (dismissState.targetValue == DismissValue.DismissedToEnd || dismissState.targetValue == DismissValue.DismissedToStart) {
+                    AnimatedVisibility(
+                        visible = dismissState.progress.to == DismissValue.DismissedToEnd || dismissState.progress.to == DismissValue.DismissedToStart,
+                        enter = fadeIn(),
+                        exit = ExitTransition.None
+                    ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -424,7 +430,7 @@ object Helpful {
                                     )
                                     .padding(10.dp)
                                     .align(
-                                        when (dismissState.targetValue) {
+                                        when (dismissState.progress.to) {
                                             DismissValue.DismissedToEnd -> Alignment.CenterStart
                                             DismissValue.DismissedToStart -> Alignment.CenterEnd
                                             else -> Alignment.Center
@@ -440,7 +446,6 @@ object Helpful {
                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
                     modifier = Modifier
                         .padding(20.dp)
-                        .clickable { } // TODO
                 ) {
                     val tipIconSize = LocalDensity.current.run {
                         MaterialTheme.typography.labelSmall.fontSize.toPx().toDp()
