@@ -384,8 +384,10 @@ object Helpful {
     }
 
     @Composable
-    fun PopupTip() {
-        var leftTIme by remember { mutableStateOf(3) }
+    fun PopupTip(
+        //
+    ) {
+        var leftTIme by rememberSaveable { mutableStateOf(3) }
         LaunchedEffect(leftTIme) {
             if (leftTIme > 0) {
                 delay(1000)
