@@ -19,6 +19,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalDensity
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.Popup
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
@@ -132,6 +134,7 @@ fun Report() {
                             ) {
                                 Text(
                                     text = "sjfslkhfs${remainingTime.value}",
+                                    style = MaterialTheme.typography.titleMedium,
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
                                 if (true) {
@@ -188,6 +191,106 @@ object Report {
 }
 
 object MyView {
+
+    @Composable
+    fun DialogBase(
+        onDismissRequest: () -> Unit,
+        properties: DialogProperties,
+        content: @Composable () -> Unit
+    ) {
+        Dialog(onDismissRequest = { isReporting = false }) {
+            val displayWidth = let {
+                val size = Point()
+                Core.getActivity().windowManager.defaultDisplay.getRealSize(size)
+                val displayWidth = with(LocalDensity.current) { size.x.toDp() }
+            }
+            Surface(
+                modifier = Modifier
+                    .requiredWidthIn(
+                        min = if (displayWidth >= 280.dp) 280.dp else 0.dp,
+                        max = if (displayWidth >= 560.dp) 560.dp else displayWidth
+                    )
+                    .padding(10.dp),
+                shape = RoundedCornerShape(28.dp),
+                tonalElevation = 2.dp
+            ) {
+                //TODO
+            }
+        }
+    }
+
+    @Composable
+    fun a() {
+        Column(
+            modifier = Modifier.padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Warning,
+                contentDescription = "투두",
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "투두$size",
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "투두${with(LocalDensity.current) { size.x.toDp() }}".repeat(30),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(6.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            val remainingTime = remember { mutableStateOf(waitTime) }
+            wait(rememberCoroutineScope(), remainingTime)
+
+            for (i in 1..10) {
+                TextButton(
+                    onClick = {
+                        /*TODO*/
+                        isReporting = false
+                        if (reportDoubleCheck) isDoubleChecking = true
+                    },
+                    contentPadding = PaddingValues(12.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "sjfslkhfs${remainingTime.value}",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.align(Alignment.CenterStart)
+                        )
+                        if (true) {
+                            Icon(
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.tertiary,
+                                modifier = Modifier.align(Alignment.CenterEnd)
+                            )
+                        }
+                    }
+                }
+                Divider(
+                    color = MaterialTheme.colorScheme.outline,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            TextButton(
+                onClick = { isReporting = false },
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(vertical = 6.dp)
+            ) {
+                Text(text = "닫기")
+            }
+        }
+    }
 
     data class TipInformation(
         val tip: String = Core.getContext().resources.getString(R.string.tip),
