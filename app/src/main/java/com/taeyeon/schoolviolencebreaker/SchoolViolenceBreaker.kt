@@ -21,7 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -195,6 +197,10 @@ object MyView {
     @Composable
     fun DialogBase(
         onDismissRequest: () -> Unit,
+        modifier: Modifier = Modifier,
+        shape: Shape = MaterialTheme.shapes.medium,
+        containerColor: Color = MaterialTheme.colorScheme.surface,
+        tonalElevation: Dp = 2.dp,
         properties: DialogProperties = DialogProperties(),
         content: @Composable () -> Unit
     ) {
@@ -208,14 +214,17 @@ object MyView {
                 LocalDensity.current.run { size.x.toDp() }
             }
             Surface(
-                modifier = Modifier
-                    .requiredWidthIn(
-                        min = if (displayWidth >= 280.dp) 280.dp else 0.dp,
-                        max = if (displayWidth >= 560.dp) 560.dp else displayWidth
-                    )
-                    .padding(10.dp),
-                shape = RoundedCornerShape(28.dp),
-                tonalElevation = 2.dp,
+                modifier = modifier.then(
+                    Modifier
+                        .requiredWidthIn(
+                            min = if (displayWidth >= 280.dp) 280.dp else 0.dp,
+                            max = if (displayWidth >= 560.dp) 560.dp else displayWidth
+                        )
+                        .padding(10.dp)
+                ),
+                shape = shape,
+                color = containerColor,
+                tonalElevation = tonalElevation,
                 content = content
             )
         }
@@ -227,12 +236,37 @@ object MyView {
         properties: DialogProperties = DialogProperties(),
         content: @Composable () -> Unit
     ) {
-        DialogBase(
+        /*DialogBase(
             onDismissRequest = onDismissRequest,
             properties = properties
         ) {
             // TODO
-        }
+        }*/
+        /*
+        @Composable
+@ComposableInferredTarget
+public fun AlertDialog(
+    onDismissRequest: () → Unit,
+    confirmButton: @Composable
+() → Unit,
+    modifier: Modifier,
+    dismissButton: @Composable()
+(() → Unit)?,
+    icon: @Composable()
+(() → Unit)?,
+    title: @Composable()
+(() → Unit)?,
+    text: @Composable()
+(() → Unit)?,
+    shape: Shape,
+    containerColor: Color,
+    tonalElevation: Dp,
+    iconContentColor: Color,
+    titleContentColor: Color,
+    textContentColor: Color,
+    properties: DialogProperties
+): Unit
+         */
     }
 
     @Composable
