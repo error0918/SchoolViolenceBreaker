@@ -27,10 +27,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FractionalThreshold
 import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.rememberDismissState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -118,15 +115,6 @@ object Helpful {
 
         listOf(
             Helpful(
-                imageBitmap = getImage("https://www.moe.go.kr/img/2021Renewal/content/mi_2_1.png"),
-                imageBitmapBackground = Color.White,
-                title = "교육부",
-                description = """
-                     대한민국의 인적자원 개발정책과 학교교육·평생교육 및 학술에 관한 사무를 관장하는 중앙행정기관.
-                """.trimIndent(),
-                link = "https://www.moe.go.kr/main.do?s=moe"
-            ),
-            Helpful(
                 imageBitmap = getImage("https://www.police.go.kr/resources/common/images/sub/txt_kcc.png"),
                 imageBitmapBackground = Color.White,
                 title = "경찰청",
@@ -136,14 +124,13 @@ object Helpful {
                 link = "https://www.police.go.kr/index.do"
             ),
             Helpful(
-                imageBitmap = getImage("https://www.kyci.or.kr/userSite/images/common/logo.png"),
+                imageBitmap = getImage("https://www.moe.go.kr/img/2021Renewal/content/mi_2_1.png"),
                 imageBitmapBackground = Color.White,
-                title = "한국청소년상담복지개발원",
+                title = "교육부",
                 description = """
-                     한국청소년상담복지개발원은 전국 600여개의 청소년상담복지센터, 학교밖청소년지원센터(청소년지원센터 꿈드림), 청소년복지시설(청소년쉼터, 청소년자립지원관, 청소년회복지원시설)을 총괄하는 중추 기관으로서 청소년의 건강한 성장과 행복한 꿈의 실현을 위해 다양한 상담복지사업을 수행하고 있는 여성가족부 산하 공공기관입니다.
-                     특히 학교 밖 청소년, 미디어 과의존 청소년 등 위기청소년 지원과 함께 청소년 정책연구 및 프로그램 개발, 상담복지 전문인력 양성 등 다양한 사업을 수행하고 있습니다.
+                     대한민국의 인적자원 개발정책과 학교교육·평생교육 및 학술에 관한 사무를 관장하는 중앙행정기관.
                 """.trimIndent(),
-                link = "https://www.kyci.or.kr/userSite/index.asp"
+                link = "https://www.moe.go.kr/main.do?s=moe"
             ),
             Helpful(
                 imageBitmap = getImage("https://www.safe182.go.kr/static/home/new_images/logo.png"),
@@ -154,6 +141,15 @@ object Helpful {
                      「안전Dream」은 다양한 신고서비스와 온라인 상담, 범죄예방 컨텐츠 등을 제공하며, 경찰청 내부업무시스템인 「프로파일링시스템」과의 연계로 보다 빠르고 신뢰성 있는 치안서비스를 제공하고 되었습니다.
                 """.trimIndent(),
                 link = "https://www.safe182.go.kr/index.do"
+            ),
+            Helpful(
+                imageBitmap = getImage("https://www.edunet.net/nedu/images/common_c/edunet_newlogo.png"),
+                imageBitmapBackground = Color.White,
+                title = "에듀넷·티-클리어",
+                description = """
+                    에듀넷·티-클리어는 약자로 교육과정과 교육정책 전반의 정보를 통합 제공하고, 협업 소통을 지원하는 교육정보 통합 지원 서비스입니다.
+                """.trimIndent(),
+                link = "https://doran.edunet.net/main/mainForm.do"
             ),
             Helpful(
                 imageBitmap = getImage("https://www.btf.or.kr/images/common/logo02.png"),
@@ -185,13 +181,14 @@ object Helpful {
                 link = "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%ED%95%99%EA%B5%90%ED%8F%AD%EB%A0%A5%EC%98%88%EB%B0%A9%EB%B0%8F%EB%8C%80%EC%B1%85%EC%97%90%EA%B4%80%ED%95%9C%EB%B2%95%EB%A5%A0"
             ),
             Helpful(
-                imageBitmap = getImage("https://www.edunet.net/nedu/images/common_c/edunet_newlogo.png"),
+                imageBitmap = getImage("https://www.kyci.or.kr/userSite/images/common/logo.png"),
                 imageBitmapBackground = Color.White,
-                title = "에듀넷·티-클리어",
+                title = "한국청소년상담복지개발원",
                 description = """
-                    에듀넷·티-클리어는 약자로 교육과정과 교육정책 전반의 정보를 통합 제공하고, 협업 소통을 지원하는 교육정보 통합 지원 서비스입니다.
+                     한국청소년상담복지개발원은 전국 600여개의 청소년상담복지센터, 학교밖청소년지원센터(청소년지원센터 꿈드림), 청소년복지시설(청소년쉼터, 청소년자립지원관, 청소년회복지원시설)을 총괄하는 중추 기관으로서 청소년의 건강한 성장과 행복한 꿈의 실현을 위해 다양한 상담복지사업을 수행하고 있는 여성가족부 산하 공공기관입니다.
+                     특히 학교 밖 청소년, 미디어 과의존 청소년 등 위기청소년 지원과 함께 청소년 정책연구 및 프로그램 개발, 상담복지 전문인력 양성 등 다양한 사업을 수행하고 있습니다.
                 """.trimIndent(),
-                link = "https://doran.edunet.net/main/mainForm.do"
+                link = "https://www.kyci.or.kr/userSite/index.asp"
             )
         )
     }
@@ -239,11 +236,10 @@ object Helpful {
     ) {
         val hasImage = imageBitmap != null
 
-        var showingWorkDialog by remember { mutableStateOf(false) }
+        var showingActionsDialog by remember { mutableStateOf(false) }
         var showingInfoDialog by remember { mutableStateOf(false) }
 
-        if (showingWorkDialog) {
-            // TODO
+        if (showingActionsDialog) {
             /*Dialog(
                 onDismissRequest = { showingWorkDialog = false }
             ) {
@@ -251,7 +247,6 @@ object Helpful {
         }
 
         if (showingInfoDialog) {
-            // TODO
             Dialog(
                 onDismissRequest = { showingInfoDialog = false }
             ) {
@@ -272,7 +267,7 @@ object Helpful {
                         },
                         onLongClick = {
                             Utils.vibrate(50)
-                            showingWorkDialog = true
+                            showingActionsDialog = true
                         },
                         onDoubleClick = {
                             Utils.vibrate(50)
@@ -292,14 +287,15 @@ object Helpful {
                 }
                 cornerRadius
             }
-            var textMoreSee by rememberSaveable { mutableStateOf(false) }
+            var textMoreSee by remember { mutableStateOf(false) }
+            var didOverflowHeight by remember { mutableStateOf(false) }
 
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(cornerRadius)
             ) {
-                val (image, titleText, descriptionText, seeMoreButton) = createRefs()
+                val (image, titleText, showActionsButton, showInfoButton, descriptionText, seeMoreButton) = createRefs()
 
                 if (hasImage) {
                     var imageWidth by remember { mutableStateOf(0) }
@@ -336,7 +332,35 @@ object Helpful {
                         }
                 )
 
-                var didOverflowHeight by remember { mutableStateOf(false) }
+                IconButton(
+                    onClick = { showingInfoDialog = true },
+                    modifier = Modifier
+                        .constrainAs(showInfoButton) {
+                            top.linkTo(titleText.top)
+                            bottom.linkTo(titleText.bottom)
+                            end.linkTo(showActionsButton.start)
+                        }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Info,
+                        contentDescription = null
+                    )
+                }
+
+                IconButton(
+                    onClick = { showingActionsDialog = true },
+                    modifier = Modifier
+                        .constrainAs(showActionsButton) {
+                            top.linkTo(titleText.top)
+                            bottom.linkTo(titleText.bottom)
+                            end.linkTo(parent.end)
+                        }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.PlayArrow,
+                        contentDescription = null
+                    )
+                }
 
                 Text(
                     text = description,
@@ -388,6 +412,8 @@ object Helpful {
         //
     ) {
         var leftTIme by rememberSaveable { mutableStateOf(3) }
+        val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
+
         LaunchedEffect(leftTIme) {
             if (leftTIme > 0) {
                 delay(1000)
@@ -397,7 +423,6 @@ object Helpful {
             }
         }
 
-        val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
         Popup(
             alignment = Alignment.BottomCenter,
             offset = IntOffset(0, -bottomNavigationBarHeight.toInt()),
