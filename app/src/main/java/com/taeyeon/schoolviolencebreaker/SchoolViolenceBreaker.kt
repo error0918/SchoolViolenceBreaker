@@ -195,14 +195,17 @@ object MyView {
     @Composable
     fun DialogBase(
         onDismissRequest: () -> Unit,
-        properties: DialogProperties,
+        properties: DialogProperties = DialogProperties(),
         content: @Composable () -> Unit
     ) {
-        Dialog(onDismissRequest = { isReporting = false }) {
+        Dialog(
+            onDismissRequest = onDismissRequest,
+            properties = properties
+        ) {
             val displayWidth = let {
                 val size = Point()
                 Core.getActivity().windowManager.defaultDisplay.getRealSize(size)
-                val displayWidth = with(LocalDensity.current) { size.x.toDp() }
+                LocalDensity.current.run { size.x.toDp() }
             }
             Surface(
                 modifier = Modifier
@@ -212,10 +215,23 @@ object MyView {
                     )
                     .padding(10.dp),
                 shape = RoundedCornerShape(28.dp),
-                tonalElevation = 2.dp
-            ) {
-                //TODO
-            }
+                tonalElevation = 2.dp,
+                content = content
+            )
+        }
+    }
+
+    @Composable
+    fun DialogFull(
+        onDismissRequest: () -> Unit,
+        properties: DialogProperties = DialogProperties(),
+        content: @Composable () -> Unit
+    ) {
+        DialogBase(
+            onDismissRequest = onDismissRequest,
+            properties = properties
+        ) {
+            // TODO
         }
     }
 
@@ -232,12 +248,12 @@ object MyView {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "투두$size",
+                text = "투두",
                 style = MaterialTheme.typography.titleLarge,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "투두${with(LocalDensity.current) { size.x.toDp() }}".repeat(30),
+                text = "투두",
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(6.dp)
             )
