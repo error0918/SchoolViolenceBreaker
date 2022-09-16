@@ -1,6 +1,8 @@
 package com.taeyeon.schoolviolencebreaker
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +56,31 @@ object SVInfo {
             if (showingTip) {
                 val tipIndex by rememberSaveable { mutableStateOf(Random().nextInt(tipInformation.size)) }
                 Tip(tipInformation[tipIndex])
+            }
+
+            var showing by rememberSaveable { mutableStateOf(false) }
+            if (showing) {
+                MyView.BaseDialog(
+                    onDismissRequest = { showing = false },
+                    icon = { Icon(imageVector = Icons.Default.QuestionMark, contentDescription = null) },
+                    title = { Text(text = "타이틀") },
+                    text = { Text(text = "텍스트 ".repeat(20)) },
+                    button = {
+                        MyView.DialogButtonRow() {
+                            TextButton(onClick = { showing = false }) { Text(text = "버튼 1") }
+                            TextButton(onClick = { showing = false }) { Text(text = "버튼 2") }
+                        }
+                    }
+                )
+            }
+
+            Button(
+                onClick = {
+                    showing = true
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "테스트")
             }
 
             Text(

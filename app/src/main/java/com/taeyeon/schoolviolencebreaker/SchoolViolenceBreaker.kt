@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -195,65 +196,63 @@ object Report {
 
 object MyView {
 
+    @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
+    object DialogDefaults {
+        val Modifier: Modifier
+            @Composable get() { return androidx.compose.ui.Modifier }
+        val MinWidth = 280.dp
+        val MaxWidth = 560.dp
+        val MinHeight = 0.dp
+        val MaxHeight = Dp.Infinity
+        val ContainerPadding = 24.dp
+        val Shape: Shape
+            @Composable get() { return MaterialTheme.shapes.medium }
+        val ContainerColor: Color
+            @Composable get() { return MaterialTheme.colorScheme.surface }
+        val TonalElevation = 2.dp
+        val IconContentColor: Color
+            @Composable get() { return contentColorFor(backgroundColor = ContainerColor) }
+        val TitleContentColor: Color
+            @Composable get() { return contentColorFor(backgroundColor = ContainerColor) }
+        val TextContentColor: Color
+            @Composable get() { return contentColorFor(backgroundColor = ContainerColor) }
+        val ContentColor: Color
+            @Composable get() { return contentColorFor(backgroundColor = ContainerColor) }
+        val ButtonContentColor: Color
+            @Composable get() { return MaterialTheme.colorScheme.primary }
+        val TitleTextStyle: TextStyle
+            @Composable get() { return MaterialTheme.typography.headlineSmall }
+        val TextTextStyle: TextStyle
+            @Composable get() { return MaterialTheme.typography.bodyMedium }
+        val ContentTextStyle: TextStyle
+            @Composable get() { return MaterialTheme.typography.bodyMedium }
+        val ButtonTextStyle: TextStyle
+            @Composable get() { return MaterialTheme.typography.labelLarge }
+        val Properties = DialogProperties()
+    }
+
+    @SuppressLint("ModifierParameter")
     @Composable
-    fun BaseDialog(
+    fun SurfaceDialog(
         onDismissRequest: () -> Unit,
-        modifier: Modifier = Modifier,
-        minWidth: Dp = 280.dp,
-        maxWidth: Dp = 560.dp,
-        minHeight: Dp = 0.dp,
-        maxHeight: Dp = Dp.Infinity,
-        shape: Shape = MaterialTheme.shapes.medium,
-        containerColor: Color = MaterialTheme.colorScheme.surface,
-        tonalElevation: Dp = 2.dp,
-        properties: DialogProperties = DialogProperties(),
+        modifier: Modifier = DialogDefaults.Modifier,
+        minWidth: Dp = DialogDefaults.MinWidth,
+        maxWidth: Dp = DialogDefaults.MaxWidth,
+        minHeight: Dp = DialogDefaults.MinHeight,
+        maxHeight: Dp = DialogDefaults.MaxHeight,
+        shape: Shape = DialogDefaults.Shape,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        properties: DialogProperties = DialogDefaults.Properties,
         content: @Composable () -> Unit
     ) {
         Dialog(
             onDismissRequest = onDismissRequest,
             properties = properties
         ) {
-            val size = Point()
-            Core.getActivity().windowManager.defaultDisplay.getRealSize(size)
-            val displayWidth = LocalDensity.current.run { size.x.toDp() }
-            val displayHeight = LocalDensity.current.run { size.y.toDp() }
             Surface(
                 modifier = modifier.then(
                     Modifier
-                        /*.also {
-                            if ((minWidth ?: 0.dp) <= (maxWidth ?: Dp.Infinity)) {
-                                if (minWidth == null && maxWidth != null) {
-                                    it.requiredWidthIn(
-                                        max = if (displayWidth >= maxWidth) maxWidth else displayWidth
-                                    )
-                                } else if (minWidth != null && maxWidth == null) {
-                                    it.requiredWidthIn(
-                                        min = if (displayWidth >= minWidth) minWidth else 0.dp
-                                    )
-                                } else if (minWidth != null && maxWidth != null) {
-                                    it.requiredWidthIn(
-                                        min = if (displayWidth >= minWidth) minWidth else 0.dp,
-                                        max = if (displayWidth >= maxWidth) maxWidth else displayWidth
-                                    )
-                                }
-                            }
-                            if ((minHeight ?: 0.dp) <= (maxHeight ?: Dp.Infinity)) {
-                                if (minHeight == null && maxHeight != null) {
-                                    it.requiredHeightIn(
-                                        max = if (displayHeight >= maxHeight) maxHeight else displayHeight
-                                    )
-                                } else if (minHeight != null && maxHeight == null) {
-                                    it.requiredHeightIn(
-                                        min = if (displayHeight >= minHeight) minHeight else 0.dp
-                                    )
-                                } else if (minHeight != null && maxHeight != null) {
-                                    it.requiredHeightIn(
-                                        min = if (displayHeight >= minHeight) minHeight else 0.dp,
-                                        max = if (displayHeight >= maxHeight) maxHeight else displayHeight
-                                    )
-                                }
-                            }
-                        }*/
                         .sizeIn(
                             minWidth = minWidth,
                             maxWidth = maxWidth,
@@ -270,21 +269,141 @@ object MyView {
         }
     }
 
-    @Composable
-    fun DialogButtonRow(
-        modifier: Modifier = Modifier,
-        button: @Composable RowScope.() -> Unit
-    ) {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            content = button
-        )
-    }
-
     @SuppressLint("ModifierParameter")
     @Composable
-    fun DialogFull(
+    fun BaseDialog(
+        onDismissRequest: () -> Unit,
+        modifier: Modifier = DialogDefaults.Modifier,
+        minWidth: Dp = DialogDefaults.MinWidth,
+        maxWidth: Dp = DialogDefaults.MaxWidth,
+        minHeight: Dp = DialogDefaults.MinHeight,
+        maxHeight: Dp = DialogDefaults.MaxHeight,
+        containerPadding: Dp = DialogDefaults.ContainerPadding,
+        icon: (@Composable () -> Unit)? = null,
+        title: (@Composable () -> Unit)? = null,
+        text: (@Composable () -> Unit)? = null,
+        content: (@Composable () -> Unit)? = null,
+        button: (@Composable () -> Unit)? = null,
+        shape: Shape = DialogDefaults.Shape,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        iconContentColor: Color = DialogDefaults.IconContentColor,
+        titleContentColor: Color = DialogDefaults.TitleContentColor,
+        textContentColor: Color = DialogDefaults.TextContentColor,
+        contentColor: Color = DialogDefaults.ContentColor,
+        buttonContentColor: Color = DialogDefaults.ButtonContentColor,
+        titleTextStyle: TextStyle = DialogDefaults.TitleTextStyle,
+        textTextStyle: TextStyle = DialogDefaults.TextTextStyle,
+        contentTextStyle: TextStyle = DialogDefaults.ContentTextStyle,
+        buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
+        properties: DialogProperties = DialogDefaults.Properties
+    ) {
+        SurfaceDialog(
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            minWidth = minWidth,
+            maxWidth = maxWidth,
+            minHeight = minHeight,
+            maxHeight = maxHeight,
+            shape = shape,
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
+            properties = properties
+        ) {
+            Column(
+                modifier = Modifier.padding(containerPadding),
+                horizontalAlignment = if (icon != null) Alignment.CenterHorizontally else Alignment.Start
+            ) {
+
+                icon?.let {
+                    CompositionLocalProvider(LocalContentColor provides iconContentColor) {
+                        Box(
+                            modifier = Modifier.padding(PaddingValues(bottom = 16.dp))
+                        ) {
+                            icon()
+                        }
+                    }
+                }
+
+                title?.let {
+                    CompositionLocalProvider(LocalContentColor provides titleContentColor) {
+                        ProvideTextStyle(titleTextStyle) {
+                            Box(
+                                modifier = Modifier.padding(PaddingValues(bottom = 16.dp))
+                            ) {
+                                title()
+                            }
+                        }
+                    }
+                }
+
+                text?.let {
+                    CompositionLocalProvider(LocalContentColor provides textContentColor) {
+                        ProvideTextStyle(textTextStyle) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(weight = 1f, fill = false)
+                                    .padding(PaddingValues(bottom = 16.dp))
+                                    .align(Alignment.Start)
+                            ) {
+                                text()
+                            }
+                        }
+                    }
+                }
+
+                content?.let {
+                    CompositionLocalProvider(LocalContentColor provides contentColor) {
+                        ProvideTextStyle(contentTextStyle) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(weight = 1f, fill = false)
+                                    .padding(PaddingValues(bottom = 16.dp))
+                                    .align(Alignment.Start)
+                            ) {
+                                content()
+                            }
+                        }
+                    }
+                }
+
+                button?.let {
+                    CompositionLocalProvider(LocalContentColor provides buttonContentColor) {
+                        ProvideTextStyle(buttonTextStyle) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(PaddingValues(top = 2.dp))
+                                    .align(Alignment.End),
+                            ) {
+                                button()
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    @Composable
+    fun MessageDialog(
+        /*onDismissRequest: () -> Unit,
+        confirmButton: @Composable () -> Unit,
+        modifier: Modifier = Modifier,
+        dismissButton: (@Composable () -> Unit)? = null,
+        icon: (@Composable () -> Unit)? = null,
+        title: (@Composable () -> Unit)? = null,
+        text: (@Composable () -> Unit)? = null,
+        shape: Shape = AlertDialogDefaults.shape,
+        containerColor: Color = AlertDialogDefaults.containerColor,
+        iconContentColor: Color = AlertDialogDefaults.iconContentColor,
+        titleContentColor: Color = AlertDialogDefaults.titleContentColor,
+        textContentColor: Color = AlertDialogDefaults.textContentColor,
+        tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
+        properties: DialogProperties = DialogProperties()*/
+    ) {
+        /*
         onDismissRequest: () -> Unit,
         modifier: Modifier = Modifier,
         minWidth: Dp = 280.dp,
@@ -305,94 +424,47 @@ object MyView {
         textContentColor: Color = contentColorFor(backgroundColor = containerColor),
         contentColor: Color = contentColorFor(backgroundColor = containerColor),
         buttonContentColor: Color = MaterialTheme.colorScheme.primary,
+        titleTextStyle: TextStyle = MaterialTheme.typography.headlineSmall,
+        textTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+        contentTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+        buttonTextStyle: TextStyle = MaterialTheme.typography.labelLarge,
         properties: DialogProperties = DialogProperties()
+         */
+        /*
+        public fun AlertDialog(
+    onDismissRequest: () → Unit,
+    confirmButton: @Composable
+() → Unit,
+    modifier: Modifier,
+    dismissButton: @Composable()
+(() → Unit)?,
+    icon: @Composable()
+(() → Unit)?,
+    title: @Composable()
+(() → Unit)?,
+    text: @Composable()
+(() → Unit)?,
+    shape: Shape,
+    containerColor: Color,
+    tonalElevation: Dp,
+    iconContentColor: Color,
+    titleContentColor: Color,
+    textContentColor: Color,
+    properties: DialogProperties
+): Unit
+         */
+    }
+
+    @Composable
+    fun DialogButtonRow(
+        modifier: Modifier = Modifier,
+        button: @Composable RowScope.() -> Unit
     ) {
-        BaseDialog(
-            onDismissRequest = onDismissRequest,
+        Row(
             modifier = modifier,
-            minWidth = minWidth,
-            maxWidth = maxWidth,
-            minHeight = minHeight,
-            maxHeight = maxHeight,
-            shape = shape,
-            containerColor = containerColor,
-            tonalElevation = tonalElevation,
-            properties = properties
-        ) {
-            Column(
-                modifier = Modifier.padding(containerPadding),
-                horizontalAlignment = if (icon != null) Alignment.CenterHorizontally else Alignment.Start
-            ) {
-                icon?.let {
-                    CompositionLocalProvider(LocalContentColor provides iconContentColor) {
-                        Box(
-                            modifier = Modifier.padding(PaddingValues(bottom = 16.dp))
-                        ) {
-                            icon()
-                        }
-                    }
-                }
-
-                title?.let {
-                    CompositionLocalProvider(LocalContentColor provides titleContentColor) {
-                        val textStyle = MaterialTheme.typography.headlineSmall
-                        ProvideTextStyle(textStyle) {
-                            Box(
-                                modifier = Modifier.padding(PaddingValues(bottom = 16.dp))
-                            ) {
-                                title()
-                            }
-                        }
-                    }
-                }
-
-                text?.let {
-                    CompositionLocalProvider(LocalContentColor provides textContentColor) {
-                        val textStyle = MaterialTheme.typography.bodyMedium
-                        ProvideTextStyle(textStyle) {
-                            Box(
-                                modifier = Modifier
-                                    .weight(weight = 1f, fill = false)
-                                    .padding(PaddingValues(bottom = 16.dp))
-                                    .align(Alignment.Start)
-                            ) {
-                                text()
-                            }
-                        }
-                    }
-                }
-
-                content?.let {
-                    CompositionLocalProvider(LocalContentColor provides contentColor) {
-                        Box(
-                            modifier = Modifier
-                                .weight(weight = 1f, fill = false)
-                                .padding(PaddingValues(bottom = 16.dp))
-                                .align(Alignment.Start)
-                        ) {
-                            content()
-                        }
-                    }
-                }
-
-                button?.let {
-                    CompositionLocalProvider(LocalContentColor provides buttonContentColor) {
-                        val textStyle = MaterialTheme.typography.labelLarge
-                        ProvideTextStyle(textStyle) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(PaddingValues(top = 2.dp))
-                                    .align(Alignment.End),
-                            ) {
-                                button()
-                            }
-                        }
-                    }
-                }
-
-            }
-        }
-
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            content = button
+        )
     }
 
 
