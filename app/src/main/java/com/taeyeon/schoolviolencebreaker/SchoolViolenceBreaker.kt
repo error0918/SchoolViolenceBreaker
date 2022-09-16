@@ -196,13 +196,13 @@ object Report {
 object MyView {
 
     @Composable
-    fun DialogBase(
+    fun BaseDialog(
         onDismissRequest: () -> Unit,
         modifier: Modifier = Modifier,
-        minWidth: Dp? = 280.dp,
-        maxWidth: Dp? = 560.dp,
-        minHeight: Dp? = null,
-        maxHeight: Dp? = null,
+        minWidth: Dp = 280.dp,
+        maxWidth: Dp = 560.dp,
+        minHeight: Dp = 0.dp,
+        maxHeight: Dp = Dp.Infinity,
         shape: Shape = MaterialTheme.shapes.medium,
         containerColor: Color = MaterialTheme.colorScheme.surface,
         tonalElevation: Dp = 2.dp,
@@ -220,7 +220,7 @@ object MyView {
             Surface(
                 modifier = modifier.then(
                     Modifier
-                        .also {
+                        /*.also {
                             if ((minWidth ?: 0.dp) <= (maxWidth ?: Dp.Infinity)) {
                                 if (minWidth == null && maxWidth != null) {
                                     it.requiredWidthIn(
@@ -253,8 +253,14 @@ object MyView {
                                     )
                                 }
                             }
-                        }
-                        .padding(10.dp)
+                        }*/
+                        .sizeIn(
+                            minWidth = minWidth,
+                            maxWidth = maxWidth,
+                            minHeight = minHeight,
+                            maxHeight = maxHeight
+                        )
+                        .padding(PaddingValues(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 18.dp))
                 ),
                 shape = shape,
                 color = containerColor,
@@ -264,20 +270,33 @@ object MyView {
         }
     }
 
+    @Composable
+    fun DialogButtonRow(
+        modifier: Modifier = Modifier,
+        button: @Composable RowScope.() -> Unit
+    ) {
+        Row(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            content = button
+        )
+    }
+
     @SuppressLint("ModifierParameter")
     @Composable
     fun DialogFull(
         onDismissRequest: () -> Unit,
-        button: RowScope.() -> Unit = {},
         modifier: Modifier = Modifier,
-        minWidth: Dp? = 280.dp,
-        maxWidth: Dp? = 560.dp,
-        minHeight: Dp? = null,
-        maxHeight: Dp? = null,
+        minWidth: Dp = 280.dp,
+        maxWidth: Dp = 560.dp,
+        minHeight: Dp = 0.dp,
+        maxHeight: Dp = Dp.Infinity,
+        containerPadding: Dp = 24.dp,
         icon: (@Composable () -> Unit)? = null,
         title: (@Composable () -> Unit)? = null,
         text: (@Composable () -> Unit)? = null,
         content: (@Composable () -> Unit)? = null,
+        button: (@Composable () -> Unit)? = null,
         shape: Shape = MaterialTheme.shapes.medium,
         containerColor: Color = MaterialTheme.colorScheme.surface,
         tonalElevation: Dp = 2.dp,
@@ -285,9 +304,10 @@ object MyView {
         titleContentColor: Color = contentColorFor(backgroundColor = containerColor),
         textContentColor: Color = contentColorFor(backgroundColor = containerColor),
         contentColor: Color = contentColorFor(backgroundColor = containerColor),
+        buttonContentColor: Color = MaterialTheme.colorScheme.primary,
         properties: DialogProperties = DialogProperties()
     ) {
-        DialogBase(
+        BaseDialog(
             onDismissRequest = onDismissRequest,
             modifier = modifier,
             minWidth = minWidth,
@@ -299,107 +319,82 @@ object MyView {
             tonalElevation = tonalElevation,
             properties = properties
         ) {
-            // TODO
-        }
-        /*
-        @Composable
-@ComposableInferredTarget
-public fun AlertDialog(
-    onDismissRequest: () → Unit,
-    confirmButton: @Composable
-() → Unit,
-    modifier: Modifier,
-    dismissButton: @Composable()
-(() → Unit)?,
-    icon: @Composable()
-(() → Unit)?,
-    title: @Composable()
-(() → Unit)?,
-    text: @Composable()
-(() → Unit)?,
-    shape: Shape,
-    containerColor: Color,
-    tonalElevation: Dp,
-    iconContentColor: Color,
-    titleContentColor: Color,
-    textContentColor: Color,
-    properties: DialogProperties
-): Unit
-         */
-    }
-
-    @Composable
-    fun a() {
-        Column(
-            modifier = Modifier.padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Warning,
-                contentDescription = "투두",
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "투두",
-                style = MaterialTheme.typography.titleLarge,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "투두",
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(6.dp)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            val remainingTime = remember { mutableStateOf(waitTime) }
-            wait(rememberCoroutineScope(), remainingTime)
-
-            for (i in 1..10) {
-                TextButton(
-                    onClick = {
-                        /*TODO*/
-                        isReporting = false
-                        //if (reportDoubleCheck) isDoubleChecking = true
-                    },
-                    contentPadding = PaddingValues(12.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "sjfslkhfs${remainingTime.value}",
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
-                        if (true) {
-                            Icon(
-                                imageVector = Icons.Filled.Star,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.tertiary,
-                                modifier = Modifier.align(Alignment.CenterEnd)
-                            )
+            Column(
+                modifier = Modifier.padding(containerPadding),
+                horizontalAlignment = if (icon != null) Alignment.CenterHorizontally else Alignment.Start
+            ) {
+                icon?.let {
+                    CompositionLocalProvider(LocalContentColor provides iconContentColor) {
+                        Box(
+                            modifier = Modifier.padding(PaddingValues(bottom = 16.dp))
+                        ) {
+                            icon()
                         }
                     }
                 }
-                Divider(
-                    color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
 
-            Spacer(modifier = Modifier.height(24.dp))
-            TextButton(
-                onClick = { isReporting = false },
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(vertical = 6.dp)
-            ) {
-                Text(text = "닫기")
+                title?.let {
+                    CompositionLocalProvider(LocalContentColor provides titleContentColor) {
+                        val textStyle = MaterialTheme.typography.headlineSmall
+                        ProvideTextStyle(textStyle) {
+                            Box(
+                                modifier = Modifier.padding(PaddingValues(bottom = 16.dp))
+                            ) {
+                                title()
+                            }
+                        }
+                    }
+                }
+
+                text?.let {
+                    CompositionLocalProvider(LocalContentColor provides textContentColor) {
+                        val textStyle = MaterialTheme.typography.bodyMedium
+                        ProvideTextStyle(textStyle) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(weight = 1f, fill = false)
+                                    .padding(PaddingValues(bottom = 16.dp))
+                                    .align(Alignment.Start)
+                            ) {
+                                text()
+                            }
+                        }
+                    }
+                }
+
+                content?.let {
+                    CompositionLocalProvider(LocalContentColor provides contentColor) {
+                        Box(
+                            modifier = Modifier
+                                .weight(weight = 1f, fill = false)
+                                .padding(PaddingValues(bottom = 16.dp))
+                                .align(Alignment.Start)
+                        ) {
+                            content()
+                        }
+                    }
+                }
+
+                button?.let {
+                    CompositionLocalProvider(LocalContentColor provides buttonContentColor) {
+                        val textStyle = MaterialTheme.typography.labelLarge
+                        ProvideTextStyle(textStyle) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(PaddingValues(top = 2.dp))
+                                    .align(Alignment.End),
+                            ) {
+                                button()
+                            }
+                        }
+                    }
+                }
+
             }
         }
+
     }
+
 
     data class TipInformation(
         val tip: String = Core.getContext().resources.getString(R.string.tip),
