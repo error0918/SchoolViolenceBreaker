@@ -1,5 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
-@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+@file:Suppress("OPT_IN_IS_NOT_ENABLED", "EXPERIMENTAL_IS_NOT_ENABLED",
+    "EXPERIMENTAL_IS_NOT_ENABLED", "DEPRECATION"
+)
 
 package com.taeyeon.schoolviolencebreaker
 
@@ -19,7 +21,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -29,7 +30,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.Popup
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
@@ -75,6 +75,7 @@ fun save() {
     Settings.saveSettings()
 }
 
+@Suppress("DEPRECATION")
 @Composable
 fun Report() {
     var isDoubleChecking by remember { mutableStateOf(false) }
@@ -198,6 +199,10 @@ object MyView {
     fun DialogBase(
         onDismissRequest: () -> Unit,
         modifier: Modifier = Modifier,
+        minWidth: Dp? = null,
+        maxWidth: Dp? = null,
+        minHeight: Dp? = null,
+        maxHeight: Dp? = null,
         shape: Shape = MaterialTheme.shapes.medium,
         containerColor: Color = MaterialTheme.colorScheme.surface,
         tonalElevation: Dp = 2.dp,
@@ -230,18 +235,35 @@ object MyView {
         }
     }
 
+    @SuppressLint("ModifierParameter")
     @Composable
     fun DialogFull(
         onDismissRequest: () -> Unit,
-        properties: DialogProperties = DialogProperties(),
-        content: @Composable () -> Unit
+        button: RowScope.() -> Unit = {},
+        modifier: Modifier = Modifier,
+        icon: (@Composable () -> Unit)? = null,
+        title: (@Composable () -> Unit)? = null,
+        text: (@Composable () -> Unit)? = null,
+        content: (@Composable () -> Unit)? = null,
+        shape: Shape = MaterialTheme.shapes.medium,
+        containerColor: Color = MaterialTheme.colorScheme.surface,
+        tonalElevation: Dp = 2.dp,
+        iconContentColor: Color,
+        titleContentColor: Color,
+        textContentColor: Color,
+        contentColor: Color,
+        properties: DialogProperties = DialogProperties()
     ) {
-        /*DialogBase(
+        DialogBase(
             onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            shape = shape,
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
             properties = properties
         ) {
             // TODO
-        }*/
+        }
         /*
         @Composable
 @ComposableInferredTarget
@@ -301,7 +323,7 @@ public fun AlertDialog(
                     onClick = {
                         /*TODO*/
                         isReporting = false
-                        if (reportDoubleCheck) isDoubleChecking = true
+                        //if (reportDoubleCheck) isDoubleChecking = true
                     },
                     contentPadding = PaddingValues(12.dp),
                     modifier = Modifier.fillMaxWidth()
