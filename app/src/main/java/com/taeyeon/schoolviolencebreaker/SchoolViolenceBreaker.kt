@@ -477,7 +477,7 @@ object MyView {
             title = title,
             text = text,
             button = {
-                DialogButtonRow() {
+                DialogButtonRow {
                     if (dismissButton != null) dismissButton()
                     if (confirmButton != null) confirmButton()
                 }
@@ -506,7 +506,7 @@ object MyView {
         text: String? = null,
         dismissButtonText: String? = null,
         confirmButtonText: String? = null,
-        onDismissButtonClick: (() -> Unit)? = null,
+        onDismissButtonClick: (() -> Unit)? = onDismissRequest,
         onConfirmButtonClick: (() -> Unit)? = null,
         shape: Shape = DialogDefaults.Shape,
         containerColor: Color = DialogDefaults.ContainerColor,

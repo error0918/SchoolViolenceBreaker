@@ -60,17 +60,12 @@ object SVInfo {
 
             var showing by rememberSaveable { mutableStateOf(false) }
             if (showing) {
-                MyView.BaseDialog(
+                MyView.MessageDialog(
                     onDismissRequest = { showing = false },
-                    icon = { Icon(imageVector = Icons.Default.QuestionMark, contentDescription = null) },
-                    title = { Text(text = "타이틀") },
-                    text = { Text(text = "텍스트 ".repeat(20)) },
-                    button = {
-                        MyView.DialogButtonRow() {
-                            TextButton(onClick = { showing = false }) { Text(text = "버튼 1") }
-                            TextButton(onClick = { showing = false }) { Text(text = "버튼 2") }
-                        }
-                    }
+                    icon = Icons.Default.QuestionMark,
+                    title = "타이틀",
+                    text = "텍스트 ",
+                    dismissButtonText = "닫기",
                 )
             }
 
