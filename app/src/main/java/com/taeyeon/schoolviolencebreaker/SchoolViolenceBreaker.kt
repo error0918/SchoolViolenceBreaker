@@ -199,8 +199,8 @@ object MyView {
     fun DialogBase(
         onDismissRequest: () -> Unit,
         modifier: Modifier = Modifier,
-        minWidth: Dp? = null,
-        maxWidth: Dp? = null,
+        minWidth: Dp? = 280.dp,
+        maxWidth: Dp? = 560.dp,
         minHeight: Dp? = null,
         maxHeight: Dp? = null,
         shape: Shape = MaterialTheme.shapes.medium,
@@ -213,18 +213,47 @@ object MyView {
             onDismissRequest = onDismissRequest,
             properties = properties
         ) {
-            val displayWidth = let {
-                val size = Point()
-                Core.getActivity().windowManager.defaultDisplay.getRealSize(size)
-                LocalDensity.current.run { size.x.toDp() }
-            }
+            val size = Point()
+            Core.getActivity().windowManager.defaultDisplay.getRealSize(size)
+            val displayWidth = LocalDensity.current.run { size.x.toDp() }
+            val displayHeight = LocalDensity.current.run { size.y.toDp() }
             Surface(
                 modifier = modifier.then(
                     Modifier
-                        .requiredWidthIn(
-                            min = if (displayWidth >= 280.dp) 280.dp else 0.dp,
-                            max = if (displayWidth >= 560.dp) 560.dp else displayWidth
-                        )
+                        .also {
+                            if ((minWidth ?: 0.dp) <= (maxWidth ?: Dp.Infinity)) {
+                                if (minWidth == null && maxWidth != null) {
+                                    it.requiredWidthIn(
+                                        max = if (displayWidth >= maxWidth) maxWidth else displayWidth
+                                    )
+                                } else if (minWidth != null && maxWidth == null) {
+                                    it.requiredWidthIn(
+                                        min = if (displayWidth >= minWidth) minWidth else 0.dp
+                                    )
+                                } else if (minWidth != null && maxWidth != null) {
+                                    it.requiredWidthIn(
+                                        min = if (displayWidth >= minWidth) minWidth else 0.dp,
+                                        max = if (displayWidth >= maxWidth) maxWidth else displayWidth
+                                    )
+                                }
+                            }
+                            if ((minHeight ?: 0.dp) <= (maxHeight ?: Dp.Infinity)) {
+                                if (minHeight == null && maxHeight != null) {
+                                    it.requiredHeightIn(
+                                        max = if (displayHeight >= maxHeight) maxHeight else displayHeight
+                                    )
+                                } else if (minHeight != null && maxHeight == null) {
+                                    it.requiredHeightIn(
+                                        min = if (displayHeight >= minHeight) minHeight else 0.dp
+                                    )
+                                } else if (minHeight != null && maxHeight != null) {
+                                    it.requiredHeightIn(
+                                        min = if (displayHeight >= minHeight) minHeight else 0.dp,
+                                        max = if (displayHeight >= maxHeight) maxHeight else displayHeight
+                                    )
+                                }
+                            }
+                        }
                         .padding(10.dp)
                 ),
                 shape = shape,
@@ -241,6 +270,10 @@ object MyView {
         onDismissRequest: () -> Unit,
         button: RowScope.() -> Unit = {},
         modifier: Modifier = Modifier,
+        minWidth: Dp? = 280.dp,
+        maxWidth: Dp? = 560.dp,
+        minHeight: Dp? = null,
+        maxHeight: Dp? = null,
         icon: (@Composable () -> Unit)? = null,
         title: (@Composable () -> Unit)? = null,
         text: (@Composable () -> Unit)? = null,
@@ -248,15 +281,19 @@ object MyView {
         shape: Shape = MaterialTheme.shapes.medium,
         containerColor: Color = MaterialTheme.colorScheme.surface,
         tonalElevation: Dp = 2.dp,
-        iconContentColor: Color,
-        titleContentColor: Color,
-        textContentColor: Color,
-        contentColor: Color,
+        iconContentColor: Color = contentColorFor(backgroundColor = containerColor),
+        titleContentColor: Color = contentColorFor(backgroundColor = containerColor),
+        textContentColor: Color = contentColorFor(backgroundColor = containerColor),
+        contentColor: Color = contentColorFor(backgroundColor = containerColor),
         properties: DialogProperties = DialogProperties()
     ) {
         DialogBase(
             onDismissRequest = onDismissRequest,
             modifier = modifier,
+            minWidth = minWidth,
+            maxWidth = maxWidth,
+            minHeight = minHeight,
+            maxHeight = maxHeight,
             shape = shape,
             containerColor = containerColor,
             tonalElevation = tonalElevation,
