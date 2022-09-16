@@ -25,6 +25,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -259,7 +260,14 @@ object MyView {
                             minHeight = minHeight,
                             maxHeight = maxHeight
                         )
-                        .padding(PaddingValues(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 18.dp))
+                        .padding(
+                            PaddingValues(
+                                start = 24.dp,
+                                top = 24.dp,
+                                end = 24.dp,
+                                bottom = 18.dp
+                            )
+                        )
                 ),
                 shape = shape,
                 color = containerColor,
@@ -386,73 +394,150 @@ object MyView {
 
     }
 
+    @SuppressLint("ModifierParameter")
     @Composable
     fun MessageDialog(
-        /*onDismissRequest: () -> Unit,
-        confirmButton: @Composable () -> Unit,
-        modifier: Modifier = Modifier,
-        dismissButton: (@Composable () -> Unit)? = null,
-        icon: (@Composable () -> Unit)? = null,
-        title: (@Composable () -> Unit)? = null,
-        text: (@Composable () -> Unit)? = null,
-        shape: Shape = AlertDialogDefaults.shape,
-        containerColor: Color = AlertDialogDefaults.containerColor,
-        iconContentColor: Color = AlertDialogDefaults.iconContentColor,
-        titleContentColor: Color = AlertDialogDefaults.titleContentColor,
-        textContentColor: Color = AlertDialogDefaults.textContentColor,
-        tonalElevation: Dp = AlertDialogDefaults.TonalElevation,
-        properties: DialogProperties = DialogProperties()*/
-    ) {
-        /*
         onDismissRequest: () -> Unit,
-        modifier: Modifier = Modifier,
-        minWidth: Dp = 280.dp,
-        maxWidth: Dp = 560.dp,
-        minHeight: Dp = 0.dp,
-        maxHeight: Dp = Dp.Infinity,
-        containerPadding: Dp = 24.dp,
+        modifier: Modifier = DialogDefaults.Modifier,
         icon: (@Composable () -> Unit)? = null,
         title: (@Composable () -> Unit)? = null,
         text: (@Composable () -> Unit)? = null,
-        content: (@Composable () -> Unit)? = null,
         button: (@Composable () -> Unit)? = null,
-        shape: Shape = MaterialTheme.shapes.medium,
-        containerColor: Color = MaterialTheme.colorScheme.surface,
-        tonalElevation: Dp = 2.dp,
-        iconContentColor: Color = contentColorFor(backgroundColor = containerColor),
-        titleContentColor: Color = contentColorFor(backgroundColor = containerColor),
-        textContentColor: Color = contentColorFor(backgroundColor = containerColor),
-        contentColor: Color = contentColorFor(backgroundColor = containerColor),
-        buttonContentColor: Color = MaterialTheme.colorScheme.primary,
-        titleTextStyle: TextStyle = MaterialTheme.typography.headlineSmall,
-        textTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-        contentTextStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-        buttonTextStyle: TextStyle = MaterialTheme.typography.labelLarge,
-        properties: DialogProperties = DialogProperties()
-         */
-        /*
-        public fun AlertDialog(
-    onDismissRequest: () → Unit,
-    confirmButton: @Composable
-() → Unit,
-    modifier: Modifier,
-    dismissButton: @Composable()
-(() → Unit)?,
-    icon: @Composable()
-(() → Unit)?,
-    title: @Composable()
-(() → Unit)?,
-    text: @Composable()
-(() → Unit)?,
-    shape: Shape,
-    containerColor: Color,
-    tonalElevation: Dp,
-    iconContentColor: Color,
-    titleContentColor: Color,
-    textContentColor: Color,
-    properties: DialogProperties
-): Unit
-         */
+        shape: Shape = DialogDefaults.Shape,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        iconContentColor: Color = DialogDefaults.IconContentColor,
+        titleContentColor: Color = DialogDefaults.TitleContentColor,
+        textContentColor: Color = DialogDefaults.TextContentColor,
+        buttonContentColor: Color = DialogDefaults.ButtonContentColor,
+        titleTextStyle: TextStyle = DialogDefaults.TitleTextStyle,
+        textTextStyle: TextStyle = DialogDefaults.TextTextStyle,
+        buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
+        properties: DialogProperties = DialogDefaults.Properties
+    ) {
+        BaseDialog(
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            icon = icon,
+            title = title,
+            text = text,
+            button = button,
+            shape= shape,
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            buttonContentColor = buttonContentColor,
+            titleTextStyle = titleTextStyle,
+            textTextStyle = textTextStyle,
+            buttonTextStyle = buttonTextStyle,
+            properties = properties
+        )
+    }
+
+    @SuppressLint("ModifierParameter")
+    @Composable
+    fun MessageDialog(
+        onDismissRequest: () -> Unit,
+        modifier: Modifier = DialogDefaults.Modifier,
+        icon: (@Composable () -> Unit)? = null,
+        title: (@Composable () -> Unit)? = null,
+        text: (@Composable () -> Unit)? = null,
+        dismissButton: (@Composable () -> Unit)? = null,
+        confirmButton: (@Composable () -> Unit)? = null,
+        shape: Shape = DialogDefaults.Shape,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        iconContentColor: Color = DialogDefaults.IconContentColor,
+        titleContentColor: Color = DialogDefaults.TitleContentColor,
+        textContentColor: Color = DialogDefaults.TextContentColor,
+        buttonContentColor: Color = DialogDefaults.ButtonContentColor,
+        titleTextStyle: TextStyle = DialogDefaults.TitleTextStyle,
+        textTextStyle: TextStyle = DialogDefaults.TextTextStyle,
+        buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
+        properties: DialogProperties = DialogDefaults.Properties
+    ) {
+        MessageDialog(
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            icon = icon,
+            title = title,
+            text = text,
+            button = {
+                DialogButtonRow() {
+                    if (dismissButton != null) dismissButton()
+                    if (confirmButton != null) confirmButton()
+                }
+            },
+            shape= shape,
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            buttonContentColor = buttonContentColor,
+            titleTextStyle = titleTextStyle,
+            textTextStyle = textTextStyle,
+            buttonTextStyle = buttonTextStyle,
+            properties = properties
+        )
+    }
+
+    @SuppressLint("ModifierParameter")
+    @Composable
+    fun MessageDialog(
+        onDismissRequest: () -> Unit,
+        modifier: Modifier = DialogDefaults.Modifier,
+        icon: ImageVector? = null,
+        title: String? = null,
+        text: String? = null,
+        dismissButtonText: String? = null,
+        confirmButtonText: String? = null,
+        onDismissButtonClick: (() -> Unit)? = null,
+        onConfirmButtonClick: (() -> Unit)? = null,
+        shape: Shape = DialogDefaults.Shape,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        iconContentColor: Color = DialogDefaults.IconContentColor,
+        titleContentColor: Color = DialogDefaults.TitleContentColor,
+        textContentColor: Color = DialogDefaults.TextContentColor,
+        buttonContentColor: Color = DialogDefaults.ButtonContentColor,
+        titleTextStyle: TextStyle = DialogDefaults.TitleTextStyle,
+        textTextStyle: TextStyle = DialogDefaults.TextTextStyle,
+        buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
+        properties: DialogProperties = DialogDefaults.Properties
+    ) {
+        MessageDialog(
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            icon = if (icon != null) { -> Icon(imageVector = icon, contentDescription = null) } else null,
+            title = if (title != null) { -> Text(text = title) } else null,
+            text = if (text != null) { -> Text(text = text) } else null,
+            dismissButton = if (dismissButtonText != null && onDismissButtonClick != null)
+                { ->
+                    TextButton(onClick = onDismissButtonClick) {
+                        Text(text = dismissButtonText)
+                    }
+                } else null,
+            confirmButton = if (confirmButtonText != null && onConfirmButtonClick != null)
+                { ->
+                    TextButton(onClick = onConfirmButtonClick) {
+                        Text(text = confirmButtonText)
+                    }
+                } else null,
+            shape= shape,
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            buttonContentColor = buttonContentColor,
+            titleTextStyle = titleTextStyle,
+            textTextStyle = textTextStyle,
+            buttonTextStyle = buttonTextStyle,
+            properties = properties
+        )
     }
 
     @Composable
