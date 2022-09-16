@@ -232,6 +232,18 @@ object MyView {
         val Properties = DialogProperties()
     }
 
+    @Composable
+    fun DialogButtonRow(
+        modifier: Modifier = Modifier,
+        button: @Composable RowScope.() -> Unit
+    ) {
+        Row(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            content = button
+        )
+    }
+
     @SuppressLint("ModifierParameter")
     @Composable
     fun SurfaceDialog(
@@ -537,18 +549,6 @@ object MyView {
             textTextStyle = textTextStyle,
             buttonTextStyle = buttonTextStyle,
             properties = properties
-        )
-    }
-
-    @Composable
-    fun DialogButtonRow(
-        modifier: Modifier = Modifier,
-        button: @Composable RowScope.() -> Unit
-    ) {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            content = button
         )
     }
 
