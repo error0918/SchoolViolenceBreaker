@@ -26,10 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -558,7 +560,7 @@ object MyView {
         buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
         properties: DialogProperties = DialogDefaults.Properties
     ) {
-        BaseDialog(
+        ListDialog(
             onDismissRequest = onDismissRequest,
             modifier = modifier,
             minWidth = minWidth,
@@ -569,17 +571,8 @@ object MyView {
             icon = icon,
             title = title,
             text = text,
-            content = {
-                CompositionLocalProvider(LocalContentColor provides listContentColor) {
-                    ProvideTextStyle(listTextStyle) {
-                        LazyColumn {
-                            items(items) { item ->
-                                itemContent(item)
-                            }
-                        }
-                    }
-                }
-            },
+            items = items.toList(),
+            itemContent = itemContent,
             button = button,
             shape = shape,
             containerColor = containerColor,
@@ -587,9 +580,11 @@ object MyView {
             iconContentColor = iconContentColor,
             titleContentColor = titleContentColor,
             textContentColor = textContentColor,
+            listContentColor = listContentColor,
             buttonContentColor = buttonContentColor,
             titleTextStyle = titleTextStyle,
             textTextStyle = textTextStyle,
+            listTextStyle = listTextStyle,
             buttonTextStyle = buttonTextStyle,
             properties = properties
         )
@@ -692,7 +687,7 @@ object MyView {
         buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
         properties: DialogProperties = DialogDefaults.Properties
     ) {
-        BaseDialog(
+        ListDialog(
             onDismissRequest = onDismissRequest,
             modifier = modifier,
             minWidth = minWidth,
@@ -703,17 +698,8 @@ object MyView {
             icon = icon,
             title = title,
             text = text,
-            content = {
-                CompositionLocalProvider(LocalContentColor provides listContentColor) {
-                    ProvideTextStyle(listTextStyle) {
-                        LazyColumn {
-                            itemsIndexed(items) { index, item ->
-                                itemContent(index, item)
-                            }
-                        }
-                    }
-                }
-            },
+            items = items.toList(),
+            itemContent = itemContent,
             button = button,
             shape = shape,
             containerColor = containerColor,
@@ -721,9 +707,143 @@ object MyView {
             iconContentColor = iconContentColor,
             titleContentColor = titleContentColor,
             textContentColor = textContentColor,
+            listContentColor = listContentColor,
             buttonContentColor = buttonContentColor,
             titleTextStyle = titleTextStyle,
             textTextStyle = textTextStyle,
+            listTextStyle = listTextStyle,
+            buttonTextStyle = buttonTextStyle,
+            properties = properties
+        )
+    }
+
+    @SuppressLint("ModifierParameter")
+    @Composable
+    fun ListDialog(
+        onDismissRequest: () -> Unit,
+        modifier: Modifier = DialogDefaults.Modifier,
+        icon: ImageVector? = null,
+        title: String? = null,
+        text: String? = null,
+        items: List<String>,
+        onItemClick: (index: Int, item: String) -> Unit,
+        dismissButtonText: String? = null,
+        confirmButtonText: String? = null,
+        onDismissButtonClick: (() -> Unit)? = onDismissRequest,
+        onConfirmButtonClick: (() -> Unit)? = null,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        iconContentColor: Color = DialogDefaults.IconContentColor,
+        titleContentColor: Color = DialogDefaults.TitleContentColor,
+        textContentColor: Color = DialogDefaults.TextContentColor,
+        listContentColor: Color = DialogDefaults.ListContentColor,
+        buttonContentColor: Color = DialogDefaults.ButtonContentColor,
+        titleTextStyle: TextStyle = DialogDefaults.TitleTextStyle,
+        textTextStyle: TextStyle = DialogDefaults.TextTextStyle,
+        listTextStyle: TextStyle = DialogDefaults.ListTextStyle,
+        buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
+        properties: DialogProperties = DialogDefaults.Properties
+    ) {
+        ListDialog(
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            icon = if (icon != null) { -> Icon(imageVector = icon, contentDescription = null) } else null,
+            title = if (title != null) { -> Text(text = title) } else null,
+            text = if (text != null) { -> Text(text = text) } else null,
+            items = items,
+            itemContent = { index, item ->
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    TextButton(
+                        onClick = { onItemClick(index, item) },
+                        shape = RectangleShape
+                    ) {
+                        Text(
+                            text = item,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    Divider(modifier = Modifier.fillMaxWidth())
+                }
+            },
+            button = {
+                DialogButtonRow {
+                    if (dismissButtonText != null && onDismissButtonClick != null) {
+                        TextButton(onClick = onDismissButtonClick) {
+                            Text(text = dismissButtonText)
+                        }
+                    }
+                    if (confirmButtonText != null && onConfirmButtonClick != null) {
+                        TextButton(onClick = onConfirmButtonClick) {
+                            Text(text = confirmButtonText)
+                        }
+                    }
+                }
+            },
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            listContentColor = listContentColor,
+            buttonContentColor = buttonContentColor,
+            titleTextStyle = titleTextStyle,
+            textTextStyle = textTextStyle,
+            listTextStyle = listTextStyle,
+            buttonTextStyle = buttonTextStyle,
+            properties = properties
+        )
+    }
+
+    @SuppressLint("ModifierParameter")
+    @Composable
+    fun ListDialog(
+        onDismissRequest: () -> Unit,
+        modifier: Modifier = DialogDefaults.Modifier,
+        icon: ImageVector? = null,
+        title: String? = null,
+        text: String? = null,
+        items: Array<String>,
+        onItemClick: (index: Int, item: String) -> Unit,
+        dismissButtonText: String? = null,
+        confirmButtonText: String? = null,
+        onDismissButtonClick: (() -> Unit)? = onDismissRequest,
+        onConfirmButtonClick: (() -> Unit)? = null,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        iconContentColor: Color = DialogDefaults.IconContentColor,
+        titleContentColor: Color = DialogDefaults.TitleContentColor,
+        textContentColor: Color = DialogDefaults.TextContentColor,
+        listContentColor: Color = DialogDefaults.ListContentColor,
+        buttonContentColor: Color = DialogDefaults.ButtonContentColor,
+        titleTextStyle: TextStyle = DialogDefaults.TitleTextStyle,
+        textTextStyle: TextStyle = DialogDefaults.TextTextStyle,
+        listTextStyle: TextStyle = DialogDefaults.ListTextStyle,
+        buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
+        properties: DialogProperties = DialogDefaults.Properties
+    ) {
+        ListDialog(
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            icon = icon,
+            title = title,
+            text = text,
+            items = items.toList(),
+            onItemClick = onItemClick,
+            dismissButtonText = dismissButtonText,
+            confirmButtonText = confirmButtonText,
+            onDismissButtonClick = onDismissButtonClick,
+            onConfirmButtonClick = onConfirmButtonClick,
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            listContentColor = listContentColor,
+            buttonContentColor = buttonContentColor,
+            titleTextStyle = titleTextStyle,
+            textTextStyle = textTextStyle,
+            listTextStyle = listTextStyle,
             buttonTextStyle = buttonTextStyle,
             properties = properties
         )
