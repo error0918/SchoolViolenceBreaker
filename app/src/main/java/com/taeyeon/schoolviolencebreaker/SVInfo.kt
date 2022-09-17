@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
 import java.util.*
@@ -60,12 +61,32 @@ object SVInfo {
 
             var showing by rememberSaveable { mutableStateOf(false) }
             if (showing) {
-                MyView.MessageDialog(
+                MyView.ListDialog(
                     onDismissRequest = { showing = false },
-                    icon = Icons.Default.QuestionMark,
-                    title = "타이틀",
-                    text = "텍스트 ",
-                    dismissButtonText = "닫기",
+                    icon = { Icon(imageVector = Icons.Default.QuestionMark, contentDescription = null) },
+                    title = { Text(text = "타이틀") },
+                    itemContent = { index ->
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            TextButton(
+                                onClick = { /*TODO*/ }
+                            ) {
+                                Text(
+                                    text = "아이템 $index",
+                                    textAlign = TextAlign.Start,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                            Divider(modifier = Modifier.fillMaxWidth())
+                        }
+                    },
+                    itemCount = 20,
+                    button = {
+                        MyView.DialogButtonRow {
+                            TextButton(onClick = { showing = false }) {
+                                Text(text = "버튼")
+                            }
+                        }
+                    }
                 )
             }
 

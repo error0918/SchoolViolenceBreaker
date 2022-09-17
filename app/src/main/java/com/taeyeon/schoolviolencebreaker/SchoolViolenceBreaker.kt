@@ -10,6 +10,8 @@ import android.graphics.Point
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
@@ -219,6 +221,8 @@ object MyView {
             @Composable get() { return contentColorFor(backgroundColor = ContainerColor) }
         val ContentColor: Color
             @Composable get() { return contentColorFor(backgroundColor = ContainerColor) }
+        val ListContentColor: Color
+            @Composable get() { return MaterialTheme.colorScheme.primary }
         val ButtonContentColor: Color
             @Composable get() { return MaterialTheme.colorScheme.primary }
         val TitleTextStyle: TextStyle
@@ -226,6 +230,8 @@ object MyView {
         val TextTextStyle: TextStyle
             @Composable get() { return MaterialTheme.typography.bodyMedium }
         val ContentTextStyle: TextStyle
+            @Composable get() { return MaterialTheme.typography.bodyMedium }
+        val ListTextStyle: TextStyle
             @Composable get() { return MaterialTheme.typography.bodyMedium }
         val ButtonTextStyle: TextStyle
             @Composable get() { return MaterialTheme.typography.labelLarge }
@@ -539,6 +545,73 @@ object MyView {
                     }
                 } else null,
             shape= shape,
+            containerColor = containerColor,
+            tonalElevation = tonalElevation,
+            iconContentColor = iconContentColor,
+            titleContentColor = titleContentColor,
+            textContentColor = textContentColor,
+            buttonContentColor = buttonContentColor,
+            titleTextStyle = titleTextStyle,
+            textTextStyle = textTextStyle,
+            buttonTextStyle = buttonTextStyle,
+            properties = properties
+        )
+    }
+
+    @SuppressLint("ModifierParameter")
+    @Composable
+    fun ListDialog(
+        onDismissRequest: () -> Unit,
+        modifier: Modifier = DialogDefaults.Modifier,
+        minWidth: Dp = DialogDefaults.MinWidth,
+        maxWidth: Dp = DialogDefaults.MaxWidth,
+        minHeight: Dp = DialogDefaults.MinHeight,
+        maxHeight: Dp = DialogDefaults.MaxHeight,
+        containerPadding: Dp = DialogDefaults.ContainerPadding,
+        icon: (@Composable () -> Unit)? = null,
+        title: (@Composable () -> Unit)? = null,
+        text: (@Composable () -> Unit)? = null,
+        itemCount: Int,
+        itemContent: @Composable LazyItemScope.(index: Int) -> Unit,
+        button: (@Composable () -> Unit)? = null,
+        shape: Shape = DialogDefaults.Shape,
+        containerColor: Color = DialogDefaults.ContainerColor,
+        tonalElevation: Dp = DialogDefaults.TonalElevation,
+        iconContentColor: Color = DialogDefaults.IconContentColor,
+        titleContentColor: Color = DialogDefaults.TitleContentColor,
+        textContentColor: Color = DialogDefaults.TextContentColor,
+        listContentColor: Color = DialogDefaults.ListContentColor,
+        buttonContentColor: Color = DialogDefaults.ButtonContentColor,
+        titleTextStyle: TextStyle = DialogDefaults.TitleTextStyle,
+        textTextStyle: TextStyle = DialogDefaults.TextTextStyle,
+        listTextStyle: TextStyle = DialogDefaults.ListTextStyle,
+        buttonTextStyle: TextStyle = DialogDefaults.ButtonTextStyle,
+        properties: DialogProperties = DialogDefaults.Properties
+    ) {
+        BaseDialog(
+            onDismissRequest = onDismissRequest,
+            modifier = modifier,
+            minWidth = minWidth,
+            maxWidth = maxWidth,
+            minHeight = minHeight,
+            maxHeight = maxHeight,
+            containerPadding = containerPadding,
+            icon = icon,
+            title = title,
+            text = text,
+            content = {
+                CompositionLocalProvider(LocalContentColor provides listContentColor) {
+                    ProvideTextStyle(listTextStyle) {
+                        LazyColumn {
+                            items(itemCount) { index ->
+                                itemContent(index)
+                            }
+                        }
+                    }
+                }
+            },
+            button = button,
+            shape = shape,
             containerColor = containerColor,
             tonalElevation = tonalElevation,
             iconContentColor = iconContentColor,
