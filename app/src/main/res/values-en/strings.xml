@@ -15,6 +15,18 @@
 
     <string name="helpful">Helpful Site</string>
 
+    <string name="helpful_unit_info">Info</string>
+
+    <string name="helpful_unit_action">Action</string>
+    <string name="helpful_unit_action_browse">Browse</string>
+    <string name="helpful_unit_action_copy_link">Copy Link</string>
+    <string name="helpful_unit_action_copy_info">Copy Info</string>
+    <string name="helpful_unit_action_copy_info_message">
+        Name: %1$s\n
+        Description: %2$s\n
+        Link: %3$s\n
+    </string>
+
     <string name="refresh">Refresh</string>
     <string name="edit">Edit</string>
     <string name="edit_rules">

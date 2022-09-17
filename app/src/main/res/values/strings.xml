@@ -15,6 +15,18 @@
 
     <string name="helpful">도움되는 곳</string>
 
+    <string name="helpful_unit_info">정보</string>
+
+    <string name="helpful_unit_action">액션</string>
+    <string name="helpful_unit_action_browse">링크 바로가기</string>
+    <string name="helpful_unit_action_copy_link">링크 복사하기</string>
+    <string name="helpful_unit_action_copy_info">정보 복사하기</string>
+    <string name="helpful_unit_action_copy_info_message">
+        이름: %1$s\n
+        설명: %2$s\n
+        링크: %3$s\n
+    </string>
+
     <string name="refresh">새로고침</string>
     <string name="edit">수정하기</string>
     <string name="edit_rules">

@@ -245,19 +245,92 @@ object Helpful {
     ) {
         val hasImage = imageBitmap != null
 
-        var showingActionsDialog by remember { mutableStateOf(false) }
         var showingInfoDialog by remember { mutableStateOf(false) }
-
-        if (showingActionsDialog) {
-            MyView.BaseDialog(
-                onDismissRequest = { showingActionsDialog = false },
-                //icon = { Icon }
-            )
-        }
+        var showingActionsDialog by remember { mutableStateOf(false) }
 
         if (showingInfoDialog) {
             MyView.BaseDialog(
-                onDismissRequest = { showingInfoDialog = false }
+                onDismissRequest = { showingInfoDialog = false },
+                icon = { Icon(imageVector = Icons.Filled.Info, contentDescription = stringResource(id = R.string.helpful_unit_info)) },
+                title = { Text(text= stringResource(id = R.string.helpful_unit_info)) },
+                content = {
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        if (hasImage) {
+                            var imageWidth by remember { mutableStateOf(0) }
+                            Image(
+                                bitmap = imageBitmap!!,
+                                contentDescription = imageBitmapDescription,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                                    .onSizeChanged { intSize ->
+                                        imageWidth = intSize.width
+                                    }
+                                    .background(
+                                        color = imageBitmapBackground
+                                            ?: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                                        shape = MaterialTheme.shapes.medium
+                                    )
+                                    .padding(5.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Text(
+                            text = description,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
+                    }
+                },
+                button = {
+                    TextButton(onClick = { showingInfoDialog = false }) {
+                        Text(stringResource(id = R.string.close))
+                    }
+                }
+            )
+        }
+
+        if (showingActionsDialog) {
+            MyView.ListDialog(
+                onDismissRequest = { showingActionsDialog = false },
+                icon = Icons.Filled.PlayArrow,
+                title = stringResource(id = R.string.helpful_unit_action),
+                items = listOf(stringResource(id = R.string.helpful_unit_action_browse), stringResource(id = R.string.helpful_unit_action_copy_link), stringResource(id = R.string.helpful_unit_action_copy_info)),
+                onItemClick = { index, _ ->
+                    when (index) {
+                        0 -> {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                            Core
+                                .getActivity()
+                                .startActivity(intent)
+                        }
+                        1 -> {
+                            Utils.copy(text = link)
+                        }
+                        2 -> {
+                            Utils.copy(
+                                text = Core.getContext().getString(
+                                    R.string.helpful_unit_action_copy_info_message,
+                                    title, description, link
+                                )
+                            )
+                        }
+                    }
+                    showingActionsDialog = false
+                },
+                listTextStyle = MaterialTheme.typography.bodyLarge,
+                dismissButtonText = stringResource(id = R.string.close)
             )
         }
 
