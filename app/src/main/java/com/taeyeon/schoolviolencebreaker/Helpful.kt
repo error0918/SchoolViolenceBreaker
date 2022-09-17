@@ -198,15 +198,6 @@ object Helpful {
 
     @Composable
     fun Helpful(paddingValues: PaddingValues = PaddingValues()) {
-        var tip by rememberSaveable { mutableStateOf(true) }
-        if(tip) {
-            MyView.PopupTip(
-                message = "우왕!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-                hasBottomBar = true,
-                onClose = { tip = false }
-            )
-        }
-
         LazyColumn(
             modifier = Modifier.padding(
                 top = paddingValues.calculateTopPadding(),

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.ReportProblem
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -158,6 +159,15 @@ object Main {
             floatingActionButton = { Fab() },
             bottomBar = { NavigationBar() }
         ) { paddingValues ->
+            var tip by rememberSaveable { mutableStateOf(true) }
+            if(tip) {
+                MyView.PopupTip(
+                    message = "우왕!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+                    hasBottomBar = true,
+                    onClose = { tip = false }
+                )
+            }
+
             MainContent(paddingValues = paddingValues)
         }
     }
