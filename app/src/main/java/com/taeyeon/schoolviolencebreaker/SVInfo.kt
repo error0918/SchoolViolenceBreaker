@@ -1,8 +1,7 @@
 package com.taeyeon.schoolviolencebreaker
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -10,8 +9,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
@@ -56,7 +53,7 @@ object SVInfo {
                 )
             )
 
-            if (showingTip) {
+            AnimatedVisibility(visible = showingTip) {
                 val tipIndex by rememberSaveable { mutableStateOf(Random().nextInt(tipInformation.size)) }
                 Tip(tipInformation[tipIndex])
             }

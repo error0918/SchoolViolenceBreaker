@@ -60,6 +60,7 @@ object MyView {
         val ContainerColor: Color
             @Composable get() { return MaterialTheme.colorScheme.surface }
         val TonalElevation = 2.dp
+        val ListTextAlign = TextAlign.Start
         val IconContentColor: Color
             @Composable get() { return contentColorFor(backgroundColor = ContainerColor) }
         val TitleContentColor: Color
@@ -726,6 +727,7 @@ object MyView {
         title: String? = null,
         text: String? = null,
         items: List<String>,
+        listTextAlign: TextAlign = DialogDefaults.ListTextAlign,
         onItemClick: (index: Int, item: String) -> Unit,
         dismissButtonText: String? = null,
         confirmButtonText: String? = null,
@@ -759,7 +761,7 @@ object MyView {
                     ) {
                         Text(
                             text = item,
-                            textAlign = TextAlign.Start,
+                            textAlign = listTextAlign,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
@@ -804,6 +806,7 @@ object MyView {
         title: String? = null,
         text: String? = null,
         items: Array<String>,
+        listTextAlign: TextAlign = DialogDefaults.ListTextAlign,
         onItemClick: (index: Int, item: String) -> Unit,
         dismissButtonText: String? = null,
         confirmButtonText: String? = null,
@@ -829,6 +832,7 @@ object MyView {
             title = title,
             text = text,
             items = items.toList(),
+            listTextAlign = listTextAlign,
             onItemClick = onItemClick,
             dismissButtonText = dismissButtonText,
             confirmButtonText = confirmButtonText,

@@ -38,6 +38,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -195,7 +196,14 @@ object Helpful {
 
     @Composable
     fun Helpful(paddingValues: PaddingValues = PaddingValues()) {
-        PopupTip()
+        var tip by rememberSaveable { mutableStateOf(true) }
+        if(tip) {
+            PopupTip(
+                message = "우왕!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+                hasBottomBar = true,
+                onClose = { tip = false }
+            )
+        }
 
         LazyColumn(
             modifier = Modifier.padding(
@@ -409,34 +417,40 @@ object Helpful {
 
     @Composable
     fun PopupTip(
-        //
+        tip: Pair<ImageVector, String> = Icons.Filled.Notifications to stringResource(id = R.string.tip),
+        close: Pair<ImageVector, String> = Icons.Filled.Close to stringResource(id = R.string.close),
+        message: String,
+        onClose: () -> Unit,
+        disappearTime: Int? = 10,
+        hasBottomBar: Boolean = false,
     ) {
-        var leftTIme by rememberSaveable { mutableStateOf(3) }
-        val bottomNavigationBarHeight = with(LocalDensity.current) { 80.dp.toPx() }
-
-        LaunchedEffect(leftTIme) {
-            if (leftTIme > 0) {
-                delay(1000)
-                leftTIme--
-            } else {
-                // TODO
+        var leftTime by rememberSaveable { mutableStateOf(disappearTime ?: 0) }
+        if (disappearTime != null) {
+            LaunchedEffect(leftTime) {
+                if (leftTime > 0) {
+                    delay(1000)
+                    leftTime--
+                } else {
+                    onClose()
+                }
             }
         }
 
         Popup(
             alignment = Alignment.BottomCenter,
-            offset = IntOffset(0, -bottomNavigationBarHeight.toInt()),
-            onDismissRequest = {}
+            offset = IntOffset(0, if(hasBottomBar) -with(LocalDensity.current) { 80.dp.toPx() }.toInt() else 0),
+            onDismissRequest = onClose,
+            properties = PopupProperties(dismissOnClickOutside = false)
         ) {
             val dismissState = rememberDismissState(
                 confirmStateChange = { value ->
                     when (value) {
                         DismissValue.DismissedToEnd -> {
-                            // TODO
+                            onClose()
                             false
                         }
                         DismissValue.DismissedToStart -> {
-                            // TODO
+                            onClose()
                             false
                         }
                         else -> false
@@ -459,7 +473,7 @@ object Helpful {
                                 .padding(20.dp)
                         ) {
                             Text(
-                                text = stringResource(id = R.string.close),
+                                text = close.second,
                                 modifier = Modifier
                                     .background(
                                         color = MaterialTheme.colorScheme.secondaryContainer.copy(
@@ -485,6 +499,7 @@ object Helpful {
                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
                     modifier = Modifier
                         .padding(20.dp)
+                        .requiredWidthIn(min = 150.dp, max = Dp.Infinity)
                 ) {
                     val tipIconSize = LocalDensity.current.run {
                         MaterialTheme.typography.labelSmall.fontSize.toPx().toDp()
@@ -496,8 +511,8 @@ object Helpful {
                         val (tipIcon, tipText, closeText, closeIconButton, messageText) = createRefs()
 
                         Icon(
-                            imageVector = Icons.Filled.Notifications,
-                            contentDescription = stringResource(id = R.string.tip),
+                            imageVector = tip.first,
+                            contentDescription = tip.second,
                             modifier = Modifier
                                 .size(tipIconSize)
                                 .constrainAs(tipIcon) {
@@ -507,7 +522,7 @@ object Helpful {
                         )
 
                         Text(
-                            text = stringResource(id = R.string.tip),
+                            text = tip.second,
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
                                 .constrainAs(tipText) {
@@ -517,19 +532,21 @@ object Helpful {
                                 }
                         )
 
-                        Text(
-                            text = "$leftTIme",
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier
-                                .constrainAs(closeText) {
-                                    top.linkTo(tipIcon.top)
-                                    bottom.linkTo(tipIcon.bottom)
-                                    end.linkTo(closeIconButton.start, margin = tipIconSize / 2)
-                                }
-                        )
+                        disappearTime?.let {
+                            Text(
+                                text = "$leftTime",
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier
+                                    .constrainAs(closeText) {
+                                        top.linkTo(tipIcon.top)
+                                        bottom.linkTo(tipIcon.bottom)
+                                        end.linkTo(closeIconButton.start, margin = tipIconSize / 2)
+                                    }
+                            )
+                        }
 
                         IconButton(
-                            onClick = { }, // TODO
+                            onClick = onClose,
                             modifier = Modifier
                                 .size(tipIconSize)
                                 .constrainAs(closeIconButton) {
@@ -539,13 +556,13 @@ object Helpful {
                                 }
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Close,
-                                contentDescription = stringResource(id = R.string.close)
+                                imageVector = close.first,
+                                contentDescription = close.second
                             )
                         }
 
                         Text(
-                            text = "카드를 클릭해보고, 길게 클릭해보고, 두번 클릭해보세요!",
+                            text = message,
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier
                                 .constrainAs(messageText) {
