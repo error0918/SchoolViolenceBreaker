@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @file:Suppress(
     "OPT_IN_IS_NOT_ENABLED",
     "EXPERIMENTAL_IS_NOT_ENABLED",
@@ -8,6 +8,9 @@
 package com.taeyeon.schoolviolencebreaker
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,12 +18,25 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.contentColorFor
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -30,14 +46,19 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
+import kotlinx.coroutines.delay
 
 object MyView {
 
@@ -1025,6 +1046,169 @@ object MyView {
                     }
                 }
 
+            }
+        }
+    }
+
+
+
+    @Composable
+    fun PopupTip(
+        tip: Pair<ImageVector, String> = Icons.Filled.Notifications to stringResource(id = R.string.tip),
+        close: Pair<ImageVector, String> = Icons.Filled.Close to stringResource(id = R.string.close),
+        message: String,
+        onClose: () -> Unit,
+        disappearTime: Int? = 10,
+        hasBottomBar: Boolean = false,
+    ) {
+        var leftTime by rememberSaveable { mutableStateOf(disappearTime ?: 0) }
+        if (disappearTime != null) {
+            LaunchedEffect(leftTime) {
+                if (leftTime > 0) {
+                    delay(1000)
+                    leftTime--
+                } else {
+                    onClose()
+                }
+            }
+        }
+
+        Popup(
+            alignment = Alignment.BottomCenter,
+            offset = IntOffset(0, if(hasBottomBar) -with(LocalDensity.current) { 80.dp.toPx() }.toInt() else 0),
+            onDismissRequest = onClose,
+            properties = PopupProperties(dismissOnClickOutside = false)
+        ) {
+            val dismissState = rememberDismissState(
+                confirmStateChange = { value ->
+                    when (value) {
+                        DismissValue.DismissedToEnd -> {
+                            onClose()
+                            false
+                        }
+                        DismissValue.DismissedToStart -> {
+                            onClose()
+                            false
+                        }
+                        else -> false
+                    }
+                }
+            )
+
+            SwipeToDismiss(
+                state = dismissState,
+                dismissThresholds = { FractionalThreshold(0.2f) },
+                background = {
+                    AnimatedVisibility(
+                        visible = dismissState.progress.to == DismissValue.DismissedToEnd || dismissState.progress.to == DismissValue.DismissedToStart,
+                        enter = fadeIn(),
+                        exit = ExitTransition.None
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(20.dp)
+                        ) {
+                            Text(
+                                text = close.second,
+                                modifier = Modifier
+                                    .background(
+                                        color = MaterialTheme.colorScheme.secondaryContainer.copy(
+                                            alpha = 0.8f
+                                        ),
+                                        shape = RoundedCornerShape(10.dp)
+                                    )
+                                    .padding(10.dp)
+                                    .align(
+                                        when (dismissState.progress.to) {
+                                            DismissValue.DismissedToEnd -> Alignment.CenterStart
+                                            DismissValue.DismissedToStart -> Alignment.CenterEnd
+                                            else -> Alignment.Center
+                                        }
+                                    )
+                            )
+                        }
+                    }
+                }
+            ) {
+                Surface(
+                    shape = RoundedCornerShape(20.dp),
+                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .requiredWidthIn(min = 150.dp, max = Dp.Infinity)
+                ) {
+                    val tipIconSize = LocalDensity.current.run {
+                        MaterialTheme.typography.labelSmall.fontSize.toPx().toDp()
+                    }
+
+                    ConstraintLayout(
+                        modifier = Modifier.padding(20.dp)
+                    ) {
+                        val (tipIcon, tipText, closeText, closeIconButton, messageText) = createRefs()
+
+                        Icon(
+                            imageVector = tip.first,
+                            contentDescription = tip.second,
+                            modifier = Modifier
+                                .size(tipIconSize)
+                                .constrainAs(tipIcon) {
+                                    top.linkTo(parent.top)
+                                    start.linkTo(parent.start)
+                                }
+                        )
+
+                        Text(
+                            text = tip.second,
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier
+                                .constrainAs(tipText) {
+                                    top.linkTo(tipIcon.top)
+                                    bottom.linkTo(tipIcon.bottom)
+                                    start.linkTo(tipIcon.end, margin = tipIconSize / 2)
+                                }
+                        )
+
+                        disappearTime?.let {
+                            Text(
+                                text = "$leftTime",
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier
+                                    .constrainAs(closeText) {
+                                        top.linkTo(tipIcon.top)
+                                        bottom.linkTo(tipIcon.bottom)
+                                        end.linkTo(closeIconButton.start, margin = tipIconSize / 2)
+                                    }
+                            )
+                        }
+
+                        IconButton(
+                            onClick = onClose,
+                            modifier = Modifier
+                                .size(tipIconSize)
+                                .constrainAs(closeIconButton) {
+                                    top.linkTo(tipIcon.top)
+                                    bottom.linkTo(tipIcon.bottom)
+                                    end.linkTo(parent.end)
+                                }
+                        ) {
+                            Icon(
+                                imageVector = close.first,
+                                contentDescription = close.second
+                            )
+                        }
+
+                        Text(
+                            text = message,
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier
+                                .constrainAs(messageText) {
+                                    top.linkTo(tipIcon.bottom, margin = 10.dp)
+                                    start.linkTo(parent.start)
+                                }
+                        )
+                    }
+                }
             }
         }
     }
