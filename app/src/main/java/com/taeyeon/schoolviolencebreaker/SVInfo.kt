@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
 import java.util.*
 
@@ -64,31 +65,10 @@ object SVInfo {
             if (showing) {
                 MyView.ListDialog(
                     onDismissRequest = { showing = false },
-                    icon = { Icon(imageVector = Icons.Default.QuestionMark, contentDescription = null) },
-                    title = { Text(text = "타이틀") },
-                    itemContent = { index ->
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            TextButton(
-                                onClick = { /*TODO*/ },
-                                shape = RectangleShape
-                            ) {
-                                Text(
-                                    text = "아이템 $index",
-                                    textAlign = TextAlign.Start,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
-                            Divider(modifier = Modifier.fillMaxWidth())
-                        }
-                    },
-                    itemCount = 20,
-                    button = {
-                        MyView.DialogButtonRow {
-                            TextButton(onClick = { showing = false }) {
-                                Text(text = "버튼")
-                            }
-                        }
-                    }
+                    title = "타이틀",
+                    items = run { val arrayList = arrayListOf<String>(); for(i in 0 until 100) arrayList.add("아이템 $i"); arrayList.toList() },
+                    onItemClick = { _, item -> Utils.toast(item) },
+                    dismissButtonText = "닫기"
                 )
             }
 
