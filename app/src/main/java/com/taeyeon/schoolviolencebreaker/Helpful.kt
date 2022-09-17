@@ -258,16 +258,12 @@ object Helpful {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         if (hasImage) {
-                            var imageWidth by remember { mutableStateOf(0) }
                             Image(
                                 bitmap = imageBitmap!!,
                                 contentDescription = imageBitmapDescription,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(200.dp)
-                                    .onSizeChanged { intSize ->
-                                        imageWidth = intSize.width
-                                    }
                                     .background(
                                         color = imageBitmapBackground
                                             ?: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
@@ -288,6 +284,14 @@ object Helpful {
 
                         Text(
                             text = description,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        )
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Text(
+                            text = link,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
