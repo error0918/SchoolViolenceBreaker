@@ -16,6 +16,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -246,20 +247,25 @@ object Helpful {
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleLarge
-                        )
+                        SelectionContainer {
+                            Text(
+                                text = title,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(10.dp))
 
-                        Text(
-                            text = description,
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                        )
+                        SelectionContainer {
+                            Text(
+                                text = description,
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(10.dp))
+
 
                         TextButton(
                             onClick = {
@@ -268,16 +274,22 @@ object Helpful {
                                     .getActivity()
                                     .startActivity(intent)
                             },
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)),
+                            border = BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                            ),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            Text(
-                                text = link,
-                                style = MaterialTheme.typography.titleMedium,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
+                            SelectionContainer {
+                                Text(
+                                    text = link,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
                         }
+
                     }
                 },
                 button = {
