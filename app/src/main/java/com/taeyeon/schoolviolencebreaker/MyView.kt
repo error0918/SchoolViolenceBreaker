@@ -1097,7 +1097,6 @@ object MyView {
 
             SwipeToDismiss(
                 state = dismissState,
-                dismissThresholds = { FractionalThreshold(0.2f) },
                 background = {
                     AnimatedVisibility(
                         visible = dismissState.progress.to == DismissValue.DismissedToEnd || dismissState.progress.to == DismissValue.DismissedToStart,

@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
     ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
-    ExperimentalMaterialApi::class, ExperimentalAnimationApi::class
+    ExperimentalMaterialApi::class, ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class
 )
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 
@@ -248,17 +249,16 @@ object Helpful {
         var showingInfoDialog by remember { mutableStateOf(false) }
 
         if (showingActionsDialog) {
-            /*Dialog(
-                onDismissRequest = { showingWorkDialog = false }
-            ) {
-            }
+            MyView.BaseDialog(
+                onDismissRequest = { showingActionsDialog = false },
+                //icon = { Icon }
+            )
         }
 
         if (showingInfoDialog) {
-            Dialog(
+            MyView.BaseDialog(
                 onDismissRequest = { showingInfoDialog = false }
-            ) {
-            }*/
+            )
         }
 
         Card(
