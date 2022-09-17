@@ -232,7 +232,7 @@ object MyView {
         val ContentTextStyle: TextStyle
             @Composable get() { return MaterialTheme.typography.bodyMedium }
         val ListTextStyle: TextStyle
-            @Composable get() { return MaterialTheme.typography.bodyMedium }
+            @Composable get() { return MaterialTheme.typography.labelLarge }
         val ButtonTextStyle: TextStyle
             @Composable get() { return MaterialTheme.typography.labelLarge }
         val Properties = DialogProperties()

@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
@@ -68,7 +69,8 @@ object SVInfo {
                     itemContent = { index ->
                         Column(modifier = Modifier.fillMaxWidth()) {
                             TextButton(
-                                onClick = { /*TODO*/ }
+                                onClick = { /*TODO*/ },
+                                shape = RectangleShape
                             ) {
                                 Text(
                                     text = "아이템 $index",
