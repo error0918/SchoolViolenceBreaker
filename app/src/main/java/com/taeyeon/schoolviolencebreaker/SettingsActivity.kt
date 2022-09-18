@@ -556,7 +556,7 @@ object Settings {
 
                 errorMessage = null
 
-                AlertDialog(
+                MyView.BaseDialog(
                     icon = {
                         Icon(
                             imageVector = Icons.Filled.Edit,
@@ -568,9 +568,7 @@ object Settings {
                         Text(text = stringResource(id = R.string.edit))
                     },
                     text = {
-                        Column(modifier = Modifier
-                            .width(IntrinsicSize.Min)
-                            .height(IntrinsicSize.Min)) {
+                        Column {
 
                             Text(
                                 text = Core.getContext().resources.getString(
@@ -580,7 +578,7 @@ object Settings {
                                 modifier = Modifier.fillMaxWidth()
                             )
 
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
 
                             if (errorMessage != null) {
                                 Text(
@@ -592,72 +590,74 @@ object Settings {
                                 Spacer(modifier = Modifier.height(10.dp))
                             }
 
-                            OutlinedTextField(
-                                value = editingValueString,
-                                onValueChange = { value ->
-                                    editingValueString = value
-                                    editingValue =
-                                        try {
-                                            val valueInt = value.toInt()
-
-                                            errorMessage = if (valueInt < valueRange.first) {
-                                                Core.getContext().resources.getString(R.string.edit_too_small_error_message)
-                                            } else if (valueInt > valueRange.last) {
-                                                Core.getContext().resources.getString(R.string.edit_too_big_error_message)
-                                            } else {
-                                                null
-                                            }
-
-                                            valueInt
-                                        } catch (exception: NumberFormatException) {
-                                            val error = Error(exception)
-
-                                            errorMessage = if (error.message.indexOf("For input string") != -1) {
-                                                Core.getContext().resources.getString(R.string.edit_for_input_string_error_message)
-                                            } else if (error.message.indexOf("multiple points") != -1) {
-                                                Core.getContext().resources.getString(R.string.edit_multiple_points_error_message)
-                                            } else if (error.message.indexOf("empty String") != -1) {
-                                                Core.getContext().resources.getString(R.string.edit_empty_string_error_message)
-                                            } else {
-                                                error.message
-                                            }
-
-                                            0
-                                        }
-                                },
-                                textStyle = MaterialTheme.typography.labelMedium.copy(textAlign = TextAlign.Center),
-                                shape = MaterialTheme.shapes.large,
-                                label = { Text(text = stringResource(id = R.string.edit_message)) },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number
-                                ),
-                                modifier = Modifier.fillMaxWidth()
-                                )
-
                         }
+                    },
+                    content = {
+                        OutlinedTextField(
+                            value = editingValueString,
+                            onValueChange = { value ->
+                                editingValueString = value
+                                editingValue =
+                                    try {
+                                        val valueInt = value.toInt()
+
+                                        errorMessage = if (valueInt < valueRange.first) {
+                                            Core.getContext().resources.getString(R.string.edit_too_small_error_message)
+                                        } else if (valueInt > valueRange.last) {
+                                            Core.getContext().resources.getString(R.string.edit_too_big_error_message)
+                                        } else {
+                                            null
+                                        }
+
+                                        valueInt
+                                    } catch (exception: NumberFormatException) {
+                                        val error = Error(exception)
+
+                                        errorMessage = if (error.message.indexOf("For input string") != -1) {
+                                            Core.getContext().resources.getString(R.string.edit_for_input_string_error_message)
+                                        } else if (error.message.indexOf("multiple points") != -1) {
+                                            Core.getContext().resources.getString(R.string.edit_multiple_points_error_message)
+                                        } else if (error.message.indexOf("empty String") != -1) {
+                                            Core.getContext().resources.getString(R.string.edit_empty_string_error_message)
+                                        } else {
+                                            error.message
+                                        }
+
+                                        0
+                                    }
+                            },
+                            textStyle = MaterialTheme.typography.labelMedium.copy(textAlign = TextAlign.Center),
+                            shape = MaterialTheme.shapes.large,
+                            label = { Text(text = stringResource(id = R.string.edit_message)) },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number
+                            ),
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     },
                     properties = DialogProperties(usePlatformDefaultWidth = false),
-                    confirmButton = {
-                        TextButton(
-                            onClick = {
-                                openEditValueDialog = false
-                                if (errorMessage != null) {
-                                    openErrorValueDialog = true
-                                } else {
-                                    onValueChange(editingValue)
-                                }
-                            },
-                        ) {
-                            Text(text = stringResource(id = R.string.edit))
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(
-                            onClick = {
-                                openEditValueDialog = false
-                            },
-                        ) {
-                            Text(text = stringResource(id = R.string.dismiss))
+                    button = {
+                        MyView.DialogButtonRow {
+                            TextButton(
+                                onClick = {
+                                    openEditValueDialog = false
+                                },
+                            ) {
+                                Text(text = stringResource(id = R.string.dismiss))
+                            }
+
+                            TextButton(
+                                onClick = {
+                                    openEditValueDialog = false
+                                    if (errorMessage != null) {
+                                        openErrorValueDialog = true
+                                    } else {
+                                        onValueChange(editingValue)
+                                    }
+                                },
+                            ) {
+                                Text(text = stringResource(id = R.string.edit))
+                            }
                         }
                     },
                     onDismissRequest = {
@@ -667,7 +667,7 @@ object Settings {
             }
 
             if (openErrorValueDialog) {
-                AlertDialog(
+                MyView.MessageDialog(
                     icon = {
                         Icon(
                             imageVector = Icons.Filled.Warning,

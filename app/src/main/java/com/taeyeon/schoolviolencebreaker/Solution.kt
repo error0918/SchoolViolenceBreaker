@@ -15,6 +15,20 @@ object Solution {
             modifier = Modifier.fillMaxSize(),
             text = "Solution".repeat(100)
         )
+        /*
+         * 당신은?
+         * -피해자
+         * -피해자 보호자
+         * -가해자
+         * -가해자 보호자
+         * -관측자
+         *
+         * 조치
+         *
+         * 법률
+         *
+         * 기타
+         */
     }
 
 }

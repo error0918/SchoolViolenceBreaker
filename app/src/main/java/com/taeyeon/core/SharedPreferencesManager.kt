@@ -78,7 +78,7 @@ class SharedPreferencesManager(
 
             fun getLong(key: String, defaultLong: Long = Public.defaultLong): Long = sharedPreferencesManager.getLong(key, defaultLong)
 
-            fun <E> getArrayList(key: String, childClass: Class<E>, defaultArrayList: ArrayList<E> = arrayListOf<E>()): ArrayList<E> = sharedPreferencesManager.getArrayList<E>(key, childClass, defaultArrayList)
+            fun <E> getArrayList(key: String, childClass: Class<E>, defaultArrayList: ArrayList<E> = arrayListOf()): ArrayList<E> = sharedPreferencesManager.getArrayList(key, childClass, defaultArrayList)
 
             fun getAny(key: String, anyType: Type, defaultAny: Any): Any = sharedPreferencesManager.getAny(key, anyType, defaultAny)
 
