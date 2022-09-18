@@ -4,7 +4,6 @@
 package com.taeyeon.schoolviolencebreaker
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -15,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -52,41 +50,18 @@ object Solution {
                     title = { Text(text = "${stringResource(id = R.string.report)} - ${reporter[showingDialogIndex]}") },
                     text = { Text(text = "~의 신고시 유의 사항은... 입니다") },
                     content = {
-                        val cornerRadius = MaterialTheme.shapes.medium.let {
-                            var cornerRadius: Dp = 0.dp
-                            val size = Size.Unspecified
-                            with(LocalDensity.current) {
-                                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
-                                corners.forEach { corner ->
-                                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
-                                }
-                            }
-                            cornerRadius
-                        }
-
-                        Column(
+                        LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
 
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f).compositeOver(MaterialTheme.colorScheme.surface),
-                                    contentColor = MaterialTheme.colorScheme.onSurface
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { }
-                            ) {
-                                Text(
+                            items(20) {
+                                MyView.ItemUnit(
                                     text = "투두",
-                                    color = MaterialTheme.colorScheme.primary,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.padding(cornerRadius + 8.dp)
+                                    onClick = { /*TODO*/ }
                                 )
                             }
 
                         }
-
                     },
                     button = {
                         TextButton(onClick = { showingDialog = null }) {
@@ -290,22 +265,10 @@ object Solution {
                 ) {
 
                     items.forEachIndexed { index, item ->
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f).compositeOver(MaterialTheme.colorScheme.surface),
-                                contentColor = MaterialTheme.colorScheme.onSurface
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onItemClick(index, item) }
-                        ) {
-                            Text(
-                                text = item,
-                                color = MaterialTheme.colorScheme.primary,
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(cornerRadius + 8.dp)
-                            )
-                        }
+                        MyView.ItemUnit(
+                            text = item,
+                            onClick = { onItemClick(index, item) }
+                        )
                     }
 
                 }

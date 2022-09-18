@@ -41,10 +41,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -222,30 +219,33 @@ object MyView {
                     }
                 }
 
-                text?.let {
-                    CompositionLocalProvider(LocalContentColor provides textContentColor) {
-                        ProvideTextStyle(textTextStyle) {
-                            Box(
-                                modifier = Modifier
-                                    .weight(weight = 1f, fill = false)
-                                    .padding(PaddingValues(bottom = 16.dp))
-                                    .align(Alignment.Start)
-                            ) {
-                                text()
+                Column(
+                    modifier = Modifier.weight(weight = 1f, fill = false)
+                ) {
+                    text?.let {
+                        CompositionLocalProvider(LocalContentColor provides textContentColor) {
+                            ProvideTextStyle(textTextStyle) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(PaddingValues(bottom = 16.dp))
+                                        .align(Alignment.Start)
+                                ) {
+                                    text()
+                                }
                             }
                         }
                     }
-                }
 
-                content?.let {
-                    CompositionLocalProvider(LocalContentColor provides contentColor) {
-                        ProvideTextStyle(contentTextStyle) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(PaddingValues(bottom = 16.dp))
-                                    .align(Alignment.Start)
-                            ) {
-                                content()
+                    content?.let {
+                        CompositionLocalProvider(LocalContentColor provides contentColor) {
+                            ProvideTextStyle(contentTextStyle) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(PaddingValues(bottom = 16.dp))
+                                        .align(Alignment.Start)
+                                ) {
+                                    content()
+                                }
                             }
                         }
                     }
@@ -1074,6 +1074,63 @@ object MyView {
 
             }
         }
+    }
+
+
+
+    @Composable
+    fun ItemUnit(
+        content: @Composable () -> Unit,
+        onClick: () -> Unit,
+        containerColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f).compositeOver(MaterialTheme.colorScheme.surface),
+        contentColor: Color = MaterialTheme.colorScheme.onSurface
+    ) {
+        val cornerRadius = MaterialTheme.shapes.medium.let {
+            var cornerRadius: Dp = 0.dp
+            val size = Size.Unspecified
+            with(LocalDensity.current) {
+                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
+                corners.forEach { corner ->
+                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
+                }
+            }
+            cornerRadius
+        }
+
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = containerColor,
+                contentColor = contentColor
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+        ) {
+            Box(modifier = Modifier.padding(cornerRadius + 8.dp)) {
+                content()
+            }
+        }
+    }
+
+    @Composable
+    fun ItemUnit(
+        text: String,
+        onClick: () -> Unit,
+        containerColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f).compositeOver(MaterialTheme.colorScheme.surface),
+        contentColor: Color = MaterialTheme.colorScheme.onSurface
+    ) {
+        ItemUnit(
+            content = {
+                Text(
+                    text = text,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            },
+            onClick = onClick,
+            containerColor = containerColor,
+            contentColor = contentColor
+        )
     }
 
 
