@@ -46,6 +46,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -894,6 +895,7 @@ object MyView {
         val message: String,
         val imageBitmap: ImageBitmap? = null,
         val imageBitmapDescription: String? = null,
+        val imageBitmapBackground: Color? = null,
         val actionButtonTitle: String? = null,
         val onActionButtonClick: (() -> Unit)? = null,
         val closeImage: ImageVector = TipDefaults.CloseImage,
@@ -912,6 +914,7 @@ object MyView {
             message = tipInformation.message,
             imageBitmap = tipInformation.imageBitmap,
             imageBitmapDescription = tipInformation.imageBitmapDescription,
+            imageBitmapBackground = tipInformation.imageBitmapBackground,
             actionButtonTitle = tipInformation.actionButtonTitle,
             onActionButtonClick = tipInformation.onActionButtonClick,
             closeImage = tipInformation.closeImage,
@@ -931,6 +934,7 @@ object MyView {
         message: String,
         imageBitmap: ImageBitmap? = null,
         imageBitmapDescription: String? = null,
+        imageBitmapBackground: Color? = null,
         actionButtonTitle: String? = null,
         onActionButtonClick: (() -> Unit)? = null,
         closeImage: ImageVector = TipDefaults.CloseImage,
@@ -1018,20 +1022,27 @@ object MyView {
                 )
 
                 if (hasImage) {
+                    var imageWidth by remember { mutableStateOf(0) }
                     Image(
                         bitmap = imageBitmap!!,
                         contentDescription = imageBitmapDescription,
                         modifier = Modifier
                             .fillMaxWidth()
+                            .height(with(LocalDensity.current) { imageWidth.toDp() / 3 })
                             .constrainAs(image) {
                                 top.linkTo(titleText.bottom, margin = 10.dp)
                                 start.linkTo(parent.start)
                                 end.linkTo(parent.end)
                             }
+                            .onSizeChanged { intSize ->
+                                imageWidth = intSize.width
+                            }
                             .background(
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                                color = imageBitmapBackground
+                                    ?: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
                                 shape = MaterialTheme.shapes.medium
                             )
+                            .padding(5.dp)
                     )
                 }
 

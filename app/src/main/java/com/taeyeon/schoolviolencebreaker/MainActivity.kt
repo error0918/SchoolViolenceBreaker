@@ -154,6 +154,8 @@ object Main {
         scope = rememberCoroutineScope()
         pagerState = rememberPagerState(initialPage = 0)
 
+        load()
+
         Scaffold(
             topBar = { Toolbar() },
             floatingActionButton = { Fab() },
@@ -178,13 +180,15 @@ object Main {
             title = {
                 Column {
                     Text(text = stringResource(id = R.string.app_name))
-                    Text(
-                        text = stringResource(id = R.string.main_subtitle),
-                        style = MaterialTheme.typography.titleSmall
-                            .copy(
-                                fontWeight = FontWeight((MaterialTheme.typography.titleSmall.fontWeight!!.weight * 0.5f).toInt())
-                            )
-                    )
+                    if (showSubTitle) {
+                        Text(
+                            text = stringResource(id = R.string.main_subtitle),
+                            style = MaterialTheme.typography.titleSmall
+                                .copy(
+                                    fontWeight = FontWeight((MaterialTheme.typography.titleSmall.fontWeight!!.weight * 0.5f).toInt())
+                                )
+                        )
+                    }
                 }
             },
             actions = {

@@ -326,7 +326,6 @@ object Helpful {
                     }
                     showingActionsDialog = false
                 },
-                listTextStyle = MaterialTheme.typography.bodyLarge,
                 dismissButtonText = stringResource(id = R.string.close)
             )
         }

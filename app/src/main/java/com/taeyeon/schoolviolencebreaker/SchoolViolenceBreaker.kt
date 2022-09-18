@@ -27,6 +27,7 @@ var shakeToReport by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeToReport
 var shakeTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeTime)
 var waitTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.WaitTime)
 var reportDoubleCheck by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ReportDoubleCheck)
+var showSubTitle by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShowSubTitle)
 
 var isReporting by mutableStateOf(false)
 
@@ -42,6 +43,7 @@ fun load() {
     shakeTime = Settings.settingsData.ShakeTime
     waitTime = Settings.settingsData.WaitTime
     reportDoubleCheck = Settings.settingsData.ReportDoubleCheck
+    showSubTitle = Settings.settingsData.ShowSubTitle
 }
 
 fun save() {
@@ -54,6 +56,7 @@ fun save() {
     Settings.settingsData.ShakeTime = shakeTime
     Settings.settingsData.WaitTime = waitTime
     Settings.settingsData.ReportDoubleCheck = reportDoubleCheck
+    Settings.settingsData.ShowSubTitle = showSubTitle
 
     Settings.saveSettings()
 }

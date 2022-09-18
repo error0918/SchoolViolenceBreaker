@@ -92,6 +92,7 @@
     <string name="settings_title_color">색상</string>
     <string name="settings_title_color_default_mode">일반 모드</string>
     <string name="settings_title_color_dynamic_mode">다이나믹 모드</string>
+    <string name="settings_title_show_subtitle">서브타이틀 보기</string>
 
     <string name="settings_title_about_solve_problem">문제 해결</string>
     <string name="settings_title_restart_app">앱 재시작</string>

@@ -27,8 +27,8 @@ object SVInfo {
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            var showTip by rememberSaveable { mutableStateOf(showTip) }
-            var showingTip by rememberSaveable { mutableStateOf(showTip) }
+            var showTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
+            var showingTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
             if (showTip != com.taeyeon.schoolviolencebreaker.showTip) {
                 showingTip = com.taeyeon.schoolviolencebreaker.showTip
                 showTip = com.taeyeon.schoolviolencebreaker.showTip

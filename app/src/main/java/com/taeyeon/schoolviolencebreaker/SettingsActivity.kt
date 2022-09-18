@@ -316,6 +316,16 @@ object Settings {
                                 }
                                 save()
                             }
+                        },
+                        {
+                            SettingsUnit.SwitchUnit(
+                                title = stringResource(id = R.string.settings_title_show_subtitle),
+                                checked = showSubTitle,
+                                onCheckedChange = { checked ->
+                                    showSubTitle = checked
+                                    save()
+                                }
+                            )
                         }
                     ).also {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S ) {

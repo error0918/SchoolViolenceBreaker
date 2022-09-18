@@ -92,6 +92,7 @@
     <string name="settings_title_color">Color</string>
     <string name="settings_title_color_default_mode">Default Mode</string>
     <string name="settings_title_color_dynamic_mode">Dynamic Mode</string>
+    <string name="settings_title_show_subtitle">Show Subtitle</string>
 
     <string name="settings_title_about_solve_problem">Solve Problem</string>
     <string name="settings_title_restart_app">Restart App</string>

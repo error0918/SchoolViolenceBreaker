@@ -35,7 +35,9 @@ object Settings {
             ShakeToReport = true,
             ShakeTime = 3,
             WaitTime = 5,
-            ReportDoubleCheck = true
+            ReportDoubleCheck = true,
+
+            ShowSubTitle = true
         )
         get() {
             return field.clone()
@@ -52,7 +54,8 @@ object Settings {
         ShakeToReport: Boolean = INITIAL_SETTINGS_DATA.ShakeToReport,
         ShakeTime: Int = INITIAL_SETTINGS_DATA.ShakeTime,
         WaitTime: Int = INITIAL_SETTINGS_DATA.WaitTime,
-        ReportDoubleCheck: Boolean = INITIAL_SETTINGS_DATA.ReportDoubleCheck
+        ReportDoubleCheck: Boolean = INITIAL_SETTINGS_DATA.ReportDoubleCheck,
+        ShowSubTitle: Boolean = INITIAL_SETTINGS_DATA.ShowSubTitle
     ) : Cloneable {
         var FullScreenMode: Boolean = false
             set(value) {
@@ -99,6 +102,11 @@ object Settings {
                 field = value
                 saveSettings()
             }
+        var ShowSubTitle: Boolean = true
+            set(value) {
+                field = value
+                saveSettings()
+            }
 
         init {
             this.FullScreenMode = FullScreenMode
@@ -112,6 +120,7 @@ object Settings {
             this.ShakeTime = ShakeTime
             this.WaitTime = WaitTime
             this.ReportDoubleCheck = ReportDoubleCheck
+            this.ShowSubTitle = ShowSubTitle
         }
 
         public override fun clone(): SettingsData {
