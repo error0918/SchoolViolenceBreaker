@@ -22,6 +22,8 @@ var fullScreenMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.FullScreenMo
 var screenAlwaysOn by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ScreenAlwaysOn)
 var darkMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.DarkMode)
 var dynamicColor by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.DynamicColor)
+var showPopupTip by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShowPopupTip)
+var popupTipDisappearTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.PopupTipDisappearTime)
 var showTip by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShowTip)
 var shakeToReport by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeToReport)
 var shakeTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeTime)
@@ -38,6 +40,8 @@ fun load() {
     screenAlwaysOn = Settings.settingsData.ScreenAlwaysOn
     darkMode = Settings.settingsData.DarkMode
     dynamicColor = Settings.settingsData.DynamicColor
+    showPopupTip = Settings.settingsData.ShowPopupTip
+    popupTipDisappearTime = Settings.settingsData.PopupTipDisappearTime
     showTip = Settings.settingsData.ShowTip
     shakeToReport = Settings.settingsData.ShakeToReport
     shakeTime = Settings.settingsData.ShakeTime
@@ -51,6 +55,8 @@ fun save() {
     Settings.settingsData.ScreenAlwaysOn = screenAlwaysOn
     Settings.settingsData.DarkMode = darkMode
     Settings.settingsData.DynamicColor = dynamicColor
+    Settings.settingsData.ShowPopupTip = showPopupTip
+    Settings.settingsData.PopupTipDisappearTime = popupTipDisappearTime
     Settings.settingsData.ShowTip = showTip
     Settings.settingsData.ShakeToReport = shakeToReport
     Settings.settingsData.ShakeTime = shakeTime

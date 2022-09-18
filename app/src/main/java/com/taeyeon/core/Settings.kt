@@ -31,6 +31,8 @@ object Settings {
             DarkMode = SYSTEM_MODE,
             DynamicColor = false,
 
+            ShowPopupTip = true,
+            PopupTipDisappearTime = 10,
             ShowTip = true,
             ShakeToReport = true,
             ShakeTime = 3,
@@ -50,6 +52,8 @@ object Settings {
         ScreenAlwaysOn: Boolean = INITIAL_SETTINGS_DATA.ScreenAlwaysOn,
         DarkMode: Int = INITIAL_SETTINGS_DATA.DarkMode,
         DynamicColor: Boolean = INITIAL_SETTINGS_DATA.DynamicColor,
+        ShowPopupTip: Boolean = INITIAL_SETTINGS_DATA.ShowPopupTip,
+        PopupTipDisappearTime: Int = INITIAL_SETTINGS_DATA.PopupTipDisappearTime,
         ShowTip: Boolean = INITIAL_SETTINGS_DATA.ShowTip,
         ShakeToReport: Boolean = INITIAL_SETTINGS_DATA.ShakeToReport,
         ShakeTime: Int = INITIAL_SETTINGS_DATA.ShakeTime,
@@ -73,6 +77,16 @@ object Settings {
                 saveSettings()
             }
         var DynamicColor: Boolean = true
+            set(value) {
+                field = value
+                saveSettings()
+            }
+        var ShowPopupTip: Boolean = true
+            set(value) {
+                field = value
+                saveSettings()
+            }
+        var PopupTipDisappearTime: Int = 10
             set(value) {
                 field = value
                 saveSettings()
@@ -115,6 +129,8 @@ object Settings {
                 if (DarkMode == SYSTEM_MODE || DarkMode == LIGHT_MODE || DarkMode == DARK_MODE) DarkMode
                 else if (INITIAL_SETTINGS_DATA.DarkMode == SYSTEM_MODE || INITIAL_SETTINGS_DATA.DarkMode == LIGHT_MODE || INITIAL_SETTINGS_DATA.DarkMode == DARK_MODE) INITIAL_SETTINGS_DATA.DarkMode else SYSTEM_MODE
             this.DynamicColor = DynamicColor
+            this.ShowPopupTip = ShowPopupTip
+            this.PopupTipDisappearTime = PopupTipDisappearTime
             this.ShowTip = ShowTip
             this.ShakeToReport = ShakeToReport
             this.ShakeTime = ShakeTime

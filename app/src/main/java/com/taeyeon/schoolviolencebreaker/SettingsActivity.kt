@@ -177,7 +177,17 @@ object Settings {
             val settingsUnits = listOf(
                 SettingsUnit.SettingsUnit(
                     title = stringResource(id = R.string.settings_title_general),
-                    settingsComposable = listOf(
+                    settingsComposable = arrayListOf<@Composable () -> Unit>(
+                        {
+                            SettingsUnit.SwitchUnit(
+                                title = stringResource(id = R.string.settings_title_show_popup_tip),
+                                checked = showPopupTip,
+                                onCheckedChange = { checked ->
+                                    showPopupTip = checked
+                                    save()
+                                }
+                            )
+                        },
                         {
                             SettingsUnit.SwitchUnit(
                                 title = stringResource(id = R.string.settings_title_show_tip),
@@ -230,7 +240,21 @@ object Settings {
                                 }
                             )
                         }
-                    )
+                    ).also {
+                        if (showPopupTip) {
+                            it.add(index = 1) {
+                                SettingsUnit.EditIntUnit(
+                                    title = stringResource(id = R.string.settings_title_popup_tip_disappear_time),
+                                    value = popupTipDisappearTime,
+                                    valueRange = 3..30,
+                                    onValueChange = { value ->
+                                        popupTipDisappearTime = value
+                                        save()
+                                    }
+                                )
+                            }
+                        }
+                    }
                 ),
 
                 SettingsUnit.SettingsUnit(

@@ -65,6 +65,8 @@
     <string name="settings_restart_message">앱 재시작 후 정상 작동합니다.</string>
 
     <string name="settings_title_general">일반</string>
+    <string name="settings_title_show_popup_tip">팝업 팁 보여주기</string>
+    <string name="settings_title_popup_tip_disappear_time">팝업 팁 보여주는 시간</string>
     <string name="settings_title_show_tip">팁 보여주기</string>
     <string name="settings_title_shake_to_report">흔들어 신고하기</string>
     <string name="settings_title_shake_time">흔드는 횟수</string>

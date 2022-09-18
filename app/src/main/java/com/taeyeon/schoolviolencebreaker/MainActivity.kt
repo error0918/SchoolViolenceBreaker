@@ -161,12 +161,19 @@ object Main {
             floatingActionButton = { Fab() },
             bottomBar = { NavigationBar() }
         ) { paddingValues ->
-            var tip by rememberSaveable { mutableStateOf(true) }
-            if(tip) {
+            var showPopupTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showPopupTip) }
+            var showingPopupTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showPopupTip) }
+            if (showPopupTip != com.taeyeon.schoolviolencebreaker.showPopupTip) {
+                showingPopupTip = com.taeyeon.schoolviolencebreaker.showPopupTip
+                showPopupTip = com.taeyeon.schoolviolencebreaker.showPopupTip
+            }
+
+            if(showingPopupTip) {
                 MyView.PopupTip(
                     message = "우왕!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
                     hasBottomBar = true,
-                    onClose = { tip = false }
+                    onClose = { showingPopupTip = false },
+                    disappearTime = popupTipDisappearTime
                 )
             }
 

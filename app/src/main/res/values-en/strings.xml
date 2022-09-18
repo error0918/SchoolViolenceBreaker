@@ -66,6 +66,8 @@
     <string name="settings_restart_message">It works fine after restarting the app.</string>
 
     <string name="settings_title_general">General</string>
+    <string name="settings_title_show_popup_tip">Show Popup Tip</string>
+    <string name="settings_title_popup_tip_disappear_time">Popup Tip Disappear Time</string>
     <string name="settings_title_show_tip">Show Tip</string>
     <string name="settings_title_shake_to_report">Shake To Report</string>
     <string name="settings_title_shake_time">Shake Time</string>
