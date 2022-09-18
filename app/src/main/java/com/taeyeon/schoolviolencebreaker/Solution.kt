@@ -4,6 +4,8 @@
 package com.taeyeon.schoolviolencebreaker
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.taeyeon.core.Core
 
 object Solution {
 
@@ -38,8 +41,22 @@ object Solution {
         var showingDialog by rememberSaveable { mutableStateOf<Int?>(null) }
         var showingDialogIndex by rememberSaveable { mutableStateOf(0) }
 
-        val reporter = listOf(
+        val reporterList = listOf(
             "피해자", "피해자 보호자", "가해자", "가해자 보호자", "관측자"
+        )
+        val reporterNoticeList = listOf(
+            "피해자의 유의사항은 익명성이 보장되므로, 최대한 솔직하게 신고해야 사건이 더 원할하게 해결된다는 점입니다.",
+            "피해자 보호자의 유의사항은 피해자를 고통에서 해방시키기 위하여, 피해자의 정서를 보다듬어 주고, 정확하게 신고해야 한다는 점입니다.",
+            "가해자의 유의사항은 미안한 마음을 가지고, 잘못을 늬우치며, 최대한 솔직하고 정중하게 답해야 한다는 점입니다.",
+            "가해자 보호자의 유의사항은 가해자의 미래와 인성을 위해서, 가해자에 대한 우대를 멀리하고 객관적으로 솔직히 답변해야 한다는 점입니다.",
+            "관측자의 유의사항은 피해자를 위하여, 솔직하고 정확하게 신고해야한다는 점입니다."
+        )
+        val reportList = listOf(
+            "117" to {
+                val tt = Intent(Intent.ACTION_CALL, Uri.parse("tel:01067438337"))
+                Core.getActivity().startActivity(tt)
+            },
+            "ASDF" to {}
         )
 
         when (showingDialog) {
@@ -47,17 +64,17 @@ object Solution {
                 MyView.BaseDialog(
                     onDismissRequest = { showingDialog = null },
                     icon = { Icon(imageVector = Icons.Filled.Warning, contentDescription = stringResource(id = R.string.report)) },
-                    title = { Text(text = "${stringResource(id = R.string.report)} - ${reporter[showingDialogIndex]}") },
-                    text = { Text(text = "~의 신고시 유의 사항은... 입니다") },
+                    title = { Text(text = "${stringResource(id = R.string.report)} - ${reporterList[showingDialogIndex]}") },
+                    text = { Text(text = reporterNoticeList[showingDialogIndex]) },
                     content = {
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
 
-                            items(20) {
+                            items(reportList) { report ->
                                 MyView.ItemUnit(
-                                    text = "투두",
-                                    onClick = { /*TODO*/ }
+                                    text = report.first,
+                                    onClick = report.second
                                 )
                             }
 
@@ -88,7 +105,7 @@ object Solution {
                 iconContentDescription = "신고",
                 title = "신고",
                 subTitle = "당신은?",
-                items = reporter,
+                items = reporterList,
                 onItemClick = { index, _ ->
                     showingDialog = 0
                     showingDialogIndex = index
@@ -151,20 +168,6 @@ object Solution {
                 )
             }
         }
-        /*
-         * 당신은?
-         * -피해자
-         * -피해자 보호자
-         * -가해자
-         * -가해자 보호자
-         * -관측자
-         *
-         * 조치
-         *
-         * 법률
-         *
-         * 기타
-         */
     }
 
     @SuppressLint("ModifierParameter")

@@ -179,8 +179,12 @@ fun wait(coroutineScope: CoroutineScope, remainingTime: MutableState<Int>) {
 
 object Report {
 
+    private fun dial(phone: String) {
+        //
+    }
+
     private fun call(phone: String) {
-        // TODO
+        //
     }
 
 }

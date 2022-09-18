@@ -3,9 +3,11 @@
 
 package com.taeyeon.schoolviolencebreaker
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,7 +17,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -28,11 +32,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.pager.*
 import com.taeyeon.core.Core
@@ -111,8 +117,17 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Theme {
+                //
+                val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
+                    if (isGranted) Utils.toast("됨")
+                    else Utils.toast("안됨")
+                }
+                SideEffect {
+                    if (ContextCompat.checkSelfPermission(Core.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) launcher.launch(Manifest.permission.CALL_PHONE)
+                }
+
                 Main.Main()
-                Report()
+                Report() // TODO
             }
         }
     }
