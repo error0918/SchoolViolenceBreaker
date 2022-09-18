@@ -13,6 +13,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -46,7 +47,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -64,8 +64,7 @@ object MyView {
 
     @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
     object DialogDefaults {
-        val Modifier: Modifier
-            @Composable get() { return androidx.compose.ui.Modifier }
+        val Modifier: Modifier = androidx.compose.ui.Modifier
         val MinWidth = 280.dp
         val MaxWidth = 560.dp
         val MinHeight = 0.dp
@@ -876,33 +875,49 @@ object MyView {
 
 
 
+    object TipDefaults {
+        val TipImage = Icons.Filled.Notifications
+        val TipImageDescription: String
+            get() { return Core.getContext().resources.getString(R.string.tip) }
+        val TipDescription: String
+            get() { return Core.getContext().resources.getString(R.string.tip) }
+        val CloseImage = Icons.Filled.Close
+        val CloseImageDescription: String
+            get() { return Core.getContext().resources.getString(R.string.close) }
+        val Modifier: Modifier = androidx.compose.ui.Modifier
+    }
+
     data class TipInformation(
-        val tip: String = Core.getContext().resources.getString(R.string.tip),
-        val tipImageDescription: String = tip,
+        val tipImage: ImageVector = TipDefaults.TipImage,
+        val tipImageDescription: String? = TipDefaults.TipImageDescription,
+        val tipDescription: String = TipDefaults.TipDescription,
         val title: String,
         val message: String,
-        val closeImageDescription: String? = null,
-        val onCloseButtonClick: (() -> Unit)? = null,
         val imageBitmap: ImageBitmap? = null,
         val imageBitmapDescription: String? = null,
         val actionButtonTitle: String? = null,
         val onActionButtonClick: (() -> Unit)? = null,
-        val modifier: Modifier = Modifier
+        val closeImage: ImageVector = TipDefaults.CloseImage,
+        val closeImageDescription: String? = TipDefaults.CloseImageDescription,
+        val onClose: (() -> Unit)? = null,
+        val modifier: Modifier = TipDefaults.Modifier
     )
 
     @Composable
     fun Tip(tipInformation: TipInformation) {
         Tip(
-            tip = tipInformation.tip,
+            tipImage = tipInformation.tipImage,
             tipImageDescription = tipInformation.tipImageDescription,
+            tipDescription = tipInformation.tipDescription,
             title = tipInformation.title,
             message = tipInformation.message,
-            closeImageDescription = tipInformation.closeImageDescription,
-            onCloseButtonClick = tipInformation.onCloseButtonClick,
             imageBitmap = tipInformation.imageBitmap,
             imageBitmapDescription = tipInformation.imageBitmapDescription,
             actionButtonTitle = tipInformation.actionButtonTitle,
             onActionButtonClick = tipInformation.onActionButtonClick,
+            closeImage = tipInformation.closeImage,
+            closeImageDescription = tipInformation.closeImageDescription,
+            onClose = tipInformation.onClose,
             modifier = tipInformation.modifier
         )
     }
@@ -910,19 +925,21 @@ object MyView {
     @SuppressLint("ModifierParameter")
     @Composable
     fun Tip(
-        tip: String,
-        tipImageDescription: String? = null,
+        tipImage: ImageVector = TipDefaults.TipImage,
+        tipImageDescription: String? = TipDefaults.TipImageDescription,
+        tipDescription: String = TipDefaults.TipDescription,
         title: String,
         message: String,
-        closeImageDescription: String? = null,
-        onCloseButtonClick: (() -> Unit)? = null,
         imageBitmap: ImageBitmap? = null,
         imageBitmapDescription: String? = null,
         actionButtonTitle: String? = null,
         onActionButtonClick: (() -> Unit)? = null,
-        modifier: Modifier = Modifier
+        closeImage: ImageVector = TipDefaults.CloseImage,
+        closeImageDescription: String? = TipDefaults.CloseImageDescription,
+        onClose: (() -> Unit)? = null,
+        modifier: Modifier = TipDefaults.Modifier
     ) {
-        val hasCloseButton = onCloseButtonClick != null
+        val hasCloseButton = onClose != null
         val hasImage = imageBitmap != null
         val hasAction = actionButtonTitle != null && onActionButtonClick != null
 
@@ -955,7 +972,7 @@ object MyView {
 
                 if (hasCloseButton) {
                     IconButton(
-                        onClick = onCloseButtonClick!!,
+                        onClick = onClose!!,
                         modifier = Modifier
                             .constrainAs(closeIconButton) {
                                 top.linkTo(parent.top)
@@ -963,14 +980,14 @@ object MyView {
                             }
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Close,
+                            imageVector = closeImage,
                             contentDescription = closeImageDescription
                         )
                     }
                 }
 
                 Icon(
-                    imageVector = Icons.Filled.Notifications,
+                    imageVector = tipImage,
                     contentDescription = tipImageDescription,
                     modifier = Modifier
                         .size(tipIconSize)
@@ -981,7 +998,7 @@ object MyView {
                 )
 
                 Text(
-                    text = tip,
+                    text = tipDescription,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier
                         .constrainAs(tipText) {
@@ -1052,14 +1069,70 @@ object MyView {
 
 
 
+    object PopupTipDefaults {
+        val TipImage = Icons.Filled.Notifications
+        val TipImageDescription: String
+            get() { return Core.getContext().resources.getString(R.string.tip) }
+        val TipDescription: String
+            get() { return Core.getContext().resources.getString(R.string.tip) }
+        val CloseImage = Icons.Filled.Close
+        val CloseImageDescription: String
+            get() { return Core.getContext().resources.getString(R.string.close) }
+        val CloseDescription: String
+            get() { return Core.getContext().resources.getString(R.string.close) }
+        const val DisappearTime = 10
+        const val HasBottomBar = false
+        val Modifier = androidx.compose.ui.Modifier
+    }
+
+    data class PopupTipInformation(
+        val tipImage: ImageVector = PopupTipDefaults.TipImage,
+        val tipImageDescription: String? = PopupTipDefaults.TipImageDescription,
+        val tipDescription: String = PopupTipDefaults.TipDescription,
+        val closeImage: ImageVector = PopupTipDefaults.CloseImage,
+        val closeImageDescription: String? = PopupTipDefaults.CloseImageDescription,
+        val closeDescription: String = PopupTipDefaults.CloseDescription,
+        val message: String,
+        val onClick: (() -> Unit)? = null,
+        val onClose: () -> Unit,
+        val disappearTime: Int? = PopupTipDefaults.DisappearTime,
+        val hasBottomBar: Boolean = PopupTipDefaults.HasBottomBar,
+        val modifier: Modifier = PopupTipDefaults.Modifier
+    )
+
+    @Composable
+    fun PopupTip(popupTipInformation: PopupTipInformation) {
+        PopupTip(
+            tipImage = popupTipInformation.tipImage,
+            tipImageDescription = popupTipInformation.tipImageDescription,
+            tipDescription = popupTipInformation.tipDescription,
+            closeImage = popupTipInformation.closeImage,
+            closeImageDescription = popupTipInformation.closeImageDescription,
+            closeDescription = popupTipInformation.closeDescription,
+            message = popupTipInformation.message,
+            onClick = popupTipInformation.onClick,
+            onClose = popupTipInformation.onClose,
+            disappearTime = popupTipInformation.disappearTime,
+            hasBottomBar = popupTipInformation.hasBottomBar,
+            modifier = popupTipInformation.modifier
+        )
+    }
+
+    @SuppressLint("ModifierParameter")
     @Composable
     fun PopupTip(
-        tip: Pair<ImageVector, String> = Icons.Filled.Notifications to stringResource(id = R.string.tip),
-        close: Pair<ImageVector, String> = Icons.Filled.Close to stringResource(id = R.string.close),
+        tipImage: ImageVector = PopupTipDefaults.TipImage,
+        tipImageDescription: String? = PopupTipDefaults.TipImageDescription,
+        tipDescription: String = PopupTipDefaults.TipDescription,
+        closeImage: ImageVector = PopupTipDefaults.CloseImage,
+        closeImageDescription: String? = PopupTipDefaults.CloseImageDescription,
+        closeDescription: String = PopupTipDefaults.CloseDescription,
         message: String,
+        onClick: (() -> Unit)? = null,
         onClose: () -> Unit,
-        disappearTime: Int? = 10,
-        hasBottomBar: Boolean = false,
+        disappearTime: Int? = PopupTipDefaults.DisappearTime,
+        hasBottomBar: Boolean = PopupTipDefaults.HasBottomBar,
+        modifier: Modifier = PopupTipDefaults.Modifier
     ) {
         var leftTime by rememberSaveable { mutableStateOf(disappearTime ?: 0) }
         if (disappearTime != null) {
@@ -1109,7 +1182,7 @@ object MyView {
                                 .padding(20.dp)
                         ) {
                             Text(
-                                text = close.second,
+                                text = closeDescription,
                                 modifier = Modifier
                                     .background(
                                         color = MaterialTheme.colorScheme.secondaryContainer.copy(
@@ -1136,6 +1209,9 @@ object MyView {
                     modifier = Modifier
                         .padding(20.dp)
                         .requiredWidthIn(min = 150.dp, max = Dp.Infinity)
+                        .also { modifier ->
+                            onClick?.let { modifier.clickable(onClick = onClick)  }
+                        }
                 ) {
                     val tipIconSize = LocalDensity.current.run {
                         MaterialTheme.typography.labelSmall.fontSize.toPx().toDp()
@@ -1147,8 +1223,8 @@ object MyView {
                         val (tipIcon, tipText, closeText, closeIconButton, messageText) = createRefs()
 
                         Icon(
-                            imageVector = tip.first,
-                            contentDescription = tip.second,
+                            imageVector = tipImage,
+                            contentDescription = tipImageDescription,
                             modifier = Modifier
                                 .size(tipIconSize)
                                 .constrainAs(tipIcon) {
@@ -1158,7 +1234,7 @@ object MyView {
                         )
 
                         Text(
-                            text = tip.second,
+                            text = tipDescription,
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
                                 .constrainAs(tipText) {
@@ -1192,8 +1268,8 @@ object MyView {
                                 }
                         ) {
                             Icon(
-                                imageVector = close.first,
-                                contentDescription = close.second
+                                imageVector = closeImage,
+                                contentDescription = closeImageDescription
                             )
                         }
 
