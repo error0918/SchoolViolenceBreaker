@@ -47,7 +47,7 @@ object Helpful {
         val imageBitmapBackground: Color? = null,
         val title: String,
         val description: String,
-        val link: String,
+        val link: String
     )
 
     val helpfulList by lazy {
@@ -187,12 +187,7 @@ object Helpful {
         ) {
             items(helpfulList) { helpful ->
                 HelpfulUnit(
-                    imageBitmap = helpful.imageBitmap,
-                    imageBitmapDescription = helpful.title,
-                    imageBitmapBackground = helpful.imageBitmapBackground,
-                    title = helpful.title,
-                    description = helpful.description,
-                    link = helpful.link,
+                    helpful = helpful,
                     modifier = Modifier.padding(
                         top = if(helpfulList.indexOf(helpful) == 0) 16.dp else 0.dp,
                         bottom = if(helpfulList.lastIndexOf(helpful) == helpfulList.size - 1) 16.dp else 0.dp
@@ -200,6 +195,23 @@ object Helpful {
                 )
             }
         }
+    }
+
+    @SuppressLint("ModifierParameter")
+    @Composable
+    fun HelpfulUnit(
+        helpful: Helpful,
+        modifier: Modifier = Modifier
+    ) {
+        HelpfulUnit(
+            imageBitmap = helpful.imageBitmap,
+            imageBitmapDescription = helpful.title,
+            imageBitmapBackground = helpful.imageBitmapBackground,
+            title = helpful.title,
+            description = helpful.description,
+            link = helpful.link,
+            modifier = modifier
+        )
     }
 
     @SuppressLint("ModifierParameter")
