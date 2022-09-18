@@ -62,7 +62,6 @@ import kotlinx.coroutines.delay
 
 object MyView {
 
-    @SuppressLint("ModifierFactoryExtensionFunction", "ComposableModifierFactory")
     object DialogDefaults {
         val Modifier: Modifier = androidx.compose.ui.Modifier
         val MinWidth = 280.dp

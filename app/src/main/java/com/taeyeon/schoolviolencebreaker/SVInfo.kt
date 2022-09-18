@@ -38,7 +38,7 @@ object SVInfo {
                 MyView.TipInformation(
                     title = "알고 계셨나요?",
                     message = "학교 폭력은 진짜 나쁘답니다!",
-                    onCloseButtonClick = {
+                    onClose = {
                         showingTip = false
                     },
                     closeImageDescription = "닫기"
@@ -46,7 +46,7 @@ object SVInfo {
                 MyView.TipInformation(
                     title = "알고 계셨나요?",
                     message = "학교 폭력 멈춰!",
-                    onCloseButtonClick = {
+                    onClose = {
                         showingTip = false
                     },
                     closeImageDescription = "닫기"
