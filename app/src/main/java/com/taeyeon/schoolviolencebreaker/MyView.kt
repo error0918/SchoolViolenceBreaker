@@ -963,7 +963,9 @@ object MyView {
                 }
                 cornerRadius
             }
-            val tipIconSize = LocalDensity.current.run { MaterialTheme.typography.labelSmall.fontSize.toPx().toDp() }
+            val tipIconSize = LocalDensity.current.run {
+                MaterialTheme.typography.labelSmall.fontSize.toPx().toDp()
+            }
 
             ConstraintLayout(
                 modifier = Modifier
@@ -1050,7 +1052,10 @@ object MyView {
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .constrainAs(messageText) {
-                            top.linkTo(if (hasImage) image.bottom else titleText.bottom, margin = 10.dp)
+                            top.linkTo(
+                                if (hasImage) image.bottom else titleText.bottom,
+                                margin = 10.dp
+                            )
                             start.linkTo(parent.start)
                         }
                 )
@@ -1082,7 +1087,7 @@ object MyView {
     fun ItemUnit(
         content: @Composable () -> Unit,
         onClick: () -> Unit,
-        containerColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f).compositeOver(MaterialTheme.colorScheme.surface),
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
         contentColor: Color = MaterialTheme.colorScheme.onSurface
     ) {
         val cornerRadius = MaterialTheme.shapes.medium.let {
@@ -1116,7 +1121,7 @@ object MyView {
     fun ItemUnit(
         text: String,
         onClick: () -> Unit,
-        containerColor: Color = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f).compositeOver(MaterialTheme.colorScheme.surface),
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
         contentColor: Color = MaterialTheme.colorScheme.onSurface
     ) {
         ItemUnit(
@@ -1272,12 +1277,14 @@ object MyView {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
-                    modifier = Modifier
-                        .padding(20.dp)
-                        .requiredWidthIn(min = 150.dp, max = Dp.Infinity)
-                        .also { modifier ->
-                            onClick?.let { modifier.clickable(onClick = onClick)  }
-                        }
+                    modifier = modifier.then(
+                        Modifier
+                            .padding(20.dp)
+                            .requiredWidthIn(min = 150.dp, max = Dp.Infinity)
+                            .also { modifier ->
+                                onClick?.let { modifier.clickable(onClick = onClick)  }
+                            }
+                    )
                 ) {
                     val tipIconSize = LocalDensity.current.run {
                         MaterialTheme.typography.labelSmall.fontSize.toPx().toDp()

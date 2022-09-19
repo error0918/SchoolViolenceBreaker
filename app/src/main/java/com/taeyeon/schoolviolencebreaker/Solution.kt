@@ -9,6 +9,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
@@ -34,6 +36,19 @@ object Solution {
         val subTitle: String? = null,
         val items: List<String>,
         val onItemClick: (index: Int, item: String) -> Unit
+    )
+
+    enum class ReportingType {
+        Call, Link
+    }
+
+    data class Reporting(
+        val title: String,
+        val organization: String? = null,
+        val receptionDetails: String? = null,
+        val description: String = "$title ($organization) : $receptionDetails",
+        val shortcut: String,
+        val type: ReportingType
     )
 
     @Composable
@@ -51,34 +66,89 @@ object Solution {
             "가해자 보호자의 유의사항은 가해자의 미래와 인성을 위해서, 가해자에 대한 우대를 멀리하고 객관적으로 솔직히 답변해야 한다는 점입니다.",
             "관측자의 유의사항은 피해자를 위하여, 솔직하고 정확하게 신고해야한다는 점입니다."
         )
-        val reportList = listOf(
-            "117" to {
-                val tt = Intent(Intent.ACTION_CALL, Uri.parse("tel:01067438337"))
-                Core.getActivity().startActivity(tt)
-            },
-            "ASDF" to {}
+        val reportingList = listOf(
+            Reporting(
+                title = "117",
+                organization = "교육부, 여성가족부, 경찰청",
+                receptionDetails = "학교폭력 예방교육 및 전화·문자 상담",
+                description = "학교",
+                shortcut = "117",
+                type = ReportingType.Call
+            ),
+            Reporting(
+                title = "1388",
+                organization = "청소년 사이버상담센터",
+                receptionDetails = "청소년 가출, 학업중단, 인터넷 중독, 고민 상담",
+                description = "학교",
+                shortcut = "1388",
+                type = ReportingType.Call
+            ),
+            Reporting(
+                title = "02-2285-1318",
+                organization = "서울시청소년상담복지센터 ",
+                receptionDetails = "자녀 학교·가정생활, 특수교육 상담",
+                description = "학교",
+                shortcut = "0222851318",
+                type = ReportingType.Call
+            ),
+            Reporting(
+                title = "1588-9128",
+                organization = "푸른나무재단",
+                receptionDetails = "학교폭력 전화상담, 인터넷 상담, 개인 및 집단상담",
+                description = "학교",
+                shortcut = "15889128",
+                type = ReportingType.Call
+            ),
+            Reporting(
+                title = "02-3141-6191",
+                organization = "탁틴내일",
+                receptionDetails = "성폭력·성착취·디지털성범죄 피해상담",
+                description = "학교",
+                shortcut = "0231416191",
+                type = ReportingType.Call
+            ),
+            Reporting(
+                title = "044-203-6898 (교육부 학교폭력대책과)",
+                organization = "교육부",
+                receptionDetails = "TODO",
+                description = "학교",
+                shortcut = "0231416191",
+                type = ReportingType.Call
+            ),
+            Reporting(
+                title = "안전Dream 학교폭력 신고센터",
+                organization = "경찰청",
+                receptionDetails = "학교폭력 신고 게시판",
+                description = "학교",
+                shortcut = "https://www.safe182.go.kr/pot/selectRptList.do?rptTyGubun=09",
+                type = ReportingType.Link
+            )
         )
 
         when (showingDialog) {
             0 -> {
-                MyView.BaseDialog(
+                var reportingIndex by rememberSaveable { mutableStateOf<Int?>(null) }
+
+                MyView.ListDialog(
                     onDismissRequest = { showingDialog = null },
                     icon = { Icon(imageVector = Icons.Filled.Warning, contentDescription = stringResource(id = R.string.report)) },
                     title = { Text(text = "${stringResource(id = R.string.report)} - ${reporterList[showingDialogIndex]}") },
                     text = { Text(text = reporterNoticeList[showingDialogIndex]) },
-                    content = {
-                        LazyColumn(
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                    items = reportingList,
+                    itemContent = { index, reporting ->
+                        Box(
+                            modifier = Modifier.padding(
+                                top = if (index == 0) 0.dp else 8.dp,
+                                bottom = if (index == reportingList.size - 1) 0.dp else 8.dp,
+                                start = 0.dp,
+                                end = 0.dp
                         ) {
 
-                            items(reportList) { report ->
-                                MyView.ItemUnit(
-                                    text = report.first,
-                                    onClick = report.second
-                                )
-                            }
-
                         }
+                        MyView.ItemUnit(
+                            text = reporting.title,
+                            onClick = { reportingIndex = index }
+                        )
                     },
                     button = {
                         TextButton(onClick = { showingDialog = null }) {
@@ -86,6 +156,34 @@ object Solution {
                         }
                     }
                 )
+
+                reportingIndex?.let { index ->
+                    val reporting = reportingList[index]
+                    MyView.BaseDialog(
+                        onDismissRequest = { reportingIndex = null },
+                        icon = { Icon(imageVector = if (reporting.type == ReportingType.Call) Icons.Filled.Call else if (reporting.type == ReportingType.Link) Icons.Filled.OpenInBrowser else Icons.Filled.Error, contentDescription = reporting.title) },
+                        title = { Text(text = "${reporting.title} - ${reporterList[showingDialogIndex]}") },
+                        text = { Text(text = "TODO") },
+                        content = {
+                            Column(
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+
+                                if (reporting.type == ReportingType.Call) {
+
+                                } else if (reporting.type == ReportingType.Link) {
+
+                                }
+
+                            }
+                        },
+                        button = {
+                            TextButton(onClick = { reportingIndex = null }) {
+                                Text(text = stringResource(id = R.string.close))
+                            }
+                        }
+                    )
+                }
             }
             1 -> {
                 // TODO
@@ -94,6 +192,9 @@ object Solution {
                 // TODO
             }
             3 -> {
+                // TODO
+            }
+            4 -> {
                 // TODO
             }
 
@@ -117,6 +218,18 @@ object Solution {
                 title = "조치",
                 items = listOf(
                     "피해자", "가해자"
+                ),
+                onItemClick = { index, _ ->
+                    showingDialog = 1
+                    showingDialogIndex = index
+                }
+            ),
+            Solution(
+                icon = Icons.Filled.Error,
+                iconContentDescription = "오해",
+                title = "오해",
+                items = listOf(
+                    "잘못된 해결법", "잘못된 상식"
                 ),
                 onItemClick = { index, _ ->
                     showingDialog = 1
