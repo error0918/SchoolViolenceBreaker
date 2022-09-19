@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.core.Core
+import kotlin.random.Random
 
 object Solution {
 
@@ -140,15 +141,13 @@ object Solution {
                             modifier = Modifier.padding(
                                 top = if (index == 0) 0.dp else 8.dp,
                                 bottom = if (index == reportingList.size - 1) 0.dp else 8.dp,
-                                start = 0.dp,
-                                end = 0.dp
+                            )
                         ) {
-
+                            MyView.ItemUnit(
+                                text = reporting.title,
+                                onClick = { reportingIndex = index }
+                            )
                         }
-                        MyView.ItemUnit(
-                            text = reporting.title,
-                            onClick = { reportingIndex = index }
-                        )
                     },
                     button = {
                         TextButton(onClick = { showingDialog = null }) {
@@ -170,9 +169,29 @@ object Solution {
                             ) {
 
                                 if (reporting.type == ReportingType.Call) {
-
+                                    val hasPermission = Random(3).nextInt() == 1
+                                    MyView.ItemUnit(
+                                        text = "전화 열기",
+                                        onClick = {
+                                            /* TODO */
+                                        }
+                                    )
+                                    MyView.ItemUnit(
+                                        text = "전화하기",
+                                        onClick = if (hasPermission)
+                                            { ->
+                                                /* TODO */
+                                            }
+                                        else null,
+                                        contentColor = if (hasPermission) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                                    )
                                 } else if (reporting.type == ReportingType.Link) {
-
+                                    MyView.ItemUnit(
+                                        text = "링크 열기",
+                                        onClick = {
+                                            /* TODO */
+                                        }
+                                    )
                                 }
 
                             }

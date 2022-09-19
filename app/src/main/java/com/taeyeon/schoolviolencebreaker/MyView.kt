@@ -1083,63 +1083,6 @@ object MyView {
 
 
 
-    @Composable
-    fun ItemUnit(
-        content: @Composable () -> Unit,
-        onClick: () -> Unit,
-        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
-        contentColor: Color = MaterialTheme.colorScheme.onSurface
-    ) {
-        val cornerRadius = MaterialTheme.shapes.medium.let {
-            var cornerRadius: Dp = 0.dp
-            val size = Size.Unspecified
-            with(LocalDensity.current) {
-                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
-                corners.forEach { corner ->
-                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
-                }
-            }
-            cornerRadius
-        }
-
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = containerColor,
-                contentColor = contentColor
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onClick)
-        ) {
-            Box(modifier = Modifier.padding(cornerRadius + 8.dp)) {
-                content()
-            }
-        }
-    }
-
-    @Composable
-    fun ItemUnit(
-        text: String,
-        onClick: () -> Unit,
-        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
-        contentColor: Color = MaterialTheme.colorScheme.onSurface
-    ) {
-        ItemUnit(
-            content = {
-                Text(
-                    text = text,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            },
-            onClick = onClick,
-            containerColor = containerColor,
-            contentColor = contentColor
-        )
-    }
-
-
-
     object PopupTipDefaults {
         val TipImage = Icons.Filled.Notifications
         val TipImageDescription: String
@@ -1359,6 +1302,66 @@ object MyView {
                 }
             }
         }
+    }
+
+
+
+    @Composable
+    fun ItemUnit(
+        content: @Composable () -> Unit,
+        onClick: (() -> Unit)?,
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
+        contentColor: Color = MaterialTheme.colorScheme.onSurface
+    ) {
+        val cornerRadius = MaterialTheme.shapes.medium.let {
+            var cornerRadius: Dp = 0.dp
+            val size = Size.Unspecified
+            with(LocalDensity.current) {
+                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
+                corners.forEach { corner ->
+                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
+                }
+            }
+            cornerRadius
+        }
+
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = containerColor,
+                contentColor = contentColor
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    enabled = onClick != null,
+                    onClick = onClick ?: { }
+                )
+        ) {
+            Box(modifier = Modifier.padding(cornerRadius + 8.dp)) {
+                content()
+            }
+        }
+    }
+
+    @Composable
+    fun ItemUnit(
+        text: String,
+        onClick: (() -> Unit)?,
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
+        contentColor: Color = MaterialTheme.colorScheme.primary
+    ) {
+        ItemUnit(
+            content = {
+                Text(
+                    text = text,
+                    color = contentColor,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            },
+            onClick = onClick,
+            containerColor = containerColor,
+            contentColor = contentColor
+        )
     }
 
 }
