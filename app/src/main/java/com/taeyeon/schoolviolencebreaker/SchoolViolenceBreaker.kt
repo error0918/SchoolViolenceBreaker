@@ -30,8 +30,6 @@ var waitTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.WaitTime)
 var reportDoubleCheck by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ReportDoubleCheck)
 var showSubTitle by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShowSubTitle)
 
-var isReporting by mutableStateOf(false)
-
 fun load() {
     Settings.loadSettings()
 
@@ -64,11 +62,6 @@ fun save() {
     Settings.settingsData.ShowSubTitle = showSubTitle
 
     Settings.saveSettings()
-}
-
-@Composable
-fun Report() {
-    // TODO: Remove
 }
 
 object Report {
@@ -156,7 +149,7 @@ object Report {
     )
 
     @Composable
-    fun Report(reporter: Int, onDismissAdditionalAction: () -> Unit = {}, autoReport: Boolean = false) {
+    fun Report(reporter: Int = 0, onDismissAdditionalAction: () -> Unit = {}, autoReport: Boolean = false) {
         var reporterIndex by rememberSaveable { mutableStateOf<Int?>(null) }
         var reportingIndex by rememberSaveable { mutableStateOf<Int?>(null) }
 
