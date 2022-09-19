@@ -350,9 +350,7 @@ object Helpful {
                     .combinedClickable(
                         onClick = {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                            Core
-                                .getActivity()
-                                .startActivity(intent)
+                            Core.getActivity().startActivity(intent)
                         },
                         onLongClick = {
                             Utils.vibrate(50)

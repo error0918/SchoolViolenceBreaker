@@ -1,24 +1,21 @@
 package com.taeyeon.schoolviolencebreaker
 
-import android.graphics.Point
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
-import kotlinx.coroutines.*
-import kotlin.random.Random
 
 var fullScreenMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.FullScreenMode)
 var screenAlwaysOn by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ScreenAlwaysOn)
@@ -71,112 +68,7 @@ fun save() {
 
 @Composable
 fun Report() {
-    /*
-    var isDoubleChecking by remember { mutableStateOf(false) }
-
-    if (isReporting) {
-        isDoubleChecking = false
-
-        Dialog(onDismissRequest = { isReporting = false }) {
-            val size = Point()
-            Core.getActivity().windowManager.defaultDisplay.getRealSize(size)
-            val displayWidth = with (LocalDensity.current) { size.x.toDp() }
-            Surface(
-                modifier = Modifier
-                    .requiredWidthIn(
-                        min = if (displayWidth >= 280.dp) 280.dp else 0.dp,
-                        max = if (displayWidth >= 560.dp) 560.dp else displayWidth
-                    )
-                    .padding(10.dp),
-                shape = RoundedCornerShape(28.dp),
-                tonalElevation = 2.dp
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Warning,
-                        contentDescription = "투두",
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text( 
-                        text = "투두$size",
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "투두${with (LocalDensity.current) { size.x.toDp() }}".repeat(30),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(6.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    val remainingTime = remember { mutableStateOf(waitTime) }
-                    wait(rememberCoroutineScope(), remainingTime)
-
-                    for (i in 1..10) {
-                        TextButton(
-                            onClick = {
-                                /*TODO*/
-                                isReporting = false
-                                if (reportDoubleCheck) isDoubleChecking = true
-                            },
-                            contentPadding = PaddingValues(12.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Box(
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = "sjfslkhfs${remainingTime.value}",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.align(Alignment.CenterStart)
-                                )
-                                if (true) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Star,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.tertiary,
-                                        modifier = Modifier.align(Alignment.CenterEnd)
-                                    )
-                                }
-                            }
-                        }
-                        Divider(
-                            color = MaterialTheme.colorScheme.outline,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-                    TextButton(
-                        onClick = { isReporting = false },
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .padding(vertical = 6.dp)
-                    ) {
-                        Text(text = "닫기")
-                    }
-                }
-            }
-        }
-    }
-
-    if (isDoubleChecking) {
-        //
-    }*/
-}
-
-fun wait(coroutineScope: CoroutineScope, remainingTime: MutableState<Int>) {
-    coroutineScope.launch {
-        while (remainingTime.value > 0) {
-            delay(1000)
-            remainingTime.value--
-        }
-        if (remainingTime.value < 0) remainingTime.value = 0
-    }
+    // TODO: Remove
 }
 
 object Report {
@@ -324,7 +216,7 @@ object Report {
                     ) {
 
                         if (reporting.type == ReportingType.Call) {
-                            val hasPermission = Random(3).nextInt() == 1
+                            val hasPermission = checkPermission(Manifest.permission.CALL_PHONE)
                             MyView.ItemUnit(
                                 text = "전화 열기",
                                 onClick = {
@@ -360,12 +252,23 @@ object Report {
         }
     }
 
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(Core.getContext(), permission) == PackageManager.PERMISSION_GRANTED
+    }
+
     private fun dial(phone: String) {
-        //
+        val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
+        Core.getActivity().startActivity(intent)
     }
 
     private fun call(phone: String) {
-        //
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phone"))
+        Core.getActivity().startActivity(intent)
+    }
+
+    private fun openLink(link: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        Core.getActivity().startActivity(intent)
     }
 
 }
