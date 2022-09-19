@@ -39,170 +39,19 @@ object Solution {
         val onItemClick: (index: Int, item: String) -> Unit
     )
 
-    enum class ReportingType {
-        Call, Link
-    }
-
-    data class Reporting(
-        val title: String,
-        val organization: String? = null,
-        val receptionDetails: String? = null,
-        val description: String = "$title ($organization) : $receptionDetails",
-        val shortcut: String,
-        val type: ReportingType
-    )
-
     @Composable
     fun Solution(paddingValues: PaddingValues = PaddingValues()) {
         var showingDialog by rememberSaveable { mutableStateOf<Int?>(null) }
         var showingDialogIndex by rememberSaveable { mutableStateOf(0) }
 
-        val reporterList = listOf(
-            "피해자", "피해자 보호자", "가해자", "가해자 보호자", "관측자"
-        )
-        val reporterNoticeList = listOf(
-            "피해자의 유의사항은 익명성이 보장되므로, 최대한 솔직하게 신고해야 사건이 더 원할하게 해결된다는 점입니다.",
-            "피해자 보호자의 유의사항은 피해자를 고통에서 해방시키기 위하여, 피해자의 정서를 보다듬어 주고, 정확하게 신고해야 한다는 점입니다.",
-            "가해자의 유의사항은 미안한 마음을 가지고, 잘못을 늬우치며, 최대한 솔직하고 정중하게 답해야 한다는 점입니다.",
-            "가해자 보호자의 유의사항은 가해자의 미래와 인성을 위해서, 가해자에 대한 우대를 멀리하고 객관적으로 솔직히 답변해야 한다는 점입니다.",
-            "관측자의 유의사항은 피해자를 위하여, 솔직하고 정확하게 신고해야한다는 점입니다."
-        )
-        val reportingList = listOf(
-            Reporting(
-                title = "117",
-                organization = "교육부, 여성가족부, 경찰청",
-                receptionDetails = "학교폭력 예방교육 및 전화·문자 상담",
-                description = "학교",
-                shortcut = "117",
-                type = ReportingType.Call
-            ),
-            Reporting(
-                title = "1388",
-                organization = "청소년 사이버상담센터",
-                receptionDetails = "청소년 가출, 학업중단, 인터넷 중독, 고민 상담",
-                description = "학교",
-                shortcut = "1388",
-                type = ReportingType.Call
-            ),
-            Reporting(
-                title = "02-2285-1318",
-                organization = "서울시청소년상담복지센터 ",
-                receptionDetails = "자녀 학교·가정생활, 특수교육 상담",
-                description = "학교",
-                shortcut = "0222851318",
-                type = ReportingType.Call
-            ),
-            Reporting(
-                title = "1588-9128",
-                organization = "푸른나무재단",
-                receptionDetails = "학교폭력 전화상담, 인터넷 상담, 개인 및 집단상담",
-                description = "학교",
-                shortcut = "15889128",
-                type = ReportingType.Call
-            ),
-            Reporting(
-                title = "02-3141-6191",
-                organization = "탁틴내일",
-                receptionDetails = "성폭력·성착취·디지털성범죄 피해상담",
-                description = "학교",
-                shortcut = "0231416191",
-                type = ReportingType.Call
-            ),
-            Reporting(
-                title = "044-203-6898 (교육부 학교폭력대책과)",
-                organization = "교육부",
-                receptionDetails = "TODO",
-                description = "학교",
-                shortcut = "0231416191",
-                type = ReportingType.Call
-            ),
-            Reporting(
-                title = "안전Dream 학교폭력 신고센터",
-                organization = "경찰청",
-                receptionDetails = "학교폭력 신고 게시판",
-                description = "학교",
-                shortcut = "https://www.safe182.go.kr/pot/selectRptList.do?rptTyGubun=09",
-                type = ReportingType.Link
-            )
-        )
-
         when (showingDialog) {
             0 -> {
-                var reportingIndex by rememberSaveable { mutableStateOf<Int?>(null) }
-
-                MyView.ListDialog(
-                    onDismissRequest = { showingDialog = null },
-                    icon = { Icon(imageVector = Icons.Filled.Warning, contentDescription = stringResource(id = R.string.report)) },
-                    title = { Text(text = "${stringResource(id = R.string.report)} - ${reporterList[showingDialogIndex]}") },
-                    text = { Text(text = reporterNoticeList[showingDialogIndex]) },
-                    items = reportingList,
-                    itemContent = { index, reporting ->
-                        Box(
-                            modifier = Modifier.padding(
-                                top = if (index == 0) 0.dp else 8.dp,
-                                bottom = if (index == reportingList.size - 1) 0.dp else 8.dp,
-                            )
-                        ) {
-                            MyView.ItemUnit(
-                                text = reporting.title,
-                                onClick = { reportingIndex = index }
-                            )
-                        }
-                    },
-                    button = {
-                        TextButton(onClick = { showingDialog = null }) {
-                            Text(text = stringResource(id = R.string.close))
-                        }
+                Report.Report(
+                    reporter = showingDialogIndex,
+                    onDismissAdditionalAction = {
+                        showingDialog = null
                     }
                 )
-
-                reportingIndex?.let { index ->
-                    val reporting = reportingList[index]
-                    MyView.BaseDialog(
-                        onDismissRequest = { reportingIndex = null },
-                        icon = { Icon(imageVector = if (reporting.type == ReportingType.Call) Icons.Filled.Call else if (reporting.type == ReportingType.Link) Icons.Filled.OpenInBrowser else Icons.Filled.Error, contentDescription = reporting.title) },
-                        title = { Text(text = "${reporting.title} - ${reporterList[showingDialogIndex]}") },
-                        text = { Text(text = "TODO") },
-                        content = {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(16.dp)
-                            ) {
-
-                                if (reporting.type == ReportingType.Call) {
-                                    val hasPermission = Random(3).nextInt() == 1
-                                    MyView.ItemUnit(
-                                        text = "전화 열기",
-                                        onClick = {
-                                            /* TODO */
-                                        }
-                                    )
-                                    MyView.ItemUnit(
-                                        text = "전화하기",
-                                        onClick = if (hasPermission)
-                                            { ->
-                                                /* TODO */
-                                            }
-                                        else null,
-                                        contentColor = if (hasPermission) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-                                    )
-                                } else if (reporting.type == ReportingType.Link) {
-                                    MyView.ItemUnit(
-                                        text = "링크 열기",
-                                        onClick = {
-                                            /* TODO */
-                                        }
-                                    )
-                                }
-
-                            }
-                        },
-                        button = {
-                            TextButton(onClick = { reportingIndex = null }) {
-                                Text(text = stringResource(id = R.string.close))
-                            }
-                        }
-                    )
-                }
             }
             1 -> {
                 // TODO
@@ -225,7 +74,7 @@ object Solution {
                 iconContentDescription = "신고",
                 title = "신고",
                 subTitle = "당신은?",
-                items = reporterList,
+                items = Report.reporterList,
                 onItemClick = { index, _ ->
                     showingDialog = 0
                     showingDialogIndex = index
