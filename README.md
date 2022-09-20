@@ -18,5 +18,13 @@
 
 ---
 
+<div align=center>
+
+###### Copyright 2022. TAEYEON all rights reserved
+
+</div>
+
+---
+
 
 
