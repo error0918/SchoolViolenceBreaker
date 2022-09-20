@@ -12,7 +12,7 @@
 
 by 20616 정태연
 
-<div style="font-size: 50%;">
+<span style="font-size: 50%;">
 
 사회문제 탐구 수행평가
 
