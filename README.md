@@ -1,5 +1,5 @@
 <div align=center>
-![School Violence Breaker](https://github.com/error0918/SchoolViolenceBreaker/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png?raw=true)
+![School Violence Breaker]("https://github.com/error0918/SchoolViolenceBreaker/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png?raw=true")
   
 ### 🚨 SchoolViolenceBreaker 🚨
 학교폭력 예비와 대응에 대한 종합 도우비!
