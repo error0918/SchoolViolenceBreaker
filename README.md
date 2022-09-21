@@ -29,7 +29,7 @@
 
 # 🦄 사용된 것
 
-- 디자인: Material M2, *Material M3*
+- 디자인: Material M2, -Material M3-
 - 언어: Kotlin
 - 기술: Jetpack Compose
 
