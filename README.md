@@ -1,5 +1,5 @@
 <div align=center>
-![School Violence Breaker]("https://github.com/error0918/SchoolViolenceBreaker/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png?raw=true")
+!["School Violence Breaker"]("https://github.com/error0918/SchoolViolenceBreaker/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png?raw=true")
   
 ### 🚨 SchoolViolenceBreaker 🚨
 학교폭력 예비와 대응에 대한 종합 도우비!
@@ -8,8 +8,10 @@
 
 <div align=right>
 
-###### by 20616 정태연 <br/>
-###### 2022/09/09 ~ <br/>
+###### by 20616 정태연 
+
+###### 2022/09/09 ~ 
+
 ###### 사회문제 탐구 수행평가
 
 </div>
