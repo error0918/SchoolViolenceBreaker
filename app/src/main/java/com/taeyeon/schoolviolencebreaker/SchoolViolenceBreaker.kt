@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -13,11 +14,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
+import com.taeyeon.core.Utils
 
 var fullScreenMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.FullScreenMode)
 var screenAlwaysOn by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ScreenAlwaysOn)
@@ -215,13 +217,27 @@ object Report {
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 modifier = Modifier.padding(horizontal = 8.dp)
                             ) {
+                                var textOverFlow by remember { mutableStateOf(false) }
+
                                 Icon(
                                     imageVector = Icons.Filled.Workspaces,
                                     contentDescription = "기관",
                                     modifier = Modifier.size(iconSize)
                                 )
                                 Text(
-                                    text = "기관: $it"
+                                    text = "기관: $it",
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
+                                    onTextLayout = { textLayoutResult ->
+                                        textOverFlow = textLayoutResult.hasVisualOverflow
+                                    },
+                                    modifier = Modifier
+                                        .clickable(
+                                            enabled = textOverFlow,
+                                            onClick = {
+                                                Utils.toast(it)
+                                            }
+                                        )
                                 )
                             }
                         }
@@ -231,13 +247,29 @@ object Report {
                                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                                 modifier = Modifier.padding(horizontal = 8.dp)
                             ) {
+                                var textOverFlow by remember { mutableStateOf(false) }
+
                                 Icon(
                                     imageVector = Icons.Filled.QuestionMark,
                                     contentDescription = "담당하는 것",
                                     modifier = Modifier.size(iconSize)
                                 )
 
-                                Text(text = "담당하는 것: $it")
+                                Text(
+                                    text = "담당하는 것: $it",
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
+                                    onTextLayout = { textLayoutResult ->
+                                        textOverFlow = textLayoutResult.hasVisualOverflow
+                                    },
+                                    modifier = Modifier
+                                        .clickable(
+                                            enabled = textOverFlow,
+                                            onClick = {
+                                                Utils.toast(it)
+                                            }
+                                        )
+                                )
                             }
                         }
                         Text(text = reporting.description)
