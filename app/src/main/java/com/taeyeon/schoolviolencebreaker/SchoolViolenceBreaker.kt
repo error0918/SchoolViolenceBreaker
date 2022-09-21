@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
 import com.taeyeon.core.Utils
+import kotlinx.coroutines.delay
 
 var fullScreenMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.FullScreenMode)
 var screenAlwaysOn by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ScreenAlwaysOn)
@@ -162,6 +163,18 @@ object Report {
         }
 
         reporterIndex?.let { index ->
+            var leftTime by rememberSaveable { mutableStateOf(disappearTime ?: 0) }
+            if (disappearTime != null) {
+                LaunchedEffect(leftTime) {
+                    if (leftTime > 0) {
+                        delay(1000)
+                        leftTime--
+                    } else {
+                        onClose()
+                    }
+                }
+            }
+
             MyView.ListDialog(
                 onDismissRequest = {
                     reporterIndex = null
@@ -185,6 +198,7 @@ object Report {
                     ) {
                         MyView.ItemUnit(
                             text = reporting.title,
+                            subText = if (itemIndex == 0) "321" else "",
                             onClick = { reportingIndex = itemIndex }
                         )
                     }
@@ -202,6 +216,18 @@ object Report {
 
         reportingIndex?.let { index ->
             val reporting = reportingList[index]
+            var leftTime by rememberSaveable { mutableStateOf(disappearTime ?: 0) }
+            if (disappearTime != null) {
+                LaunchedEffect(leftTime) {
+                    if (leftTime > 0) {
+                        delay(1000)
+                        leftTime--
+                    } else {
+                        onClose()
+                    }
+                }
+            }
+
             MyView.BaseDialog(
                 onDismissRequest = { reportingIndex = null },
                 icon = { Icon(imageVector = if (reporting.type == ReportingType.Call) Icons.Filled.Call else if (reporting.type == ReportingType.Link) Icons.Filled.OpenInBrowser else Icons.Filled.Error, contentDescription = reporting.title) },
@@ -284,6 +310,7 @@ object Report {
                             val hasPermission = checkPermission()
                             MyView.ItemUnit(
                                 text = "전화 열기",
+                                subText = "321",
                                 onClick = {
                                     dial(reporting.shortcut)
                                 }
@@ -295,11 +322,12 @@ object Report {
                                         call(reporting.shortcut)
                                     }
                                 else null,
-                                contentColor = if (hasPermission) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+                                textColor = if (hasPermission) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
                             )
                         } else if (reporting.type == ReportingType.Link) {
                             MyView.ItemUnit(
                                 text = "링크 열기",
+                                subText = leftTime,
                                 onClick = {
                                     openLink(reporting.shortcut)
                                 }

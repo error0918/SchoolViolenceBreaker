@@ -47,6 +47,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -55,6 +57,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.taeyeon.core.Core
 import kotlinx.coroutines.delay
 
@@ -1348,19 +1351,70 @@ object MyView {
         text: String,
         onClick: (() -> Unit)?,
         containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background),
-        contentColor: Color = MaterialTheme.colorScheme.primary
+        textColor: Color = MaterialTheme.colorScheme.primary,
+        textTextStyle: TextStyle = MaterialTheme.typography.bodyLarge
     ) {
         ItemUnit(
             content = {
                 Text(
                     text = text,
-                    color = contentColor,
-                    style = MaterialTheme.typography.bodyLarge
+                    color = textColor,
+                    style = textTextStyle
                 )
             },
             onClick = onClick,
-            containerColor = containerColor,
-            contentColor = contentColor
+            containerColor = containerColor
+        )
+    }
+
+    @Composable
+    fun ItemUnit(
+        text: String,
+        subText: String,
+        onClick: (() -> Unit)?,
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background),
+        textColor: Color = MaterialTheme.colorScheme.primary,
+        subTextColor: Color = MaterialTheme.colorScheme.secondary,
+        textTextStyle: TextStyle = MaterialTheme.typography.bodyLarge,
+        subTextTextStyle: TextStyle = MaterialTheme.typography.bodyLarge
+    ) {
+        ItemUnit(
+            content = {
+                ConstraintLayout(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    val (t, st) = createRefs()
+
+                    Text(
+                        text = text,
+                        color = textColor,
+                        style = textTextStyle,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.constrainAs(t) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(st.start, margin = 8.dp)
+                            width = Dimension.fillToConstraints
+                        }
+                    )
+
+
+                    Text(
+                        text = subText,
+                        color = subTextColor,
+                        style = subTextTextStyle,
+                        modifier = Modifier.constrainAs(st) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            end.linkTo(parent.end)
+                        }
+                    )
+                }
+            },
+            onClick = onClick,
+            containerColor = containerColor
         )
     }
 
