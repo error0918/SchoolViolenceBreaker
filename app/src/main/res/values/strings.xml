@@ -71,6 +71,7 @@
     <string name="settings_title_show_tip">팁 보여주기</string>
     <string name="settings_title_shake_to_report">흔들어 신고하기</string>
     <string name="settings_title_shake_time">흔드는 횟수</string>
+    <string name="settings_title_auto_report_on_main">메인화면에서 자동 신고</string>
     <string name="settings_title_wait_time">신고 대기 시간</string>
     <string name="settings_title_report_double_check">신고 재확인</string>
 

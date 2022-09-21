@@ -71,6 +71,7 @@
     <string name="settings_title_show_tip">Show Tip</string>
     <string name="settings_title_shake_to_report">Shake To Report</string>
     <string name="settings_title_shake_time">Shake Time</string>
+    <string name="settings_title_auto_report_on_main">Auto Report On Main</string>
     <string name="settings_title_wait_time">Report Wait Time</string>
     <string name="settings_title_report_double_check">Report Double Check</string>
 

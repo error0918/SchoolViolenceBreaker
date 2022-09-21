@@ -36,6 +36,7 @@ object Settings {
             ShowTip = true,
             ShakeToReport = true,
             ShakeTime = 3,
+            AutoReportOnMain = true,
             WaitTime = 5,
             ReportDoubleCheck = true,
 
@@ -57,6 +58,7 @@ object Settings {
         ShowTip: Boolean = INITIAL_SETTINGS_DATA.ShowTip,
         ShakeToReport: Boolean = INITIAL_SETTINGS_DATA.ShakeToReport,
         ShakeTime: Int = INITIAL_SETTINGS_DATA.ShakeTime,
+        AutoReportOnMain: Boolean = INITIAL_SETTINGS_DATA.AutoReportOnMain,
         WaitTime: Int = INITIAL_SETTINGS_DATA.WaitTime,
         ReportDoubleCheck: Boolean = INITIAL_SETTINGS_DATA.ReportDoubleCheck,
         ShowSubTitle: Boolean = INITIAL_SETTINGS_DATA.ShowSubTitle
@@ -106,6 +108,11 @@ object Settings {
                 field = value
                 saveSettings()
             }
+        var AutoReportOnMain: Boolean = true
+            set(value) {
+                field = value
+                saveSettings()
+            }
         var WaitTime: Int = 5
             set(value) {
                 field = value
@@ -134,6 +141,7 @@ object Settings {
             this.ShowTip = ShowTip
             this.ShakeToReport = ShakeToReport
             this.ShakeTime = ShakeTime
+            this.AutoReportOnMain = AutoReportOnMain
             this.WaitTime = WaitTime
             this.ReportDoubleCheck = ReportDoubleCheck
             this.ShowSubTitle = ShowSubTitle

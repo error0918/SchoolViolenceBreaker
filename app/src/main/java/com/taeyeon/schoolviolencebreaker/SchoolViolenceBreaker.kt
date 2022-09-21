@@ -31,6 +31,7 @@ var popupTipDisappearTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.Popup
 var showTip by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShowTip)
 var shakeToReport by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeToReport)
 var shakeTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShakeTime)
+var autoReportOnMain by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.AutoReportOnMain)
 var waitTime by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.WaitTime)
 var reportDoubleCheck by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ReportDoubleCheck)
 var showSubTitle by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ShowSubTitle)
@@ -47,6 +48,7 @@ fun load() {
     showTip = Settings.settingsData.ShowTip
     shakeToReport = Settings.settingsData.ShakeToReport
     shakeTime = Settings.settingsData.ShakeTime
+    autoReportOnMain = Settings.settingsData.AutoReportOnMain
     waitTime = Settings.settingsData.WaitTime
     reportDoubleCheck = Settings.settingsData.ReportDoubleCheck
     showSubTitle = Settings.settingsData.ShowSubTitle
@@ -62,6 +64,7 @@ fun save() {
     Settings.settingsData.ShowTip = showTip
     Settings.settingsData.ShakeToReport = shakeToReport
     Settings.settingsData.ShakeTime = shakeTime
+    Settings.settingsData.AutoReportOnMain = autoReportOnMain
     Settings.settingsData.WaitTime = waitTime
     Settings.settingsData.ReportDoubleCheck = reportDoubleCheck
     Settings.settingsData.ShowSubTitle = showSubTitle
@@ -163,14 +166,14 @@ object Report {
         }
 
         reporterIndex?.let { index ->
-            var leftTime by rememberSaveable { mutableStateOf(disappearTime ?: 0) }
-            if (disappearTime != null) {
+            var leftTime by rememberSaveable { mutableStateOf(waitTime) }
+            if (autoReport) {
                 LaunchedEffect(leftTime) {
                     if (leftTime > 0) {
                         delay(1000)
                         leftTime--
                     } else {
-                        onClose()
+                        reportingIndex = 0
                     }
                 }
             }
@@ -198,7 +201,7 @@ object Report {
                     ) {
                         MyView.ItemUnit(
                             text = reporting.title,
-                            subText = if (itemIndex == 0) "321" else "",
+                            subText = if (itemIndex == 0 && autoReport) leftTime.toString() else "",
                             onClick = { reportingIndex = itemIndex }
                         )
                     }
@@ -216,14 +219,20 @@ object Report {
 
         reportingIndex?.let { index ->
             val reporting = reportingList[index]
-            var leftTime by rememberSaveable { mutableStateOf(disappearTime ?: 0) }
-            if (disappearTime != null) {
+            var leftTime by rememberSaveable { mutableStateOf(waitTime) }
+            if (autoReport) {
                 LaunchedEffect(leftTime) {
                     if (leftTime > 0) {
                         delay(1000)
                         leftTime--
                     } else {
-                        onClose()
+                        if (reporting.type == ReportingType.Call) {
+                            dial(reporting.shortcut)
+                        } else if (reporting.type == ReportingType.Link) {
+                            openLink(reporting.shortcut)
+                        }
+                        reporterIndex = null
+                        reportingIndex = null
                     }
                 }
             }
@@ -231,7 +240,7 @@ object Report {
             MyView.BaseDialog(
                 onDismissRequest = { reportingIndex = null },
                 icon = { Icon(imageVector = if (reporting.type == ReportingType.Call) Icons.Filled.Call else if (reporting.type == ReportingType.Link) Icons.Filled.OpenInBrowser else Icons.Filled.Error, contentDescription = reporting.title) },
-                title = { Text(text = "${reporting.title} - ${reporterList[reporterIndex!!]}") },
+                title = { Text(text = reporting.title) },
                 text = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -310,9 +319,11 @@ object Report {
                             val hasPermission = checkPermission()
                             MyView.ItemUnit(
                                 text = "전화 열기",
-                                subText = "321",
+                                subText = if (autoReport) leftTime.toString() else "",
                                 onClick = {
                                     dial(reporting.shortcut)
+                                    reporterIndex = null
+                                    reportingIndex = null
                                 }
                             )
                             MyView.ItemUnit(
@@ -320,6 +331,8 @@ object Report {
                                 onClick = if (hasPermission)
                                     { ->
                                         call(reporting.shortcut)
+                                        reporterIndex = null
+                                        reportingIndex = null
                                     }
                                 else null,
                                 textColor = if (hasPermission) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
@@ -327,9 +340,11 @@ object Report {
                         } else if (reporting.type == ReportingType.Link) {
                             MyView.ItemUnit(
                                 text = "링크 열기",
-                                subText = leftTime,
+                                subText = if (autoReport) leftTime.toString() else "",
                                 onClick = {
                                     openLink(reporting.shortcut)
+                                    reporterIndex = null
+                                    reportingIndex = null
                                 }
                             )
                         }

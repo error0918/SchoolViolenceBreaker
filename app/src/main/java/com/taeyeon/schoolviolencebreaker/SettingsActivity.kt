@@ -220,6 +220,16 @@ object Settings {
                             )
                         },
                         {
+                            SettingsUnit.SwitchUnit(
+                                title = stringResource(id = R.string.settings_title_auto_report_on_main),
+                                checked = autoReportOnMain,
+                                onCheckedChange = { checked ->
+                                    autoReportOnMain = checked
+                                    save()
+                                }
+                            )
+                        },
+                        {
                             SettingsUnit.EditIntUnit(
                                 title = stringResource(id = R.string.settings_title_wait_time),
                                 value = waitTime,
