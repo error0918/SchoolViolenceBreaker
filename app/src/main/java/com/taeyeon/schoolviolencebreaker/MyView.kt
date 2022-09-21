@@ -1310,7 +1310,7 @@ object MyView {
     fun ItemUnit(
         content: @Composable () -> Unit,
         onClick: (() -> Unit)?,
-        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background),
         contentColor: Color = MaterialTheme.colorScheme.onSurface
     ) {
         val cornerRadius = MaterialTheme.shapes.medium.let {
@@ -1347,7 +1347,7 @@ object MyView {
     fun ItemUnit(
         text: String,
         onClick: (() -> Unit)?,
-        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f).compositeOver(MaterialTheme.colorScheme.background),
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background),
         contentColor: Color = MaterialTheme.colorScheme.primary
     ) {
         ItemUnit(

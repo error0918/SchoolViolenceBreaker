@@ -11,8 +11,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
@@ -202,25 +204,63 @@ object Report {
                 onDismissRequest = { reportingIndex = null },
                 icon = { Icon(imageVector = if (reporting.type == ReportingType.Call) Icons.Filled.Call else if (reporting.type == ReportingType.Link) Icons.Filled.OpenInBrowser else Icons.Filled.Error, contentDescription = reporting.title) },
                 title = { Text(text = "${reporting.title} - ${reporterList[reporterIndex!!]}") },
-                text = { Text(text = "TODO") },
+                text = {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        val iconSize = with(LocalDensity.current) { MyView.DialogDefaults.TextTextStyle.fontSize.toPx().toDp() }
+
+                        reporting.organization?.let {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Workspaces,
+                                    contentDescription = "기관",
+                                    modifier = Modifier.size(iconSize)
+                                )
+                                Text(
+                                    text = "기관: $it"
+                                )
+                            }
+                        }
+
+                        reporting.receptionDetails?.let {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.padding(horizontal = 8.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.QuestionMark,
+                                    contentDescription = "담당하는 것",
+                                    modifier = Modifier.size(iconSize)
+                                )
+
+                                Text(text = "담당하는 것: $it")
+                            }
+                        }
+                        Text(text = reporting.description)
+                    }
+                },
                 content = {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
 
                         if (reporting.type == ReportingType.Call) {
-                            val hasPermission = checkPermission(Manifest.permission.CALL_PHONE)
+                            val hasPermission = checkPermission()
                             MyView.ItemUnit(
                                 text = "전화 열기",
                                 onClick = {
-                                    /* TODO */
+                                    dial(reporting.shortcut)
                                 }
                             )
                             MyView.ItemUnit(
                                 text = "전화하기",
                                 onClick = if (hasPermission)
                                     { ->
-                                        /* TODO */
+                                        call(reporting.shortcut)
                                     }
                                 else null,
                                 contentColor = if (hasPermission) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
@@ -229,7 +269,7 @@ object Report {
                             MyView.ItemUnit(
                                 text = "링크 열기",
                                 onClick = {
-                                    /* TODO */
+                                    openLink(reporting.shortcut)
                                 }
                             )
                         }
@@ -245,8 +285,8 @@ object Report {
         }
     }
 
-    private fun checkPermission(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(Core.getContext(), permission) == PackageManager.PERMISSION_GRANTED
+    private fun checkPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(Core.getContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun dial(phone: String) {
