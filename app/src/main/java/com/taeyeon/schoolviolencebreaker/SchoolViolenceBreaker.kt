@@ -408,7 +408,9 @@ object Law {
     )
 
     @Composable
-    fun ShowLaw() {
+    fun ShowLaw(
+
+    ) {
         //
     }
 
