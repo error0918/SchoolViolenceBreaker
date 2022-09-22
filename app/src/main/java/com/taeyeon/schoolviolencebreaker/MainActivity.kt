@@ -100,7 +100,9 @@ class MainActivity : ComponentActivity() {
                                 if (++shake >= shakeTime) {
                                     if (shakeToReport) {
                                         Utils.vibrate(50)
-                                        // TODO
+                                        Report.reporter = 0
+                                        Report.autoReport = true
+                                        Report.reporting = true
                                     }
                                     shake = 0
                                 }
@@ -127,6 +129,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Main.Main()
+                Report.ReportRunning()
             }
         }
     }
@@ -252,7 +255,9 @@ object Main {
             containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = MaterialTheme.colorScheme.onSecondary,
             onClick = {
-                //isReporting = true
+                Report.reporter = 0
+                Report.autoReport = true
+                Report.reporting = true
             }
         )
     }

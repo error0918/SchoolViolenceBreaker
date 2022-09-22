@@ -156,6 +156,21 @@ object Report {
         )
     )
 
+    var autoReport by mutableStateOf(false)
+    var reporter by mutableStateOf(0)
+    var reporting by mutableStateOf(false)
+
+    @Composable
+    fun ReportRunning() {
+        if (reporting) {
+            Report(
+                reporter = reporter,
+                onDismissAdditionalAction = { reporting = false },
+                autoReport = autoReport
+            )
+        }
+    }
+
     @Composable
     fun Report(reporter: Int = 0, onDismissAdditionalAction: () -> Unit = {}, autoReport: Boolean = false) {
         var reporterIndex by rememberSaveable { mutableStateOf<Int?>(null) }
@@ -163,6 +178,10 @@ object Report {
 
         LaunchedEffect(reporter) {
             reporterIndex = reporter
+        }
+
+        LaunchedEffect(reporterIndex) {
+            if (reporterIndex == null) onDismissAdditionalAction()
         }
 
         reporterIndex?.let { index ->
@@ -179,10 +198,7 @@ object Report {
             }
 
             MyView.ListDialog(
-                onDismissRequest = {
-                    reporterIndex = null
-                    onDismissAdditionalAction()
-                },
+                onDismissRequest = { reporterIndex = null },
                 icon = {
                     Icon(
                         imageVector = Icons.Filled.Warning,
@@ -201,16 +217,13 @@ object Report {
                     ) {
                         MyView.ItemUnit(
                             text = reporting.title,
-                            subText = if (itemIndex == 0 && autoReport) leftTime.toString() else "",
+                            subText = if (itemIndex == 0 && autoReport && leftTime > 0) leftTime.toString() else "",
                             onClick = { reportingIndex = itemIndex }
                         )
                     }
                 },
                 button = {
-                    TextButton(onClick = {
-                        reporterIndex = null
-                        onDismissAdditionalAction()
-                    }) {
+                    TextButton(onClick = { reporterIndex = null }) {
                         Text(text = stringResource(id = R.string.close))
                     }
                 }
@@ -319,7 +332,7 @@ object Report {
                             val hasPermission = checkPermission()
                             MyView.ItemUnit(
                                 text = "전화 열기",
-                                subText = if (autoReport) leftTime.toString() else "",
+                                subText = if (autoReport && leftTime > 0) leftTime.toString() else "",
                                 onClick = {
                                     dial(reporting.shortcut)
                                     reporterIndex = null
@@ -340,7 +353,7 @@ object Report {
                         } else if (reporting.type == ReportingType.Link) {
                             MyView.ItemUnit(
                                 text = "링크 열기",
-                                subText = if (autoReport) leftTime.toString() else "",
+                                subText = if (autoReport && leftTime > 0) leftTime.toString() else "",
                                 onClick = {
                                     openLink(reporting.shortcut)
                                     reporterIndex = null
