@@ -4,12 +4,9 @@
 package com.taeyeon.schoolviolencebreaker
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -22,11 +19,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.taeyeon.core.Core
-import kotlin.random.Random
 
 object Solution {
 
@@ -61,6 +55,25 @@ object Solution {
             }
             3 -> {
                 // TODO
+                MyView.BaseDialog(
+                    onDismissRequest = { showingDialog = null },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Filled.Book,
+                            contentDescription = "법률"
+                        )
+                    },
+                    title = { Text(text = "테스트입니다.") },
+                    text = { Text(text = "테스트입니다.") },
+                    content = {
+
+                    },
+                    button = {
+                        TextButton(onClick = { showingDialog = null }) {
+                            Text(text = stringResource(id = R.string.close))
+                        }
+                    }
+                )
             }
             4 -> {
                 // TODO
@@ -144,7 +157,7 @@ object Solution {
                     solution,
                     modifier = Modifier.padding(
                         top = if(solutionList.indexOf(solution) == 0) 16.dp else 0.dp,
-                        bottom = if(solutionList.lastIndexOf(solution) == Helpful.helpfulList.size - 1) 16.dp else 0.dp
+                        bottom = if(solutionList.lastIndexOf(solution) == solutionList.size - 1) 16.dp else 0.dp
                     )
                 )
             }

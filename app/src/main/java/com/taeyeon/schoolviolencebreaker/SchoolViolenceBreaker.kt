@@ -387,9 +387,36 @@ object Report {
         Core.getActivity().startActivity(intent)
     }
 
-    private fun openLink(link: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        Core.getActivity().startActivity(intent)
+}
+
+
+
+object Law {
+
+    data class Law(
+        val name: String,
+        val content: String,
+        val link: String
+    )
+
+    val rawList = listOf(
+        Law(
+            name = "",
+            content = "",
+            link = ""
+        )
+    )
+
+    @Composable
+    fun ShowLaw() {
+        //
     }
 
+}
+
+
+
+fun openLink(link: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+    Core.getActivity().startActivity(intent)
 }
