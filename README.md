@@ -5,6 +5,10 @@
 ### 🚨 SchoolViolenceBreaker 🚨
 학교폭력 예방와 대응에 대한 종합 도우미!
 
+
+
+Version. Developing
+
 </div>
 
 <div align=right>
@@ -68,7 +72,7 @@
 - 개발환경: Android Studio
 - 테스트 환경: 갤럭시 Z 폴드4 (AOS12L), 갤럭시 Z 폴드3 (AOS12), 갤럭시 노트10+ (AOS12), 갤럭시 S10 5G (AOS12), POCO F1 (AOSP12), 갤럭시 탭 S7 FE (AOS12)
 - 오픈소스 라이선스: 앱 내 "설정 > 라이선스"에서 확인 가능
-- 지원 언어: 한국어, 영어 (고유명사 등 일부 영어 미지원)
+- 지원 언어: 한국어, 영어 (일부 영어 미지원)
 - 이 앱은 법적 효능이 없습니다.
 
 ---
