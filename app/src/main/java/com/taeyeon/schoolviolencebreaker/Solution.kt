@@ -7,16 +7,19 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -32,10 +35,71 @@ object Solution {
         val onItemClick: (index: Int, item: String) -> Unit
     )
 
+    private var showingDialog by mutableStateOf<Int?>(null)
+    private var showingDialogIndex by mutableStateOf(0)
+
+    val  solutionList = listOf(
+        Solution(
+            icon = Icons.Filled.Warning,
+            iconContentDescription = "신고",
+            title = "신고",
+            subTitle = "당신은?",
+            items = Report.reporterList,
+            onItemClick = { index, _ ->
+                showingDialog = 0
+                showingDialogIndex = index
+            }
+        ),
+        Solution(
+            icon = Icons.Filled.Handshake,
+            iconContentDescription = "조치",
+            title = "조치",
+            items = listOf(
+                "피해자", "가해자"
+            ),
+            onItemClick = { index, _ ->
+                showingDialog = 1
+                showingDialogIndex = index
+            }
+        ),
+        Solution(
+            icon = Icons.Filled.Error,
+            iconContentDescription = "오해",
+            title = "오해",
+            items = listOf(
+                "잘못된 해결법", "잘못된 상식"
+            ),
+            onItemClick = { index, _ ->
+                showingDialog = 2
+                showingDialogIndex = index
+            }
+        ),
+        Solution(
+            icon = Icons.Filled.Book,
+            iconContentDescription = "법률",
+            title = "법률",
+            items = Law.lawList.map { it.name },
+            onItemClick = { index, _ ->
+                showingDialog = 3
+                showingDialogIndex = index
+            }
+        ),
+        Solution(
+            icon = Icons.Filled.MoreVert,
+            iconContentDescription = "기타",
+            title = "기타",
+            items = listOf(
+                "학교폭력 실태조사"
+            ),
+            onItemClick = { index, _ ->
+                showingDialog = 4
+                showingDialogIndex = index
+            }
+        )
+    )
+
     @Composable
     fun Solution(paddingValues: PaddingValues = PaddingValues()) {
-        var showingDialog by rememberSaveable { mutableStateOf<Int?>(null) }
-        var showingDialogIndex by rememberSaveable { mutableStateOf(0) }
 
         when (showingDialog) {
             0 -> {
@@ -61,70 +125,15 @@ object Solution {
                 )
             }
             4 -> {
-                // TODO
+                Etc.ShowEtc(
+                    etcIndex = showingDialogIndex,
+                    onDismissAdditionalAction = {
+                        showingDialog = null
+                    }
+                )
             }
 
         }
-
-        val  solutionList = listOf(
-            Solution(
-                icon = Icons.Filled.Warning,
-                iconContentDescription = "신고",
-                title = "신고",
-                subTitle = "당신은?",
-                items = Report.reporterList,
-                onItemClick = { index, _ ->
-                    showingDialog = 0
-                    showingDialogIndex = index
-                }
-            ),
-            Solution(
-                icon = Icons.Filled.Handshake,
-                iconContentDescription = "조치",
-                title = "조치",
-                items = listOf(
-                    "피해자", "가해자"
-                ),
-                onItemClick = { index, _ ->
-                    showingDialog = 1
-                    showingDialogIndex = index
-                }
-            ),
-            Solution(
-                icon = Icons.Filled.Error,
-                iconContentDescription = "오해",
-                title = "오해",
-                items = listOf(
-                    "잘못된 해결법", "잘못된 상식"
-                ),
-                onItemClick = { index, _ ->
-                    showingDialog = 2
-                    showingDialogIndex = index
-                }
-            ),
-            Solution(
-                icon = Icons.Filled.Book,
-                iconContentDescription = "법률",
-                title = "법률",
-                items = Law.lawList.map { it.name },
-                onItemClick = { index, _ ->
-                    showingDialog = 3
-                    showingDialogIndex = index
-                }
-            ),
-            Solution(
-                icon = Icons.Filled.MoreVert,
-                iconContentDescription = "기타",
-                title = "기타",
-                items = listOf(
-                    "학교폭력 실태조사"
-                ),
-                onItemClick = { index, _ ->
-                    showingDialog = 4
-                    showingDialogIndex = index
-                }
-            )
-        )
 
         LazyColumn(
             modifier = Modifier.padding(

@@ -3,14 +3,12 @@ package com.taeyeon.schoolviolencebreaker
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -20,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,6 +29,7 @@ import com.taeyeon.core.Settings
 import com.taeyeon.core.Utils
 import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
+import java.net.URL
 
 var fullScreenMode by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.FullScreenMode)
 var screenAlwaysOn by mutableStateOf(Settings.INITIAL_SETTINGS_DATA.ScreenAlwaysOn)
@@ -414,18 +412,6 @@ object Law {
         val link: String?
     )
 
-    private val getRaw: (id: Int) -> String = { id ->
-        val inputStream = Core.getContext().resources.openRawResource(id)
-        val outputStream = ByteArrayOutputStream()
-        var index: Int = inputStream.read()
-        while (index != -1) {
-            outputStream.write(index)
-            index = inputStream.read()
-        }
-        inputStream.close()
-        String(outputStream.toByteArray(), Charsets.UTF_8)
-    }
-
     val lawList = listOf(
         Law(
             name = "학교폭력예방 및 대책에 관한 법률",
@@ -519,6 +505,124 @@ object Law {
 }
 
 
+
+object Etc {
+
+    data class Etc(
+        val name: String,
+        val image: Bitmap? = null,
+        val content: String,
+        val link: String? = null
+    )
+
+    val etcList by lazy {
+        listOf(
+            Etc(
+                name = "학교폭력예방 및 대책에 관한 법률",
+                content = getRaw(R.raw.act_on_the_prevention_and_measures_of_school_violence),
+                link = "https://www.law.go.kr/법령/학교폭력예방및대책에관한법률"
+            )
+        )
+    }
+
+    @Composable
+    fun ShowEtc(
+        etcIndex: Int = 0,
+        onDismissAdditionalAction: () -> Unit = {}
+    ) {
+        var index by rememberSaveable { mutableStateOf<Int?>(null) }
+
+        LaunchedEffect(etcIndex) {
+            index = etcIndex
+        }
+
+        LaunchedEffect(index) {
+            if (index == null) onDismissAdditionalAction()
+        }
+
+        index?.let {
+            val etc = etcList[it]
+
+            MyView.MessageDialog(
+                onDismissRequest = { index = null },
+                icon = { Icon(imageVector = Icons.Filled.Book, contentDescription = null) },
+                title = { Text(text = etcList[index!!].name) },
+                text = {
+                    val scrollState = rememberScrollState()
+                    Surface(
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        val cornerRadius = MaterialTheme.shapes.medium.let {
+                            var cornerRadius: Dp = 0.dp
+                            val size = Size.Unspecified
+                            with(LocalDensity.current) {
+                                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
+                                corners.forEach { corner ->
+                                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
+                                }
+                            }
+                            cornerRadius
+                        }
+
+                        Column(
+                            modifier = Modifier.verticalScroll(scrollState)
+                        ) {
+                            Spacer(modifier = Modifier.height(cornerRadius))
+                            SelectionContainer {
+                                Text(text = etc.content)
+                            }
+                            Spacer(modifier = Modifier.height(cornerRadius))
+                        }
+                    }
+                },
+                button = {
+                    MyView.DialogButtonRow {
+                        TextButton(onClick = { index = null }) {
+                            Text(text = stringResource(id = R.string.close))
+                        }
+                        etc.link?.let {
+                            TextButton(
+                                onClick = {
+                                    openLink(it)
+                                    index = null
+                                }
+                            ) {
+                                Text(text = stringResource(id = R.string.solution_browse))
+                            }
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+}
+
+
+
+fun getRaw(id: Int): String {
+    val inputStream = Core.getContext().resources.openRawResource(id)
+    val outputStream = ByteArrayOutputStream()
+    var index: Int = inputStream.read()
+    while (index != -1) {
+        outputStream.write(index)
+        index = inputStream.read()
+    }
+    inputStream.close()
+    return String(outputStream.toByteArray(), Charsets.UTF_8)
+}
+
+fun getImageFromWeb(link: String): Bitmap {
+    var bitmap: Bitmap? = null
+    val thread = Thread {
+        bitmap = BitmapFactory.decodeStream(
+            URL(link).openConnection().inputStream
+        )
+    }
+    thread.start()
+    thread.join()
+    return bitmap!!
+}
 
 fun openLink(link: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))

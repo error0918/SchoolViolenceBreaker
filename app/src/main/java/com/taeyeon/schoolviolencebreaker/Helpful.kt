@@ -38,7 +38,6 @@ import com.taeyeon.core.Core
 import com.taeyeon.core.SharedPreferencesManager
 import com.taeyeon.core.Utils
 import java.io.ByteArrayOutputStream
-import java.net.URL
 
 object Helpful {
 
@@ -51,18 +50,6 @@ object Helpful {
     )
 
     val helpfulList by lazy {
-        val getImageFromWeb = { link: String ->
-            var bitmap: Bitmap? = null
-            val thread = Thread {
-                bitmap = BitmapFactory.decodeStream(
-                    URL(link).openConnection().inputStream
-                )
-            }
-            thread.start()
-            thread.join()
-            bitmap!!
-        }
-
         val getImage = { link: String ->
             val getStringFromBitmap = { bitmap: Bitmap ->
                 val byteArrayBitmapStream = ByteArrayOutputStream()
