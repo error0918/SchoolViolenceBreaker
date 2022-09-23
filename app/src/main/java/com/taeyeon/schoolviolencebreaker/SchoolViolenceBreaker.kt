@@ -172,7 +172,11 @@ object Report {
     }
 
     @Composable
-    fun Report(reporter: Int = 0, onDismissAdditionalAction: () -> Unit = {}, autoReport: Boolean = false) {
+    fun Report(
+        reporter: Int = 0,
+        onDismissAdditionalAction: () -> Unit = {},
+        autoReport: Boolean = false
+    ) {
         var reporterIndex by rememberSaveable { mutableStateOf<Int?>(null) }
         var reportingIndex by rememberSaveable { mutableStateOf<Int?>(null) }
 
@@ -396,22 +400,58 @@ object Law {
     data class Law(
         val name: String,
         val content: String,
-        val link: String
+        val link: String?
     )
 
-    val rawList = listOf(
+    val lawList = listOf(
         Law(
-            name = "",
-            content = "",
-            link = ""
+            name = "법 이름",
+            content = "${"법 내용".repeat(10)}\n".repeat(300),
+            link = "https://naver.com"
+        ),
+        Law(
+            name = "법 이름2",
+            content = "${"법 내용2".repeat(10)}\n".repeat(300),
+            link = "https://google.com"
         )
     )
 
     @Composable
     fun ShowLaw(
-
+        lawIndex: Int = 0,
+        onDismissAdditionalAction: () -> Unit = {}
     ) {
-        //
+        var index by rememberSaveable { mutableStateOf<Int?>(null) }
+
+        LaunchedEffect(lawIndex) {
+            index = lawIndex
+        }
+
+        LaunchedEffect(index) {
+            if (index == null) onDismissAdditionalAction()
+        }
+
+        index?.let {
+            val law = lawList[it]
+
+            MyView.MessageDialog(
+                onDismissRequest = { index = null },
+                icon = Icons.Filled.Book,
+                title = law.name,
+                text = law.content,
+                dismissButtonText = stringResource(id = R.string.close),
+                confirmButtonText = if (law.link == null) null else stringResource(id = R.string.solution_browse),
+                onConfirmButtonClick = if (law.link == null) {
+                    null
+                } else {
+                    {
+                        openLink(law.link)
+                        index = null
+                    }
+                }
+            )
+
+        }
     }
 
 }

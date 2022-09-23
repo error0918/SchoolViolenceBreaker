@@ -54,24 +54,10 @@ object Solution {
                 // TODO
             }
             3 -> {
-                // TODO
-                MyView.BaseDialog(
-                    onDismissRequest = { showingDialog = null },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Filled.Book,
-                            contentDescription = "법률"
-                        )
-                    },
-                    title = { Text(text = "테스트입니다.") },
-                    text = { Text(text = "테스트입니다.") },
-                    content = {
-
-                    },
-                    button = {
-                        TextButton(onClick = { showingDialog = null }) {
-                            Text(text = stringResource(id = R.string.close))
-                        }
+                Law.ShowLaw(
+                    lawIndex = showingDialogIndex,
+                    onDismissAdditionalAction = {
+                        showingDialog = null
                     }
                 )
             }
@@ -121,9 +107,7 @@ object Solution {
                 icon = Icons.Filled.Book,
                 iconContentDescription = "법률",
                 title = "법률",
-                items = listOf(
-                    "학교폭력에 관한 법률"
-                ),
+                items = Law.lawList.map { it.name },
                 onItemClick = { index, _ ->
                     showingDialog = 2
                     showingDialogIndex = index

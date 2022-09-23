@@ -12,11 +12,10 @@
     <string name="tip">Tip</string>
 
     <string name="solution">Solution</string>
+    <string name="solution_browse">Browse</string>
 
     <string name="helpful">Helpful Site</string>
-
     <string name="helpful_unit_info">Info</string>
-
     <string name="helpful_unit_action">Action</string>
     <string name="helpful_unit_action_browse">Browse</string>
     <string name="helpful_unit_action_copy_link">Copy Link</string>
