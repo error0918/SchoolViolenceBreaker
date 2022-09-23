@@ -11,6 +11,7 @@
     <string name="tip">팁</string>
 
     <string name="solution">해결</string>
+    <string name="solution_copy">복사하기</string>
     <string name="solution_browse">링크 바로가기</string>
 
     <string name="helpful">도움되는 곳</string>

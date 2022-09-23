@@ -17,7 +17,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -99,7 +98,7 @@ object Solution {
                     "잘못된 해결법", "잘못된 상식"
                 ),
                 onItemClick = { index, _ ->
-                    showingDialog = 1
+                    showingDialog = 2
                     showingDialogIndex = index
                 }
             ),
@@ -109,7 +108,7 @@ object Solution {
                 title = "법률",
                 items = Law.lawList.map { it.name },
                 onItemClick = { index, _ ->
-                    showingDialog = 2
+                    showingDialog = 3
                     showingDialogIndex = index
                 }
             ),
@@ -121,7 +120,7 @@ object Solution {
                     "학교폭력 실태조사"
                 ),
                 onItemClick = { index, _ ->
-                    showingDialog = 3
+                    showingDialog = 4
                     showingDialogIndex = index
                 }
             )
