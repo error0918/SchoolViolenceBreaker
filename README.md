@@ -7,7 +7,7 @@
 
 
 
-Version. Developing
+Ver. Developing
 
 </div>
 
@@ -50,6 +50,7 @@ Version. Developing
 
 # 📱 사용 화면
 
+Ver 1.0.0
 ❗ 제공 예정 ❗
 
 ---
