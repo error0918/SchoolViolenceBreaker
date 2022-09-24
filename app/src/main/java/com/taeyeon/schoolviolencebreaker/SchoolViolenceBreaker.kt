@@ -19,7 +19,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -30,6 +29,7 @@ import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
 import com.taeyeon.core.Utils
 import kotlinx.coroutines.delay
+import org.jsoup.Jsoup
 import java.io.ByteArrayOutputStream
 import java.net.URL
 
@@ -507,12 +507,23 @@ object Etc {
         val link: String? = null
     )
 
+    @Suppress("RedundantLambdaOrAnonymousFunction")
     val etcList by lazy {
         listOf(
             Etc(
-                name = "학교폭력예방 및 대책에 관한 법률",
-                content = getRaw(R.raw.act_on_the_prevention_and_measures_of_school_violence),
-                link = "https://www.law.go.kr/법령/학교폭력예방및대책에관한법률"
+                name = "학교폭력 실태조사",
+                content = {
+                    var result = ""
+                    val thread = Thread {
+                        result = Jsoup.connect("http://survey.eduro.go.kr").get()
+                            .select("#contents > div.top_txt > p.top_mg.fw7.fc_n.text_l.tablet > span")
+                            .text()
+                    }
+                    thread.start()
+                    thread.join()
+                    result
+                }(),
+                link = "http://survey.eduro.go.kr"
             )
         )
     }
