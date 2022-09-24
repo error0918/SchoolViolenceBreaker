@@ -34,7 +34,7 @@ object SVInfo {
                 showTip = com.taeyeon.schoolviolencebreaker.showTip
             }
 
-            val tipInformation = listOf(
+            val tipInformationList = listOf(
                 MyView.TipInformation(
                     title = "알고 계셨나요?",
                     message = "학교 폭력은 진짜 나쁘답니다!",
@@ -54,8 +54,51 @@ object SVInfo {
             )
 
             AnimatedVisibility(visible = showingTip) {
-                val tipIndex by rememberSaveable { mutableStateOf(Random().nextInt(tipInformation.size)) }
-                Tip(tipInformation[tipIndex])
+                val helpfulListSize = Helpful.helpfulList.size
+                val lawListSize = Law.lawList.size
+                val tipInformationListSize = tipInformationList.size
+
+                val tipType = Random().nextInt(helpfulListSize + lawListSize + tipInformationListSize)
+                val tipInformation = if (tipType in 0 until helpfulListSize) {
+                    val helpful = Helpful.helpfulList[Random().nextInt(helpfulListSize)]
+                    MyView.TipInformation(
+                        title = helpful.title,
+                        message = helpful.description,
+                        imageBitmap = helpful.imageBitmap,
+                        imageBitmapBackground = helpful.imageBitmapBackground,
+                        imageBitmapDescription = helpful.title,
+                        actionButtonTitle = "방문하기",
+                        onActionButtonClick = {
+                            openLink(helpful.link)
+                        },
+                        onClose = {
+                            showingTip = false
+                        },
+                        closeImageDescription = "닫기"
+                    )
+                } else if (tipType in helpfulListSize until helpfulListSize + lawListSize) {
+                    val law = Law.lawList[Random().nextInt(Law.lawList.size)]
+                    if (law.link != null) {
+                        MyView.TipInformation(
+                            title = law.name,
+                            message = "이 법에 대해 알아보시겠습니까?",
+                            actionButtonTitle = "알아보기",
+                            onActionButtonClick = {
+                                openLink(law.link)
+                            },
+                            onClose = {
+                                showingTip = false
+                            },
+                            closeImageDescription = "닫기"
+                        )
+                    } else {
+                        tipInformationList[Random().nextInt(tipInformationList.size)]
+                    }
+                } else {
+                    tipInformationList[Random().nextInt(tipInformationList.size)]
+                }
+
+                Tip(tipInformation)
             }
 
             var showing by rememberSaveable { mutableStateOf(false) }
