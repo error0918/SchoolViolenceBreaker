@@ -889,20 +889,20 @@ object MyView {
     }
 
     data class TipInformation(
-        val tipImage: ImageVector = TipDefaults.TipImage,
-        val tipImageDescription: String? = TipDefaults.TipImageDescription,
-        val tipDescription: String = TipDefaults.TipDescription,
-        val title: String,
-        val message: String,
-        val imageBitmap: ImageBitmap? = null,
-        val imageBitmapDescription: String? = null,
-        val imageBitmapBackground: Color? = null,
-        val actionButtonTitle: String? = null,
-        val onActionButtonClick: (() -> Unit)? = null,
-        val closeImage: ImageVector = TipDefaults.CloseImage,
-        val closeImageDescription: String? = TipDefaults.CloseImageDescription,
-        val onClose: (() -> Unit)? = null,
-        val modifier: Modifier = TipDefaults.Modifier
+        var tipImage: ImageVector = TipDefaults.TipImage,
+        var tipImageDescription: String? = TipDefaults.TipImageDescription,
+        var tipDescription: String = TipDefaults.TipDescription,
+        var title: String,
+        var message: String,
+        var imageBitmap: ImageBitmap? = null,
+        var imageBitmapDescription: String? = null,
+        var imageBitmapBackground: Color? = null,
+        var actionButtonTitle: String? = null,
+        var onActionButtonClick: (() -> Unit)? = null,
+        var closeImage: ImageVector = TipDefaults.CloseImage,
+        var closeImageDescription: String? = TipDefaults.CloseImageDescription,
+        var onClose: (() -> Unit)? = null,
+        var modifier: Modifier = TipDefaults.Modifier
     )
 
     @Composable

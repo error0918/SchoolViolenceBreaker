@@ -2,6 +2,8 @@ package com.taeyeon.schoolviolencebreaker
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -19,14 +21,17 @@ object SVInfo {
     @Composable
     fun SVInfo(paddingValues: PaddingValues = PaddingValues()) {
         Column(
-            modifier = Modifier.padding(
-                top = paddingValues.calculateTopPadding() + 16.dp ,
-                bottom = paddingValues.calculateBottomPadding() + 16.dp,
-                start = paddingValues.calculateStartPadding(LocalLayoutDirection.current) + 16.dp,
-                end = paddingValues.calculateEndPadding(LocalLayoutDirection.current) + 16.dp
-            ),
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current) + 16.dp,
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current) + 16.dp
+                ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+
             var showTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
             var showingTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
             if (showTip != com.taeyeon.schoolviolencebreaker.showTip) {
@@ -37,19 +42,11 @@ object SVInfo {
             val tipInformationList = listOf(
                 MyView.TipInformation(
                     title = "알고 계셨나요?",
-                    message = "학교 폭력은 진짜 나쁘답니다!",
-                    onClose = {
-                        showingTip = false
-                    },
-                    closeImageDescription = "닫기"
+                    message = "학교 폭력은 진짜 나쁘답니다!"
                 ),
                 MyView.TipInformation(
                     title = "알고 계셨나요?",
-                    message = "학교 폭력 멈춰!",
-                    onClose = {
-                        showingTip = false
-                    },
-                    closeImageDescription = "닫기"
+                    message = "학교 폭력 멈춰!"
                 )
             )
 
@@ -70,11 +67,7 @@ object SVInfo {
                         actionButtonTitle = "방문하기",
                         onActionButtonClick = {
                             openLink(helpful.link)
-                        },
-                        onClose = {
-                            showingTip = false
-                        },
-                        closeImageDescription = "닫기"
+                        }
                     )
                 } else if (tipType in helpfulListSize until helpfulListSize + lawListSize) {
                     val law = Law.lawList[Random().nextInt(Law.lawList.size)]
@@ -85,11 +78,7 @@ object SVInfo {
                             actionButtonTitle = "알아보기",
                             onActionButtonClick = {
                                 openLink(law.link)
-                            },
-                            onClose = {
-                                showingTip = false
-                            },
-                            closeImageDescription = "닫기"
+                            }
                         )
                     } else {
                         tipInformationList[Random().nextInt(tipInformationList.size)]
@@ -98,7 +87,16 @@ object SVInfo {
                     tipInformationList[Random().nextInt(tipInformationList.size)]
                 }
 
-                Tip(tipInformation)
+                Tip(
+                    tipInformation = tipInformation.run {
+                        onClose = {
+                            showingTip = false
+                        }
+                        closeImageDescription = "닫기"
+                        modifier = Modifier.padding(top = 16.dp)
+                        this
+                    }
+                )
             }
 
             var showing by rememberSaveable { mutableStateOf(false) }
@@ -122,9 +120,10 @@ object SVInfo {
             }
 
             Text(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(bottom = 16.dp),
                 text = "정태연 ".repeat(100)
             )
+
         }
     }
 
