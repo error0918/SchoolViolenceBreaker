@@ -52,6 +52,7 @@ object SVInfo {
             AnimatedVisibility(visible = showingTip) {
                 val helpfulListSize = Helpful.helpfulList.size
                 val lawListSize = Law.lawList.size
+                val etcListSize = Etc.etcList.size
                 val tipInformationListSize = tipInformationList.size
 
                 val tipType = Random().nextInt(helpfulListSize + lawListSize + tipInformationListSize)
@@ -69,7 +70,7 @@ object SVInfo {
                         }
                     )
                 } else if (tipType in helpfulListSize until helpfulListSize + lawListSize) {
-                    val law = Law.lawList[Random().nextInt(Law.lawList.size)]
+                    val law = Law.lawList[Random().nextInt(lawListSize)]
                     if (law.link != null) {
                         MyView.TipInformation(
                             title = law.name,
@@ -80,10 +81,24 @@ object SVInfo {
                             }
                         )
                     } else {
-                        tipInformationList[Random().nextInt(tipInformationList.size)]
+                        tipInformationList[Random().nextInt(tipInformationListSize)]
+                    }
+                } else if (tipType in helpfulListSize + lawListSize until helpfulListSize + lawListSize + etcListSize) {
+                    val etc = Etc.etcList[Random().nextInt(etcListSize)]
+                    if (etc.link != null) {
+                        MyView.TipInformation(
+                            title = etc.name,
+                            message = "이 법에 대해 알아보시겠습니까?",
+                            actionButtonTitle = "알아보기",
+                            onActionButtonClick = {
+                                openLink(etc.link)
+                            }
+                        )
+                    } else {
+                        tipInformationList[Random().nextInt(tipInformationListSize)]
                     }
                 } else {
-                    tipInformationList[Random().nextInt(tipInformationList.size)]
+                    tipInformationList[Random().nextInt(tipInformationListSize)]
                 }
 
                 Tip(

@@ -406,6 +406,69 @@ object Report {
 
 
 
+object Action { // TODO
+
+    data class ActionCategory(
+        val name: String,
+        val actionList: List<Action>
+    )
+
+    data class Action(
+        val name: String,
+        val message: String
+    )
+
+    val actionCategoryList = listOf(
+        ActionCategory(
+            name = "",
+            actionList = listOf<Action>()
+        )
+    )
+
+    @Composable
+    fun ShowActionCategory(
+        actionCategoryIndex: Int = 0,
+        onDismissAdditionalAction: () -> Unit = {}
+    ) {
+
+    }
+
+    @Composable
+    fun ShowAction(
+        action: Action
+    ) {
+
+    }
+
+}
+
+
+
+object Misunderstanding {
+
+    data class Misunderstanding(
+        val name: String
+        // TODO
+    )
+
+    val misunderstandingList = listOf(
+        Misunderstanding(
+            name = ""
+        )
+    )
+
+    @Composable
+    fun ShowMisunderstanding(
+        misunderstandingIndex: Int = 0,
+        onDismissAdditionalAction: () -> Unit = {}
+    ) {
+
+    }
+
+}
+
+
+
 object Law {
 
     data class Law(
@@ -502,7 +565,6 @@ object Etc {
 
     data class Etc(
         val name: String,
-        val image: Bitmap? = null,
         val content: String,
         val link: String? = null
     )
@@ -548,43 +610,17 @@ object Etc {
 
             MyView.MessageDialog(
                 onDismissRequest = { index = null },
-                icon = { Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null) },
-                title = { Text(text = etcList[it].name) },
-                text = {
-                    val scrollState = rememberScrollState()
-                    Surface(
-                        shape = MaterialTheme.shapes.medium
-                    ) {
-                        val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
-
-                        Column(
-                            modifier = Modifier.verticalScroll(scrollState)
-                        ) {
-                            Spacer(modifier = Modifier.height(cornerRadius))
-                            SelectionContainer {
-                                Text(text = etc.content)
-                            }
-                            Spacer(modifier = Modifier.height(cornerRadius))
-                        }
+                icon = Icons.Filled.MoreVert,
+                title = etcList[it].name,
+                text = etc.content,
+                dismissButtonText = stringResource(id = R.string.close),
+                confirmButtonText = if (etc.link != null) stringResource(id = R.string.solution_browse) else null,
+                onConfirmButtonClick = if (etc.link != null) {
+                    {
+                        openLink(etc.link)
+                        index = null
                     }
-                },
-                button = {
-                    MyView.DialogButtonRow {
-                        TextButton(onClick = { index = null }) {
-                            Text(text = stringResource(id = R.string.close))
-                        }
-                        etc.link?.let {
-                            TextButton(
-                                onClick = {
-                                    openLink(it)
-                                    index = null
-                                }
-                            ) {
-                                Text(text = stringResource(id = R.string.solution_browse))
-                            }
-                        }
-                    }
-                }
+                } else null
             )
         }
     }
