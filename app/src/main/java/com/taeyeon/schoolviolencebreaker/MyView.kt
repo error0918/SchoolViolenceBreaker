@@ -954,17 +954,7 @@ object MyView {
                     .height(IntrinsicSize.Min)
             )
         ) {
-            val cornerRadius = MaterialTheme.shapes.medium.let {
-                var cornerRadius: Dp = 0.dp
-                val size = Size.Unspecified
-                with(LocalDensity.current) {
-                    val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
-                    corners.forEach { corner ->
-                        cornerRadius += corner.toPx(size, this).toDp() / corners.size
-                    }
-                }
-                cornerRadius
-            }
+            val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
             val tipIconSize = LocalDensity.current.run {
                 MaterialTheme.typography.labelSmall.fontSize.toPx().toDp()
             }
@@ -1315,17 +1305,7 @@ object MyView {
         containerColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background),
         contentColor: Color = MaterialTheme.colorScheme.onSurface
     ) {
-        val cornerRadius = MaterialTheme.shapes.medium.let {
-            var cornerRadius: Dp = 0.dp
-            val size = Size.Unspecified
-            with(LocalDensity.current) {
-                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
-                corners.forEach { corner ->
-                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
-                }
-            }
-            cornerRadius
-        }
+        val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
 
         Card(
             colors = CardDefaults.cardColors(

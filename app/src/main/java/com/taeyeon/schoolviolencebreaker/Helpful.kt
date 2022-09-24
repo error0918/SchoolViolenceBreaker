@@ -350,17 +350,7 @@ object Helpful {
                     )
             )
         ) {
-            val cornerRadius = MaterialTheme.shapes.medium.let {
-                var cornerRadius: Dp = 0.dp
-                val size = Size.Unspecified
-                with(LocalDensity.current) {
-                    val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
-                    corners.forEach { corner ->
-                        cornerRadius += corner.toPx(size, this).toDp() / corners.size
-                    }
-                }
-                cornerRadius
-            }
+            val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
             var textMoreSee by remember { mutableStateOf(false) }
             var didOverflowHeight by remember { mutableStateOf(false) }
 

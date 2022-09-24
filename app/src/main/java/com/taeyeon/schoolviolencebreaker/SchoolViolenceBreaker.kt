@@ -9,6 +9,7 @@ import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -452,17 +454,7 @@ object Law {
                     Surface(
                         shape = MaterialTheme.shapes.medium
                     ) {
-                        val cornerRadius = MaterialTheme.shapes.medium.let {
-                            var cornerRadius: Dp = 0.dp
-                            val size = Size.Unspecified
-                            with(LocalDensity.current) {
-                                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
-                                corners.forEach { corner ->
-                                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
-                                }
-                            }
-                            cornerRadius
-                        }
+                        val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
 
                         Column(
                             modifier = Modifier.verticalScroll(scrollState)
@@ -545,24 +537,14 @@ object Etc {
 
             MyView.MessageDialog(
                 onDismissRequest = { index = null },
-                icon = { Icon(imageVector = Icons.Filled.Book, contentDescription = null) },
-                title = { Text(text = etcList[index!!].name) },
+                icon = { Icon(imageVector = Icons.Filled.MoreVert, contentDescription = null) },
+                title = { Text(text = etcList[it].name) },
                 text = {
                     val scrollState = rememberScrollState()
                     Surface(
                         shape = MaterialTheme.shapes.medium
                     ) {
-                        val cornerRadius = MaterialTheme.shapes.medium.let {
-                            var cornerRadius: Dp = 0.dp
-                            val size = Size.Unspecified
-                            with(LocalDensity.current) {
-                                val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
-                                corners.forEach { corner ->
-                                    cornerRadius += corner.toPx(size, this).toDp() / corners.size
-                                }
-                            }
-                            cornerRadius
-                        }
+                        val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
 
                         Column(
                             modifier = Modifier.verticalScroll(scrollState)
@@ -599,6 +581,21 @@ object Etc {
 }
 
 
+
+@Composable
+fun getCornerSize(shape: CornerBasedShape): Dp {
+    var cornerRadius: Dp = 0.dp
+    shape.let {
+        val size = Size.Unspecified
+        with(LocalDensity.current) {
+            val corners = listOf(it.topStart, it.topEnd, it.bottomStart, it.bottomEnd)
+            corners.forEach { corner ->
+                cornerRadius += corner.toPx(size, this).toDp() / corners.size
+            }
+        }
+    }
+    return cornerRadius
+}
 
 fun getRaw(id: Int): String {
     val inputStream = Core.getContext().resources.openRawResource(id)

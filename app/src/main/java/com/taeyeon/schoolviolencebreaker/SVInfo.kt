@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
-import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
 import java.util.*
 
@@ -97,26 +96,6 @@ object SVInfo {
                         this
                     }
                 )
-            }
-
-            var showing by rememberSaveable { mutableStateOf(false) }
-            if (showing) {
-                MyView.ListDialog(
-                    onDismissRequest = { showing = false },
-                    title = "타이틀",
-                    items = run { val arrayList = arrayListOf<String>(); for(i in 0 until 100) arrayList.add("아이템 $i"); arrayList.toList() },
-                    onItemClick = { _, item -> Utils.toast(item) },
-                    dismissButtonText = "닫기"
-                )
-            }
-
-            Button(
-                onClick = {
-                    showing = true
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "테스트")
             }
 
             Text(
