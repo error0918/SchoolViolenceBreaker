@@ -12,6 +12,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -32,13 +33,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.google.accompanist.pager.*
 import com.taeyeon.core.Core
@@ -80,6 +81,10 @@ class MainActivity : ComponentActivity() {
 
         Core.activityCreated(this)
 
+        val connectivityManager = getSystemService<ConnectivityManager>()
+        val networkInfo = connectivityManager?.activeNetworkInfo
+        val isNetworkConnected = networkInfo?.isConnectedOrConnecting ?: false
+
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
@@ -120,17 +125,26 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Theme {
-                //
-                val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
-                    if (isGranted) Utils.toast("됨")
-                    else Utils.toast("안됨")
-                }
-                SideEffect {
-                    if (ContextCompat.checkSelfPermission(Core.getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) launcher.launch(Manifest.permission.CALL_PHONE)
-                }
+                if (isNetworkConnected) {
+                    // TODO
+                    val launcher =
+                        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
+                            if (isGranted) Utils.toast("됨")
+                            else Utils.toast("안됨")
+                        }
+                    SideEffect {
+                        if (ContextCompat.checkSelfPermission(
+                                Core.getContext(),
+                                Manifest.permission.CALL_PHONE
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) launcher.launch(Manifest.permission.CALL_PHONE)
+                    }
 
-                Main.Main()
-                Report.ReportRunning()
+                    Main.Main()
+                    Report.ReportRunning()
+                } else {
+                    // TODO WHEN NETWORK DISABLED
+                }
             }
         }
     }
