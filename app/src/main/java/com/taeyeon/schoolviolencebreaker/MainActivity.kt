@@ -22,7 +22,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.HelpOutline
@@ -318,6 +320,7 @@ object Main {
         }
     }
 
+    @Suppress("DEPRECATION")
     @Composable
     fun MainContentNetworkDisconnected() {
         // TODO WHEN NETWORK DISCONNECTED
@@ -342,17 +345,33 @@ object Main {
                     )
                 }
 
-                Text("투두투두투두")
+                Text(
+                    text = "투두투두투두",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.onError.copy(alpha = 0.4f),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                )
 
                 Button(
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        isNetworkConnected = Core.getContext().getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
+                        if (isNetworkConnected) Utils.toast("연결 성공")
+                        else Utils.toast("연결 실패")
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    )
                 ) {
-                    Text("투두투두투두")
+                    Text(text = "투두투두투두")
                 }
             }
         }
-
-        isNetworkConnected = Core.getContext().getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
     }
 
 }
