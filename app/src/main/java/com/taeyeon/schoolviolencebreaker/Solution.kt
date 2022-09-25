@@ -47,9 +47,9 @@ object Solution {
             icon = Icons.Filled.Handshake,
             iconContentDescription = "조치",
             title = "조치",
-            items = listOf(
+            items = Action.actionCategoryList.map { it.name }/*listOf(
                 "피해자", "가해자"
-            ),
+            )*/,
             onItemClick = { index, _ ->
                 showingDialog = 1
                 showingDialogIndex = index
@@ -59,9 +59,9 @@ object Solution {
             icon = Icons.Filled.Error,
             iconContentDescription = "오해",
             title = "오해",
-            items = listOf(
+            items = Misunderstanding.misunderstandingList.map { it.name }/*listOf(
                 "잘못된 해결법", "잘못된 상식"
-            ),
+            )*/,
             onItemClick = { index, _ ->
                 showingDialog = 2
                 showingDialogIndex = index
@@ -81,15 +81,15 @@ object Solution {
             icon = Icons.Filled.MoreVert,
             iconContentDescription = "기타",
             title = "기타",
-            items = listOf(
+            items = Etc.etcList.map { it.name }/*listOf(
                 "학교폭력 실태조사"
-            ),
+            )*/,
             onItemClick = { index, _ ->
                 showingDialog = 4
                 showingDialogIndex = index
             }
         )
-    )
+    ) // TODO
 
     @Composable
     fun Solution(paddingValues: PaddingValues = PaddingValues()) {

@@ -12,6 +12,12 @@
     <string name="tip">Tip</string>
 
     <string name="solution">Solution</string>
+    <string name="solution_report">Report</string>
+    <string name="solution_report_subtitle">Who are you?</string>
+    <string name="solution_action">Action</string>
+    <string name="solution_misunderstanding">Misunderstanding</string>
+    <string name="solution_law">Law</string>
+    <string name="solution_etc">ETC</string>
     <string name="solution_copy">Copy</string>
     <string name="solution_browse">Browse</string>
 

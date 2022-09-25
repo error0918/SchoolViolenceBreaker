@@ -421,7 +421,7 @@ object Action {
     val actionCategoryList = listOf(
         ActionCategory(
             name = "",
-            actionList = listOf<Action>()
+            actionList = listOf()
         )
     )
 

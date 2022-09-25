@@ -11,6 +11,12 @@
     <string name="tip">팁</string>
 
     <string name="solution">해결</string>
+    <string name="solution_report">신고</string>
+    <string name="solution_report_subtitle">당신은?</string>
+    <string name="solution_action">조치</string>
+    <string name="solution_misunderstanding">오해</string>
+    <string name="solution_law">법률</string>
+    <string name="solution_etc">기타</string>
     <string name="solution_copy">복사하기</string>
     <string name="solution_browse">링크 바로가기</string>
 
