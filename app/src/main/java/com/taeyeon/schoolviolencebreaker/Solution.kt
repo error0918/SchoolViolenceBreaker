@@ -12,11 +12,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 
@@ -34,7 +31,7 @@ object Solution {
     private var showingDialog by mutableStateOf<Int?>(null)
     private var showingDialogIndex by mutableStateOf(0)
 
-    val  solutionList = listOf(
+    private val solutionList = listOf(
         Solution(
             icon = Icons.Filled.Warning,
             iconContentDescription = "신고",
@@ -101,31 +98,31 @@ object Solution {
             0 -> {
                 Report.Report(
                     reporter = showingDialogIndex,
-                    onDismissAdditionalAction = {
-                        showingDialog = null
-                    }
+                    onDismissAdditionalAction = { showingDialog = null }
                 )
             }
             1 -> {
-                // TODO
+                Action.ShowActionCategory(
+                    actionCategoryIndex = showingDialogIndex,
+                    onDismissAdditionalAction = { showingDialog = null }
+                )
             }
             2 -> {
-                // TODO
+                Misunderstanding.ShowMisunderstanding(
+                    misunderstandingIndex = showingDialogIndex,
+                    onDismissAdditionalAction = { showingDialog = null }
+                )
             }
             3 -> {
                 Law.ShowLaw(
                     lawIndex = showingDialogIndex,
-                    onDismissAdditionalAction = {
-                        showingDialog = null
-                    }
+                    onDismissAdditionalAction = { showingDialog = null }
                 )
             }
             4 -> {
                 Etc.ShowEtc(
                     etcIndex = showingDialogIndex,
-                    onDismissAdditionalAction = {
-                        showingDialog = null
-                    }
+                    onDismissAdditionalAction = { showingDialog = null }
                 )
             }
 
