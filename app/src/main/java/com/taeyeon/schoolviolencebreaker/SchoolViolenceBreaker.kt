@@ -428,9 +428,10 @@ object Action { // TODO
     @Composable
     fun ShowActionCategory(
         actionCategoryIndex: Int = 0,
-        onDismissAdditionalAction: () -> Unit = {}
+        onDismissAdditionalAction: () -> Unit
     ) {
         var index by rememberSaveable { mutableStateOf<Int?>(null) }
+        var actionIndex by rememberSaveable { mutableStateOf<Int?>(null) }
 
         LaunchedEffect(actionCategoryIndex) {
             index = actionCategoryIndex
@@ -457,7 +458,7 @@ object Action { // TODO
                     ) {
                         MyView.ItemUnit(
                             text = action.name,
-                            onClick = {  }
+                            onClick = { actionIndex = itemIndex }
                         )
                     }
                 },
@@ -467,16 +468,57 @@ object Action { // TODO
                     }
                 }
             )
-        }
 
-        // TODO
+            actionIndex?.let {
+                ShowAction(
+                    action = actionCategory.actionList[actionIndex!!],
+                    onDismissRequest = { actionIndex = null }
+                )
+            }
+        }
     }
 
     @Composable
     fun ShowAction(
-        action: Action
+        action: Action,
+        onDismissRequest: () -> Unit
     ) {
+        MyView.MessageDialog(
+            onDismissRequest = onDismissRequest,
+            icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null) },
+            title = { Text(text = action.name) },
+            text = {
+                val scrollState = rememberScrollState()
+                Surface(
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
 
+                    Column(
+                        modifier = Modifier.verticalScroll(scrollState)
+                    ) {
+                        Spacer(modifier = Modifier.height(cornerRadius))
+                        SelectionContainer {
+                            Text(text = action.content)
+                        }
+                        Spacer(modifier = Modifier.height(cornerRadius))
+                    }
+                }
+            },
+            button = {
+                MyView.DialogButtonRow {
+                    TextButton(onClick = onDismissRequest) {
+                        Text(text = stringResource(id = R.string.close))
+                    }
+                    TextButton(onClick = {
+                        Utils.copy(action.name, action.content)
+                        onDismissRequest()
+                    }) {
+                        Text(text = stringResource(id = R.string.solution_copy))
+                    }
+                }
+            }
+        )
     }
 
 }
