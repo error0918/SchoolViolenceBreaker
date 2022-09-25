@@ -6,12 +6,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -19,6 +17,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -447,22 +447,74 @@ object Action { // TODO
 object Misunderstanding {
 
     data class Misunderstanding(
-        val name: String
-        // TODO
+        val name: String,
+        val imageBitmap: ImageBitmap,
+        val imageBitmapBackground: Color,
+        val content: String
     )
 
-    val misunderstandingList = listOf(
-        Misunderstanding(
-            name = ""
-        )
-    )
+    val misunderstandingList = listOf<Misunderstanding>()
 
     @Composable
     fun ShowMisunderstanding(
         misunderstandingIndex: Int = 0,
         onDismissAdditionalAction: () -> Unit = {}
     ) {
+        var index by rememberSaveable { mutableStateOf<Int?>(null) }
 
+        LaunchedEffect(misunderstandingIndex) {
+            index = misunderstandingIndex
+        }
+
+        LaunchedEffect(index) {
+            if (index == null) onDismissAdditionalAction()
+        }
+
+        index?.let {
+            val misunderstanding = misunderstandingList[it]
+
+            MyView.MessageDialog(
+                onDismissRequest = { index = null },
+                icon = { Icon(imageVector = Icons.Filled.Book, contentDescription = null) },
+                title = { Text(text = misunderstanding.name) },
+                text = {
+                    val scrollState = rememberScrollState()
+                    Surface(
+                        shape = MaterialTheme.shapes.medium
+                    ) {
+                        val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
+
+                        Column(
+                            modifier = Modifier.verticalScroll(scrollState)
+                        ) {
+                            Image(
+                                bitmap = misunderstanding.imageBitmap,
+                                contentDescription = misunderstanding.name,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(5.dp)
+                                    .background(
+                                        color = misunderstanding.imageBitmapBackground,
+                                        shape = MaterialTheme.shapes.medium
+                                    )
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            SelectionContainer {
+                                Text(text = misunderstanding.content)
+                            }
+                            Spacer(modifier = Modifier.height(cornerRadius))
+                        }
+                    }
+                },
+                button = {
+                    MyView.DialogButtonRow {
+                        TextButton(onClick = { index = null }) {
+                            Text(text = stringResource(id = R.string.close))
+                        }
+                    }
+                }
+            )
+        }
     }
 
 }
@@ -611,7 +663,7 @@ object Etc {
             MyView.MessageDialog(
                 onDismissRequest = { index = null },
                 icon = Icons.Filled.MoreVert,
-                title = etcList[it].name,
+                title = etc.name,
                 text = etc.content,
                 dismissButtonText = stringResource(id = R.string.close),
                 confirmButtonText = if (etc.link != null) stringResource(id = R.string.solution_browse) else null,
