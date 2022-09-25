@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
     var shakeTime = 0L
     var shake = 0
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             splashScreen.setOnExitAnimationListener { splashScreenView ->
@@ -81,9 +82,7 @@ class MainActivity : ComponentActivity() {
 
         Core.activityCreated(this)
 
-        val connectivityManager = getSystemService<ConnectivityManager>()
-        val networkInfo = connectivityManager?.activeNetworkInfo
-        val isNetworkConnected = networkInfo?.isConnectedOrConnecting ?: false
+        Main.isNetworkConnected = getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
 
         val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -125,7 +124,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Theme {
-                if (isNetworkConnected) {
+                if (Main.isNetworkConnected) {
                     // TODO
                     val launcher =
                         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -143,7 +142,7 @@ class MainActivity : ComponentActivity() {
                     Main.Main()
                     Report.ReportRunning()
                 } else {
-                    // TODO WHEN NETWORK DISABLED
+                    Main.MainContentNetworkDisconnected()
                 }
             }
         }
@@ -162,6 +161,7 @@ class MainActivity : ComponentActivity() {
 }
 
 object Main {
+    var isNetworkConnected by mutableStateOf(false)
     private var position by mutableStateOf(0)
     private val data by lazy {
         listOf(
@@ -313,6 +313,13 @@ object Main {
             position = this.currentPage
             data[position].composable(paddingValues)
         }
+    }
+
+    @Composable
+    fun MainContentNetworkDisconnected() {
+        // TODO WHEN NETWORK DISCONNECTED
+
+        isNetworkConnected = Core.getContext().getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
     }
 
 }
