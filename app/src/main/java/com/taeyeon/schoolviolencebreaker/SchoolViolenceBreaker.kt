@@ -415,7 +415,7 @@ object Action { // TODO
 
     data class Action(
         val name: String,
-        val message: String
+        val content: String
     )
 
     val actionCategoryList = listOf(
@@ -430,7 +430,46 @@ object Action { // TODO
         actionCategoryIndex: Int = 0,
         onDismissAdditionalAction: () -> Unit = {}
     ) {
+        var index by rememberSaveable { mutableStateOf<Int?>(null) }
 
+        LaunchedEffect(actionCategoryIndex) {
+            index = actionCategoryIndex
+        }
+
+        LaunchedEffect(index) {
+            if (index == null) onDismissAdditionalAction()
+        }
+
+        index?.let {
+            val actionCategory = actionCategoryList[it]
+
+            MyView.ListDialog(
+                onDismissRequest = { index = null },
+                icon = { Icon(imageVector = Icons.Filled.Category, contentDescription = actionCategory.name) },
+                title = { Text(text = actionCategory.name) },
+                items = actionCategory.actionList,
+                itemContent = { itemIndex, action ->
+                    Box(
+                        modifier = Modifier.padding(
+                            top = if (itemIndex == 0) 0.dp else 8.dp,
+                            bottom = if (itemIndex == actionCategory.actionList.size - 1) 0.dp else 8.dp,
+                        )
+                    ) {
+                        MyView.ItemUnit(
+                            text = action.name,
+                            onClick = {  }
+                        )
+                    }
+                },
+                button = {
+                    TextButton(onClick = { index = null }) {
+                        Text(text = stringResource(id = R.string.close))
+                    }
+                }
+            )
+        }
+
+        // TODO
     }
 
     @Composable
