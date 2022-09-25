@@ -73,6 +73,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
 
         Core.initialize(applicationContext)
+        Solution.solutionList
         Helpful.helpfulList // 초기화
 
         super.onCreate(savedInstanceState)

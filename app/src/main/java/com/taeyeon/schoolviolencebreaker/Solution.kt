@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.taeyeon.core.Core
 
 object Solution {
 
@@ -31,65 +32,61 @@ object Solution {
     private var showingDialog by mutableStateOf<Int?>(null)
     private var showingDialogIndex by mutableStateOf(0)
 
-    private val solutionList = listOf(
-        Solution(
-            icon = Icons.Filled.Warning,
-            iconContentDescription = "신고",
-            title = "신고",
-            subTitle = "당신은?",
-            items = Report.reporterList,
-            onItemClick = { index, _ ->
-                showingDialog = 0
-                showingDialogIndex = index
-            }
-        ),
-        Solution(
-            icon = Icons.Filled.Handshake,
-            iconContentDescription = "조치",
-            title = "조치",
-            items = Action.actionCategoryList.map { it.name }/*listOf(
-                "피해자", "가해자"
-            )*/,
-            onItemClick = { index, _ ->
-                showingDialog = 1
-                showingDialogIndex = index
-            }
-        ),
-        Solution(
-            icon = Icons.Filled.Error,
-            iconContentDescription = "오해",
-            title = "오해",
-            items = Misunderstanding.misunderstandingList.map { it.name }/*listOf(
-                "잘못된 해결법", "잘못된 상식"
-            )*/,
-            onItemClick = { index, _ ->
-                showingDialog = 2
-                showingDialogIndex = index
-            }
-        ),
-        Solution(
-            icon = Icons.Filled.Book,
-            iconContentDescription = "법률",
-            title = "법률",
-            items = Law.lawList.map { it.name },
-            onItemClick = { index, _ ->
-                showingDialog = 3
-                showingDialogIndex = index
-            }
-        ),
-        Solution(
-            icon = Icons.Filled.MoreVert,
-            iconContentDescription = "기타",
-            title = "기타",
-            items = Etc.etcList.map { it.name }/*listOf(
-                "학교폭력 실태조사"
-            )*/,
-            onItemClick = { index, _ ->
-                showingDialog = 4
-                showingDialogIndex = index
-            }
+    val solutionList by lazy {
+        listOf(
+            Solution(
+                icon = Icons.Filled.Warning,
+                iconContentDescription = Core.getContext().resources.getString(R.string.solution_report),
+                title = Core.getContext().resources.getString(R.string.solution_report),
+                subTitle = Core.getContext().resources.getString(R.string.solution_report_subtitle),
+                items = Report.reporterList,
+                onItemClick = { index, _ ->
+                    showingDialog = 0
+                    showingDialogIndex = index
+                }
+            ),
+            Solution(
+                icon = Icons.Filled.Handshake,
+                iconContentDescription = Core.getContext().resources.getString(R.string.solution_action),
+                title = Core.getContext().resources.getString(R.string.solution_action),
+                items = Action.actionCategoryList.map { it.name },
+                onItemClick = { index, _ ->
+                    showingDialog = 1
+                    showingDialogIndex = index
+                }
+            ),
+            Solution(
+                icon = Icons.Filled.Error,
+                iconContentDescription = Core.getContext().resources.getString(R.string.solution_misunderstanding),
+                title = Core.getContext().resources.getString(R.string.solution_misunderstanding),
+                items = Misunderstanding.misunderstandingList.map { it.name },
+                onItemClick = { index, _ ->
+                    showingDialog = 2
+                    showingDialogIndex = index
+                }
+            ),
+            Solution(
+                icon = Icons.Filled.Book,
+                iconContentDescription = Core.getContext().resources.getString(R.string.solution_law),
+                title = Core.getContext().resources.getString(R.string.solution_law),
+                items = Law.lawList.map { it.name },
+                onItemClick = { index, _ ->
+                    showingDialog = 3
+                    showingDialogIndex = index
+                }
+            ),
+            Solution(
+                icon = Icons.Filled.MoreVert,
+                iconContentDescription = Core.getContext().resources.getString(R.string.solution_etc),
+                title = Core.getContext().resources.getString(R.string.solution_etc),
+                items = Etc.etcList.map { it.name },
+                onItemClick = { index, _ ->
+                    showingDialog = 4
+                    showingDialogIndex = index
+                }
+            )
         )
-    ) // TODO
+    }
 
     @Composable
     fun Solution(paddingValues: PaddingValues = PaddingValues()) {
