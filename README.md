@@ -19,7 +19,7 @@
 
 [👋 소개](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-소개)
 
-[📱 사용 화면](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용%20화면)
+[📱 사용 화면](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용-화면)
 
 
 ---
