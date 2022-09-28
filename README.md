@@ -17,10 +17,14 @@
 
 </div>
 
-[👋 소개](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-소개) <br/>
-[📱 사용 화면](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용-화면) <br/>
-[🦄 사용된 것](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용된-것) <br/>
-[✔️ 다운로드](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#%EF%B8%8F-다운로드) <br/>
+[👋 소개](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-소개)
+
+[📱 사용 화면](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용-화면)
+
+[🦄 사용된 것](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용된-것)
+
+[✔️ 다운로드](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#%EF%B8%8F-다운로드)
+
 [🎸 기타](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-기타)
 
 ---
@@ -56,8 +60,6 @@
 
 # 📱 사용 화면
 
-[Ver 1.0.0]()
-
 ❗ 제공 예정 ❗
 
 ---
@@ -70,6 +72,8 @@
 - OS: Android 7.1.1 ~
 
 # ✔️ 다운로드
+
+[Ver 1.0.0]()
 
 ❗ 제공 예정 ❗
 
