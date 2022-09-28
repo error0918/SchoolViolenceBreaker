@@ -23,7 +23,7 @@
 
 [🦄 사용된 것](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용된-것)
 
-[✔️ 다운로드](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-다운로드)
+[✔️ 다운로드](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#%EF%B8%8F-다운로드)
 
 [🎸 기타](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-기타)
 
