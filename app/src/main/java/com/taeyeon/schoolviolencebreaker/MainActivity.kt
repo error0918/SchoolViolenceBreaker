@@ -80,56 +80,58 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
 
         Core.initialize(applicationContext)
-        Solution.solutionList
-        Helpful.helpfulList // 초기화
-
-        super.onCreate(savedInstanceState)
-
-        Core.activityCreated(this)
 
         Main.isNetworkConnected = getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
 
-        val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        if (Main.isNetworkConnected) {
 
-        sensorManager.registerListener(
-            object: SensorEventListener {
-                override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                    if (sensorEvent != null && sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                        val x = sensorEvent.values[0] / SensorManager.GRAVITY_EARTH
-                        val y = sensorEvent.values[1] / SensorManager.GRAVITY_EARTH
-                        val z = sensorEvent.values[2] / SensorManager.GRAVITY_EARTH
+            Solution.solutionList
+            Helpful.helpfulList // 초기화
 
-                        val f = (x * y * z).pow(2)
-                        val g = sqrt(f)
+            super.onCreate(savedInstanceState)
 
-                        if (g > 2.7f) {
-                            val currentTime = System.currentTimeMillis()
-                            if (shakeTime + 500f <= currentTime) {
-                                shakeTime = currentTime
-                                if (++shake >= shakeTime) {
-                                    if (shakeToReport) {
-                                        Utils.vibrate(50)
-                                        Report.reporter = 0
-                                        Report.autoReport = true
-                                        Report.reporting = true
+            Core.activityCreated(this)
+
+            val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+            val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+            sensorManager.registerListener(
+                object: SensorEventListener {
+                    override fun onSensorChanged(sensorEvent: SensorEvent?) {
+                        if (sensorEvent != null && sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                            val x = sensorEvent.values[0] / SensorManager.GRAVITY_EARTH
+                            val y = sensorEvent.values[1] / SensorManager.GRAVITY_EARTH
+                            val z = sensorEvent.values[2] / SensorManager.GRAVITY_EARTH
+
+                            val f = (x * y * z).pow(2)
+                            val g = sqrt(f)
+
+                            if (g > 2.7f) {
+                                val currentTime = System.currentTimeMillis()
+                                if (shakeTime + 500f <= currentTime) {
+                                    shakeTime = currentTime
+                                    if (++shake >= shakeTime) {
+                                        if (shakeToReport) {
+                                            Utils.vibrate(50)
+                                            Report.reporter = 0
+                                            Report.autoReport = true
+                                            Report.reporting = true
+                                        }
+                                        shake = 0
                                     }
-                                    shake = 0
                                 }
                             }
                         }
                     }
-                }
 
-                override fun onAccuracyChanged(sensor: Sensor?, p1: Int) { }
-            },
-            accelerometer,
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
+                    override fun onAccuracyChanged(sensor: Sensor?, p1: Int) { }
+                },
+                accelerometer,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
 
-        setContent {
-            Theme {
-                if (Main.isNetworkConnected) {
+            setContent {
+                Theme {
                     // TODO
                     val launcher =
                         rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -146,7 +148,12 @@ class MainActivity : ComponentActivity() {
 
                     Main.Main()
                     Report.ReportRunning()
-                } else {
+                }
+            }
+
+        } else {
+            setContent {
+                Theme {
                     Main.MainContentNetworkDisconnected()
                 }
             }
