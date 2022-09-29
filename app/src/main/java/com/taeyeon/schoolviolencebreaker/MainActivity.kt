@@ -21,8 +21,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -344,36 +346,43 @@ object Main {
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_launcher_round),
-                        contentDescription = stringResource(id = R.string.app_name)
+                        contentDescription = stringResource(id = R.string.app_name),
+                        modifier = Modifier.size(200.dp)
                     )
                     Text(
                         text = stringResource(id = R.string.app_name),
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
 
                 Text(
                     text = "인터넷이 연결되어 있지 않거나 오류가 났습니다.",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.onError.copy(alpha = 0.4f),
+                            color = MaterialTheme.colorScheme.errorContainer,
                             shape = RoundedCornerShape(8.dp)
                         )
-                        .padding(8.dp)
+                        .border(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onPrimary,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(16.dp)
                 )
 
-                Button(
+                OutlinedButton(
                     onClick = {
                         isNetworkConnected = Core.getContext().getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
                         if (isNetworkConnected) Utils.toast("연결 성공")
                         else Utils.toast("연결 실패")
                     },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
-                    )
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ),
+                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onPrimary)
                 ) {
                     Text(text = "다시시도")
                 }
