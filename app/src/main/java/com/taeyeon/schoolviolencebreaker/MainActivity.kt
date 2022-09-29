@@ -87,50 +87,51 @@ class MainActivity : ComponentActivity() {
 
         Main.isNetworkConnected = getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
 
-        if (Main.isNetworkConnected) {
 
-            Solution.solutionList
-            Helpful.helpfulList // 초기화
+        setContent {
+            if (Main.isNetworkConnected) {
 
-            val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-            val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+                Solution.solutionList
+                Helpful.helpfulList // 초기화
 
-            sensorManager.registerListener(
-                object: SensorEventListener {
-                    override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                        if (sensorEvent != null && sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                            val x = sensorEvent.values[0] / SensorManager.GRAVITY_EARTH
-                            val y = sensorEvent.values[1] / SensorManager.GRAVITY_EARTH
-                            val z = sensorEvent.values[2] / SensorManager.GRAVITY_EARTH
+                val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+                val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
-                            val f = (x * y * z).pow(2)
-                            val g = sqrt(f)
+                sensorManager.registerListener(
+                    object: SensorEventListener {
+                        override fun onSensorChanged(sensorEvent: SensorEvent?) {
+                            if (sensorEvent != null && sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                                val x = sensorEvent.values[0] / SensorManager.GRAVITY_EARTH
+                                val y = sensorEvent.values[1] / SensorManager.GRAVITY_EARTH
+                                val z = sensorEvent.values[2] / SensorManager.GRAVITY_EARTH
 
-                            if (g > 2.7f) {
-                                val currentTime = System.currentTimeMillis()
-                                if (shakeTime + 500f <= currentTime) {
-                                    shakeTime = currentTime
-                                    if (++shake >= shakeTime) {
-                                        if (shakeToReport) {
-                                            Utils.vibrate(50)
-                                            Report.reporter = 0
-                                            Report.autoReport = true
-                                            Report.reporting = true
+                                val f = (x * y * z).pow(2)
+                                val g = sqrt(f)
+
+                                if (g > 2.7f) {
+                                    val currentTime = System.currentTimeMillis()
+                                    if (shakeTime + 500f <= currentTime) {
+                                        shakeTime = currentTime
+                                        if (++shake >= shakeTime) {
+                                            if (shakeToReport) {
+                                                Utils.vibrate(50)
+                                                Report.reporter = 0
+                                                Report.autoReport = true
+                                                Report.reporting = true
+                                            }
+                                            shake = 0
                                         }
-                                        shake = 0
                                     }
                                 }
                             }
                         }
-                    }
 
-                    override fun onAccuracyChanged(sensor: Sensor?, p1: Int) { }
-                },
-                accelerometer,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
+                        override fun onAccuracyChanged(sensor: Sensor?, p1: Int) { }
+                    },
+                    accelerometer,
+                    SensorManager.SENSOR_DELAY_NORMAL
+                )
 
-            setContent {
                 Theme {
                     // TODO
                     val launcher =
@@ -149,10 +150,8 @@ class MainActivity : ComponentActivity() {
                     Main.Main()
                     Report.ReportRunning()
                 }
-            }
 
-        } else {
-            setContent {
+            } else {
                 Theme {
                     Main.MainContentNetworkDisconnected()
                 }
