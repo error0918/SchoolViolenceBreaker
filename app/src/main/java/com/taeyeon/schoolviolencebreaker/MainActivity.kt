@@ -332,7 +332,8 @@ object Main {
     fun MainContentNetworkDisconnected() {
         // TODO WHEN NETWORK DISCONNECTED
         Surface(
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
@@ -357,11 +358,11 @@ object Main {
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier
-                        .padding(8.dp)
                         .background(
                             color = MaterialTheme.colorScheme.onError.copy(alpha = 0.4f),
                             shape = RoundedCornerShape(8.dp)
                         )
+                        .padding(8.dp)
                 )
 
                 Button(
