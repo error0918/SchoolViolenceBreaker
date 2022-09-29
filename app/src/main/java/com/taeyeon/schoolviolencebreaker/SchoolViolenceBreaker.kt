@@ -150,7 +150,7 @@ object Report {
             type = ReportingType.Call
         ),
         Reporting(
-            title = "044-203-6898 (교육부 학교폭력대책과)",
+            title = "044-203-6898",
             organization = "교육부",
             receptionDetails = "TODO",
             description = "학교",
