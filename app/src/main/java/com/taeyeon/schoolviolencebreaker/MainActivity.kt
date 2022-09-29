@@ -81,16 +81,16 @@ class MainActivity : ComponentActivity() {
 
         Core.initialize(applicationContext)
 
+        super.onCreate(savedInstanceState)
+
+        Core.activityCreated(this)
+
         Main.isNetworkConnected = getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
 
         if (Main.isNetworkConnected) {
 
             Solution.solutionList
             Helpful.helpfulList // 초기화
-
-            super.onCreate(savedInstanceState)
-
-            Core.activityCreated(this)
 
             val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
             val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
