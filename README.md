@@ -22,8 +22,8 @@
 [1. 👋 소개](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-소개) <br/>
 [2. 📱 사용 화면](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용-화면) <br/>
 [3. 🦄 사용된 것](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-사용된-것) <br/>
-[4. ✔️ 다운로드](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#%EF%B8%8F-다운로드) <br/>
-[5. 🎸 기타](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-기타)
+[- ✔️ 다운로드](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#%EF%B8%8F-다운로드) <br/>
+[- 🎸 기타](https://github.com/error0918/SchoolViolenceBreaker/blob/master/README.md#-기타)
 
 ---
 
