@@ -346,7 +346,7 @@ object Main {
                 }
 
                 Text(
-                    text = "투두투두투두",
+                    text = "인터넷이 연결되어 있지 않거나 오류가 났습니다.",
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier
@@ -368,7 +368,7 @@ object Main {
                         contentColor = MaterialTheme.colorScheme.onSecondary
                     )
                 ) {
-                    Text(text = "투두투두투두")
+                    Text(text = "다시시도")
                 }
             }
         }
