@@ -26,7 +26,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.HelpOutline
@@ -91,6 +90,8 @@ class MainActivity : ComponentActivity() {
         Main.isNetworkConnected = getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
 
         setContent {
+            load()
+
             if (Main.isNetworkConnected) {
 
                 Solution.solutionList
@@ -198,8 +199,6 @@ object Main {
     fun Main() {
         scope = rememberCoroutineScope()
         pagerState = rememberPagerState(initialPage = 0)
-
-        load()
 
         Scaffold(
             topBar = { Toolbar() },
@@ -397,8 +396,8 @@ object Main {
                         else Utils.toast("연결 실패")
                     },
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.6f)
                     ),
                     border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onPrimary),
                     shape = MaterialTheme.shapes.medium,
