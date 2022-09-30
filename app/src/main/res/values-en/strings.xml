@@ -5,6 +5,12 @@
 
     <string name="main_subtitle">School Violence Breaker - 20616 Jeong Taeyeon</string>
 
+    <string name="main_call_permission_denied">Call permission denied</string>
+    <string name="main_permission">Permission</string>
+    <string name="main_call_permission_message">This application contains functions that can only be used with phone permission in "Resolution > Report" and "Main screen > Report". Are you sure you want to authorize phone permissions? Even if you deny the phone permission, you can use the rest of the functions without difficulty.</string>
+    <string name="main_call_permission_request">Request permission again</string>
+    <string name="main_call_go_to_settings">Go to setting screen</string>
+
     <string name="main_network_connect_success">Connect Success</string>
     <string name="main_network_connect_fail">Connect Fail</string>
     <string name="main_network_network_retry">Retry</string>

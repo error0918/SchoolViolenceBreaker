@@ -5,6 +5,12 @@
 
     <string name="main_subtitle">학교폭력 브레이커 - 20616 정태연</string>
 
+    <string name="main_call_permission_denied">전화 권한이 거부되었습니다.</string>
+    <string name="main_permission">권한</string>
+    <string name="main_call_permission_message">이 애플리케이션은 "해결 > 신고"와 "메인화면 > 신고"에서 전화 권한이 있어야만 사용할 수 있는 기능들을 포함하고 있습니다. 전화 권한을 승인하시겠습니까? 전화 권한을 거부하셔도 나머지 기능들을 무리 없이 사용하실 수 있습니다.</string>
+    <string name="main_call_permission_request">권한 재요청하기</string>
+    <string name="main_call_go_to_settings">설정화면 가기</string>
+
     <string name="main_network_connect_success">연결 성공</string>
     <string name="main_network_connect_fail">연결 실패</string>
     <string name="main_network_network_retry">다시시도</string>

@@ -138,20 +138,6 @@ class MainActivity : ComponentActivity() {
                 )
 
                 Theme {
-                    // TODO
-                    val launcher =
-                        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
-                            if (isGranted) Utils.toast("됨")
-                            else Utils.toast("안됨")
-                        }
-                    SideEffect {
-                        if (ContextCompat.checkSelfPermission(
-                                Core.getContext(),
-                                Manifest.permission.CALL_PHONE
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) launcher.launch(Manifest.permission.CALL_PHONE)
-                    }
-
                     Main.Main()
                     Report.ReportRunning()
                 }
@@ -201,6 +187,55 @@ object Main {
     @Composable
     fun Main() {
         pagerState = rememberPagerState(initialPage = 0)
+
+        var permissionDeniedDialog by rememberSaveable { mutableStateOf(false) }
+        var permissionLaunch by rememberSaveable { mutableStateOf(true) }
+
+        val permissionLauncher =
+            rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission()
+            ) { isGranted ->
+                if (isGranted) {
+                    permissionDeniedDialog = false
+                } else {
+                    permissionDeniedDialog = true
+                    scope.launch {
+                        snackbarHostState.showSnackbar(Core.getContext().getString(R.string.main_call_permission_denied))
+                    }
+                }
+            }
+        LaunchedEffect(permissionLaunch) {
+            if (
+                ContextCompat.checkSelfPermission(Core.getContext(), Manifest.permission.CALL_PHONE)
+                != PackageManager.PERMISSION_GRANTED
+            ) permissionLauncher.launch(Manifest.permission.CALL_PHONE)
+            permissionLaunch = false
+        }
+
+        if (permissionDeniedDialog) {
+            MyView.BaseDialog(
+                onDismissRequest = {
+                    permissionDeniedDialog = false
+                },
+                icon = { Icon(imageVector = Icons.Filled.Accessibility, contentDescription = stringResource(id = R.string.main_permission)) },
+                title = { Text(text = stringResource(id = R.string.main_call_permission_denied)) },
+                text = { Text(text = stringResource(id = R.string.main_call_permission_message)) },
+                button = {
+                    MyView.DialogButtonRow {
+                        TextButton(onClick = { permissionLaunch = true }) {
+                            Text(text = stringResource(id = R.string.main_call_permission_request))
+                        }
+                        TextButton(onClick = { permissionDeniedDialog = false }) {
+                            Text(text = stringResource(id = R.string.main_call_go_to_settings))
+                        }
+                        TextButton(onClick = { permissionDeniedDialog = false }) {
+                            Text(text = stringResource(id = R.string.close))
+                        }
+                    }
+                }
+            )
+        }
+
 
         Scaffold(
             topBar = { Toolbar() },
