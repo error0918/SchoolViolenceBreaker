@@ -38,6 +38,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -331,12 +332,20 @@ object Main {
     @Composable
     fun MainContentNetworkDisconnected() {
         // TODO WHEN NETWORK DISCONNECTED
-        Surface(
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.fillMaxWidth()
+        ) { paddingValues ->
             ConstraintLayout(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(
+                        top = paddingValues.calculateTopPadding() + 16.dp,
+                        bottom = paddingValues.calculateBottomPadding() + 16.dp,
+                        start = paddingValues.calculateStartPadding(LocalLayoutDirection.current) + 16.dp,
+                        end = paddingValues.calculateEndPadding(LocalLayoutDirection.current) + 16.dp
+                    )
+                    .fillMaxSize()
             ) {
                 val (appImage, appName, message, retry) = createRefs()
 
@@ -347,6 +356,7 @@ object Main {
                         .size(200.dp)
                         .constrainAs(appImage) {
                             bottom.linkTo(appName.top, margin = 8.dp)
+                            centerHorizontallyTo(parent)
                         }
                 )
                 Text(
@@ -361,21 +371,22 @@ object Main {
                 Text(
                     text = "인터넷이 연결되어 있지 않거나 오류가 났습니다.",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    color = MaterialTheme.colorScheme.onError,
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.errorContainer,
-                            shape = RoundedCornerShape(8.dp)
+                            color = MaterialTheme.colorScheme.error,
+                            shape = MaterialTheme.shapes.medium
                         )
                         .border(
                             width = 1.dp,
                             color = MaterialTheme.colorScheme.onPrimary,
-                            shape = RoundedCornerShape(8.dp)
+                            shape = MaterialTheme.shapes.medium
                         )
-                        .padding(16.dp)
+                        .padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                         .constrainAs(message) {
                             top.linkTo(appName.bottom)
                             bottom.linkTo(retry.top)
+                            centerHorizontallyTo(parent)
                         }
                 )
 
@@ -390,12 +401,18 @@ object Main {
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     ),
                     border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onPrimary),
+                    shape = MaterialTheme.shapes.medium,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .constrainAs(retry) {
                             bottom.linkTo(parent.bottom)
+                            centerHorizontallyTo(parent)
                         }
                 ) {
-                    Text(text = "다시시도")
+                    Text(
+                        text = "다시시도",
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             }
         }
