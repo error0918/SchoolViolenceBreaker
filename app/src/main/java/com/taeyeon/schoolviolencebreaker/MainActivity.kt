@@ -35,7 +35,6 @@ import androidx.compose.material.icons.outlined.ReportProblem
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -44,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -88,7 +88,6 @@ class MainActivity : ComponentActivity() {
         Core.activityCreated(this)
 
         Main.isNetworkConnected = getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
-
 
         setContent {
             if (Main.isNetworkConnected) {
@@ -336,24 +335,28 @@ object Main {
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.fillMaxSize()
         ) {
-            Column(
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            ConstraintLayout(
                 modifier = Modifier.padding(16.dp)
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_round),
-                        contentDescription = stringResource(id = R.string.app_name),
-                        modifier = Modifier.size(200.dp)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.app_name),
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                }
+                val (appImage, appName, message, retry) = createRefs()
+
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_round),
+                    contentDescription = stringResource(id = R.string.app_name),
+                    modifier = Modifier
+                        .size(200.dp)
+                        .constrainAs(appImage) {
+                            bottom.linkTo(appName.top, margin = 8.dp)
+                        }
+                )
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .constrainAs(appName) {
+                            centerTo(parent)
+                        }
+                )
 
                 Text(
                     text = "인터넷이 연결되어 있지 않거나 오류가 났습니다.",
@@ -370,6 +373,10 @@ object Main {
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(16.dp)
+                        .constrainAs(message) {
+                            top.linkTo(appName.bottom)
+                            bottom.linkTo(retry.top)
+                        }
                 )
 
                 OutlinedButton(
@@ -382,7 +389,11 @@ object Main {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     ),
-                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onPrimary)
+                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onPrimary),
+                    modifier = Modifier
+                        .constrainAs(retry) {
+                            bottom.linkTo(parent.bottom)
+                        }
                 ) {
                     Text(text = "다시시도")
                 }
