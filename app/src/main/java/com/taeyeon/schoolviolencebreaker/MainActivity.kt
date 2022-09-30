@@ -36,6 +36,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -91,6 +92,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             load()
+            Main.scope = rememberCoroutineScope()
 
             if (Main.isNetworkConnected) {
 
@@ -176,6 +178,7 @@ class MainActivity : ComponentActivity() {
 
 object Main {
     var isNetworkConnected by mutableStateOf(false)
+    private val snackbarHostState = SnackbarHostState()
     private var position by mutableStateOf(0)
     private val data by lazy {
         listOf(
@@ -185,7 +188,7 @@ object Main {
         )
     }
 
-    private lateinit var scope: CoroutineScope
+    lateinit var scope: CoroutineScope
     private lateinit var pagerState: PagerState
 
     data class Data(
@@ -197,13 +200,13 @@ object Main {
     
     @Composable
     fun Main() {
-        scope = rememberCoroutineScope()
         pagerState = rememberPagerState(initialPage = 0)
 
         Scaffold(
             topBar = { Toolbar() },
             floatingActionButton = { Fab() },
-            bottomBar = { NavigationBar() }
+            bottomBar = { NavigationBar() },
+            snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { paddingValues ->
             var showPopupTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showPopupTip) }
             var showingPopupTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showPopupTip) }
@@ -334,6 +337,7 @@ object Main {
         Scaffold(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
+            snackbarHost = { SnackbarHost(snackbarHostState) },
             modifier = Modifier.fillMaxWidth()
         ) { paddingValues ->
             ConstraintLayout(
@@ -347,6 +351,16 @@ object Main {
                     .fillMaxSize()
             ) {
                 val (appImage, appName, message, retry) = createRefs()
+
+                Button(
+                    onClick = { Utils.shutDownApp() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    )
+                ) {
+
+                }
 
                 Image(
                     painter = painterResource(id = R.drawable.ic_launcher_round),
@@ -392,8 +406,9 @@ object Main {
                 OutlinedButton(
                     onClick = {
                         isNetworkConnected = Core.getContext().getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
-                        if (isNetworkConnected) Utils.toast("연결 성공")
-                        else Utils.toast("연결 실패")
+                        scope.launch {
+                            snackbarHostState.showSnackbar(if (isNetworkConnected) "연결 성공" else "연결 실패")
+                        }
                     },
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.6f),
