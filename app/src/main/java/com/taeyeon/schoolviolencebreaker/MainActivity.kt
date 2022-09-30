@@ -333,7 +333,6 @@ object Main {
     @Suppress("DEPRECATION")
     @Composable
     fun MainContentNetworkDisconnected() {
-        // TODO WHEN NETWORK DISCONNECTED
         Scaffold(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -382,7 +381,7 @@ object Main {
                 )
 
                 Text(
-                    text = "인터넷이 연결되어 있지 않거나 오류가 났습니다.",
+                    text = stringResource(id = R.string.main_network_disconnected_message),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onError,
                     modifier = Modifier
@@ -407,7 +406,7 @@ object Main {
                     onClick = {
                         isNetworkConnected = Core.getContext().getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
                         scope.launch {
-                            snackbarHostState.showSnackbar(if (isNetworkConnected) "연결 성공" else "연결 실패")
+                            snackbarHostState.showSnackbar(if (isNetworkConnected) Core.getContext().getString(R.string.main_network_connect_success) else Core.getContext().getString(R.string.main_network_connect_fail))
                         }
                     },
                     colors = ButtonDefaults.outlinedButtonColors(
@@ -424,7 +423,7 @@ object Main {
                         }
                 ) {
                     Text(
-                        text = "다시시도",
+                        text = stringResource(id = R.string.main_network_network_retry),
                         modifier = Modifier.padding(16.dp)
                     )
                 }

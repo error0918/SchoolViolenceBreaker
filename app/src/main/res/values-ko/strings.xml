@@ -4,6 +4,11 @@
 
     <string name="main_subtitle">학교폭력 브레이커 - 20616 정태연</string>
 
+    <string name="main_network_connect_success">연결 성공</string>
+    <string name="main_network_connect_fail">연결 실패</string>
+    <string name="main_network_network_retry">다시시도</string>
+    <string name="main_network_disconnected_message">인터넷이 연결되어 있지 않거나 오류가 났습니다.</string>
+
     <string name="report">신고</string>
 
     <string name="tip">팁</string>

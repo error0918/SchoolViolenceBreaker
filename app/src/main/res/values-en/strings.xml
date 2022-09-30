@@ -5,6 +5,11 @@
 
     <string name="main_subtitle">School Violence Breaker - 20616 Jeong Taeyeon</string>
 
+    <string name="main_network_connect_success">Connect Success</string>
+    <string name="main_network_connect_fail">Connect Fail</string>
+    <string name="main_network_network_retry">Retry</string>
+    <string name="main_network_disconnected_message">The Internet is not connected or has an error.</string>
+
     <string name="report">Report</string>
 
     <string name="tip">Tip</string>
