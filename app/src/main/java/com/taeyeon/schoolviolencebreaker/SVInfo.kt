@@ -17,6 +17,7 @@ import java.util.*
 
 object SVInfo {
 
+    @Suppress("UNUSED_VALUE")
     @Composable
     fun SVInfo(paddingValues: PaddingValues = PaddingValues()) {
         Column(
@@ -40,37 +41,67 @@ object SVInfo {
 
             val tipInformationList = listOf(
                 MyView.TipInformation(
-                    title = "알고 계셨나요?",
-                    message = "학교 폭력은 진짜 나쁘답니다!"
-                ),
-                MyView.TipInformation(
-                    title = "알고 계셨나요?",
-                    message = "학교 폭력 멈춰!"
+                    title = "앱 버전",
+                    message = com.taeyeon.core.Info.getVersionName()
                 )
             )
 
             AnimatedVisibility(visible = showingTip) {
-                val helpfulListSize = Helpful.helpfulList.size
+                val tipInformationListSize = tipInformationList.size
+                val reporterListSize = Report.reporterList.size
+                val reportingListSize = Report.reportingList.size
+                val actionListSize by lazy {
+                    var size = 0
+                    Action.actionCategoryList.forEach { actionCategory ->
+                        size += actionCategory.actionList.size
+                    }
+                    size
+                }
+                val misunderstandingListSize = Misunderstanding.misunderstandingList.size
                 val lawListSize = Law.lawList.size
                 val etcListSize = Etc.etcList.size
-                val tipInformationListSize = tipInformationList.size
+                val helpfulListSize = Helpful.helpfulList.size
 
-                val tipType = Random().nextInt(helpfulListSize + lawListSize + tipInformationListSize)
-                val tipInformation = if (tipType in 0 until helpfulListSize) {
-                    val helpful = Helpful.helpfulList[Random().nextInt(helpfulListSize)]
+                val tipType = Random().nextInt(tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize)
+                val tipInformation = if (tipType in 0 until tipInformationListSize) {
+                    tipInformationList[tipType]
+                } else if (tipType in tipInformationListSize until tipInformationListSize + reporterListSize) {
+                    val tipIndex = tipType - tipInformationListSize
                     MyView.TipInformation(
-                        title = helpful.title,
-                        message = helpful.description,
-                        imageBitmap = helpful.imageBitmap,
-                        imageBitmapBackground = helpful.imageBitmapBackground,
-                        imageBitmapDescription = helpful.title,
-                        actionButtonTitle = "방문하기",
-                        onActionButtonClick = {
-                            openLink(helpful.link)
-                        }
+                        title = "${Report.reporterList[tipIndex]} 유의사항",
+                        message = Report.reporterNoticeList[tipIndex]
                     )
-                } else if (tipType in helpfulListSize until helpfulListSize + lawListSize) {
-                    val law = Law.lawList[Random().nextInt(lawListSize)]
+                } else if (tipType in tipInformationListSize + reporterListSize until tipInformationListSize + reporterListSize + reportingListSize) {
+                    val tipIndex = tipType - (tipInformationListSize + reporterListSize)
+                    MyView.TipInformation(
+                        title = Report.reportingList[tipIndex].title,
+                        message = """
+                            기관: ${Report.reportingList[tipIndex].organization}
+                            담당하는 것: ${Report.reportingList[tipIndex].receptionDetails},
+                            ${Report.reportingList[tipIndex].description}
+                        """.trimIndent()
+                    )
+                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize) {
+                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize)
+                    var actionPeople = ""
+                    var action = Action.Action(name = "", content = "")
+                    var finished = false
+                    var totalIndex = 0
+                    Action.actionCategoryList.forEach { actionCategory ->
+                        totalIndex += actionCategory.actionList.size
+                        if (tipIndex <= totalIndex && !finished) {
+                            actionPeople = actionCategory.name
+                            action = actionCategory.actionList[totalIndex - actionCategory.actionList.size]
+                            finished = true
+                        }
+                    }
+                    MyView.TipInformation(
+                        title = "$actionPeople 조치: ${action.name}",
+                        message = action.content
+                    )
+                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize) {
+                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize)
+                    val law = Law.lawList[tipIndex]
                     if (law.link != null) {
                         MyView.TipInformation(
                             title = law.name,
@@ -83,8 +114,9 @@ object SVInfo {
                     } else {
                         tipInformationList[Random().nextInt(tipInformationListSize)]
                     }
-                } else if (tipType in helpfulListSize + lawListSize until helpfulListSize + lawListSize + etcListSize) {
-                    val etc = Etc.etcList[Random().nextInt(etcListSize)]
+                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize) {
+                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize)
+                    val etc = Etc.etcList[tipIndex]
                     if (etc.link != null) {
                         MyView.TipInformation(
                             title = etc.name,
@@ -97,6 +129,20 @@ object SVInfo {
                     } else {
                         tipInformationList[Random().nextInt(tipInformationListSize)]
                     }
+                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + lawListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize) {
+                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + lawListSize)
+                    val helpful = Helpful.helpfulList[tipIndex]
+                    MyView.TipInformation(
+                        title = helpful.title,
+                        message = helpful.description,
+                        imageBitmap = helpful.imageBitmap,
+                        imageBitmapBackground = helpful.imageBitmapBackground,
+                        imageBitmapDescription = helpful.title,
+                        actionButtonTitle = "방문하기",
+                        onActionButtonClick = {
+                            openLink(helpful.link)
+                        }
+                    )
                 } else {
                     tipInformationList[Random().nextInt(tipInformationListSize)]
                 }

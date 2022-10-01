@@ -17,8 +17,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -409,7 +407,7 @@ object Action {
         val name: String,
         val content: String
     )
-    //"피해자", "피해자 보호자", "가해자", "가해자 보호자", "목격자"
+
     val actionCategoryList = listOf(
         ActionCategory(
             name = "피해자",
