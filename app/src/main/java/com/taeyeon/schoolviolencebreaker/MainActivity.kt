@@ -384,16 +384,33 @@ object Main {
                     )
                     .fillMaxSize()
             ) {
-                val (appImage, appName, message, retry) = createRefs()
+                val (closeButton, appImage, appName, message, retry) = createRefs()
 
                 Button(
                     onClick = { Utils.shutDownApp() },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
                         contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
+                    ),
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    contentPadding = PaddingValues(horizontal = 8.dp),
+                    modifier = Modifier
+                        .constrainAs(closeButton) {
+                            top.linkTo(parent.top)
+                            start.linkTo(parent.start)
+                        }
                 ) {
-
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = stringResource(id = R.string.close)
+                    )
+                    Text(
+                        text = stringResource(id = R.string.close),
+                        modifier = Modifier.padding(horizontal = 8.dp)
+                    )
                 }
 
                 Image(
@@ -406,6 +423,7 @@ object Main {
                             centerHorizontallyTo(parent)
                         }
                 )
+
                 Text(
                     text = stringResource(id = R.string.app_name),
                     style = MaterialTheme.typography.titleLarge,
