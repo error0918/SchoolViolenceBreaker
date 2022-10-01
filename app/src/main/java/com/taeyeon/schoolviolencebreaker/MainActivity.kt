@@ -56,6 +56,7 @@ import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.ui.theme.Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.*
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -244,6 +245,7 @@ object Main {
             bottomBar = { NavigationBar() },
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { paddingValues ->
+
             var showPopupTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showPopupTip) }
             var showingPopupTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showPopupTip) }
             if (showPopupTip != com.taeyeon.schoolviolencebreaker.showPopupTip) {
@@ -251,13 +253,38 @@ object Main {
                 showPopupTip = com.taeyeon.schoolviolencebreaker.showPopupTip
             }
 
-            if(showingPopupTip) {
-                MyView.PopupTip(
-                    message = "우왕!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+            val popupTipInformationList = listOf(
+                MyView.PopupTipInformation(
+                    message = "도움되는 곳의 카드를 클릭하고, 더블 클릭하고, 길게 클릭해보세요!",
+                    hasBottomBar = true,
+                    onClose = { showingPopupTip = false },
+                    disappearTime = popupTipDisappearTime
+                ),
+                MyView.PopupTipInformation(
+                    message = "설정에서 테마를 설정해보세요!",
+                    hasBottomBar = true,
+                    onClose = { showingPopupTip = false },
+                    disappearTime = popupTipDisappearTime
+                ),
+                MyView.PopupTipInformation(
+                    message = "팝업 팁과 팁 카드는 설정에서 끌 수 있습니다.",
+                    hasBottomBar = true,
+                    onClose = { showingPopupTip = false },
+                    disappearTime = popupTipDisappearTime
+                ),
+                MyView.PopupTipInformation(
+                    message = "설정에서 서브타이틀을 끄고 켜보세요!",
                     hasBottomBar = true,
                     onClose = { showingPopupTip = false },
                     disappearTime = popupTipDisappearTime
                 )
+            )
+
+            val randomShowPopupTip by rememberSaveable { mutableStateOf(Random().nextInt(2) == 1) }
+            if (randomShowPopupTip) {
+                if(showingPopupTip) {
+                    MyView.PopupTip(popupTipInformationList[Random().nextInt(popupTipInformationList.size)])
+                }
             }
 
             MainContent(paddingValues = paddingValues)
