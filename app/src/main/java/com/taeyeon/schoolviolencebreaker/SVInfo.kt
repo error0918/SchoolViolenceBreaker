@@ -4,6 +4,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -12,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
 import java.util.*
 
 object SVInfo {
 
+    @ExperimentalMaterial3Api
     @Suppress("UNUSED_VALUE")
     @Composable
     fun SVInfo(paddingValues: PaddingValues = PaddingValues()) {
@@ -160,9 +165,78 @@ object SVInfo {
             }
 
             Text(
-                modifier = Modifier.fillMaxSize().padding(bottom = 16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 16.dp),
                 text = "정태연 ".repeat(100)
             )
+
+            ////////////////////////////////////////////
+
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min)
+            ) {
+                val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
+                var folding by rememberSaveable { mutableStateOf(false) }
+
+                ConstraintLayout(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(cornerRadius)
+                ) {
+                    val (foldIconButton, titleText, messageText) = createRefs()
+
+                    IconButton(
+                        onClick = { folding = !folding },
+                        modifier = Modifier
+                            .constrainAs(foldIconButton) {
+                                top.linkTo(parent.top)
+                                end.linkTo(parent.end)
+                            }
+                    ) {
+                        Icon(
+                            imageVector = if (folding) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
+                            contentDescription = if (folding) "열기" else "닫기"
+                        )
+                    }
+
+                    Text(
+                        text = "타이틀",
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier
+                            .constrainAs(titleText) {
+                                top.linkTo(foldIconButton.top)
+                                bottom.linkTo(foldIconButton.bottom)
+                                start.linkTo(parent.start)
+                            }
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .constrainAs(messageText) {
+                                top.linkTo(titleText.bottom, margin = 10.dp)
+                                start.linkTo(parent.start)
+                            }
+                    ) {
+                        AnimatedVisibility(visible = !folding) {
+                            Text(
+                                text = "안녕하세요 ".repeat(100),
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        }
+                    }
+
+                }
+
+
+
+            }
+
+
+            ///////////////////////////////////////////
 
         }
     }
