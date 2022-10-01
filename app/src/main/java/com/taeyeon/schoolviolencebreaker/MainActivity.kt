@@ -184,6 +184,7 @@ object Main {
         val composable: @Composable (PaddingValues) -> Unit
     )
     
+    @Suppress("UNUSED_VALUE")
     @Composable
     fun Main() {
         pagerState = rememberPagerState(initialPage = 0)
