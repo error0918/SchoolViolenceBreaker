@@ -287,34 +287,51 @@ object Helpful {
         }
 
         if (showingActionsDialog) {
+            val actionList = listOf(stringResource(id = R.string.helpful_unit_action_browse), stringResource(id = R.string.helpful_unit_action_copy_link), stringResource(id = R.string.helpful_unit_action_copy_info))
             MyView.ListDialog(
                 onDismissRequest = { showingActionsDialog = false },
-                icon = Icons.Filled.PlayArrow,
-                title = stringResource(id = R.string.helpful_unit_action),
-                items = listOf(stringResource(id = R.string.helpful_unit_action_browse), stringResource(id = R.string.helpful_unit_action_copy_link), stringResource(id = R.string.helpful_unit_action_copy_info)),
-                onItemClick = { index, _ ->
-                    when (index) {
-                        0 -> {
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                            Core
-                                .getActivity()
-                                .startActivity(intent)
-                        }
-                        1 -> {
-                            Utils.copy(text = link)
-                        }
-                        2 -> {
-                            Utils.copy(
-                                text = Core.getContext().getString(
-                                    R.string.helpful_unit_action_copy_info_message,
-                                    title, description, link
-                                )
-                            )
-                        }
+                icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = stringResource(id = R.string.helpful_unit_action)) },
+                title = { Text(text = stringResource(id = R.string.helpful_unit_action)) },
+                items = actionList,
+                itemContent = { itemIndex, action ->
+                    Box(
+                        modifier = Modifier.padding(
+                            top = if (itemIndex == 0) 0.dp else 8.dp,
+                            bottom = if (itemIndex == actionList.size - 1) 0.dp else 8.dp,
+                        )
+                    ) {
+                        MyView.ItemUnit(
+                            text = action,
+                            onClick = {
+                                when (itemIndex) {
+                                    0 -> {
+                                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                                        Core
+                                            .getActivity()
+                                            .startActivity(intent)
+                                    }
+                                    1 -> {
+                                        Utils.copy(text = link)
+                                    }
+                                    2 -> {
+                                        Utils.copy(
+                                            text = Core.getContext().getString(
+                                                R.string.helpful_unit_action_copy_info_message,
+                                                title, description, link
+                                            )
+                                        )
+                                    }
+                                }
+                                showingActionsDialog = false
+                            }
+                        )
                     }
-                    showingActionsDialog = false
                 },
-                dismissButtonText = stringResource(id = R.string.close)
+                button = {
+                    TextButton(onClick = { showingActionsDialog = false }) {
+                        Text(text = stringResource(id = R.string.close))
+                    }
+                }
             )
         }
 
