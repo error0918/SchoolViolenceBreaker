@@ -1,16 +1,11 @@
 package com.taeyeon.schoolviolencebreaker
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -20,11 +15,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
 import java.util.*
 
@@ -173,28 +164,18 @@ object SVInfo {
                 )
             }
 
-            Text(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 16.dp),
-                text = "정태연 ".repeat(100)
-            )
-
             ////////////////////////////////////////////
 
+            var isExpanded by rememberSaveable { mutableStateOf(true) }
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Min)
             ) {
-                val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
-                var isExpanded by rememberSaveable { mutableStateOf(true) }
-
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(cornerRadius)
+                        .fillMaxWidth()
+                        .padding(getCornerSize(MaterialTheme.shapes.medium))
                 ) {
 
                     Surface(
@@ -229,20 +210,61 @@ object SVInfo {
                             shape = MaterialTheme.shapes.medium,
                             modifier = Modifier.padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
                         ) {
-                            Text(
-                                text = "안녕하세요 ".repeat(100),
-                                style = MaterialTheme.typography.titleMedium,
+                            Column(
                                 modifier = Modifier.padding(getCornerSize(shape = MaterialTheme.shapes.medium))
-                            )
+                            ) {
+                                Text(
+                                    text = "안녕하세요 ".repeat(10),
+                                    style = MaterialTheme.typography.titleMedium,
+                                )
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
+                                ) {
+                                    TextButton(
+                                        onClick = { /*TODO*/ },
+                                        contentPadding = PaddingValues(horizontal = getCornerSize(shape = MaterialTheme.shapes.small)),
+                                        modifier = Modifier.align(Alignment.CenterStart)
+                                    ) {
+                                        Text(text = "asffffffff")
+                                    }
+                                    IconButton(
+                                        onClick = { /*TODO*/ },
+                                        modifier = Modifier
+                                            .align(Alignment.CenterEnd)
+                                            .padding(end = 48.dp)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.Share,
+                                            contentDescription = null
+                                        )
+                                    }
+                                    IconButton(
+                                        onClick = { /*TODO*/ },
+                                        modifier = Modifier.align(Alignment.CenterEnd)
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Filled.ContentCopy,
+                                            contentDescription = null 
+                                        )
+                                    }
+                                }
+                            }
                         }
                     }
 
                 }
-
             }
 
-
             ///////////////////////////////////////////
+
+            Text(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 16.dp),
+                text = "정태연 ".repeat(100)
+            )
 
         }
     }
