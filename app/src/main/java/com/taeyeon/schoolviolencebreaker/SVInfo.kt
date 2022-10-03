@@ -1,6 +1,7 @@
 package com.taeyeon.schoolviolencebreaker
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,7 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
 import java.util.*
@@ -166,17 +169,15 @@ object SVInfo {
 
             ////////////////////////////////////////////
 
-            var isExpanded by rememberSaveable { mutableStateOf(true) }
-
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(getCornerSize(MaterialTheme.shapes.medium))
                 ) {
+                    var isExpanded by rememberSaveable { mutableStateOf(true) }
 
                     Surface(
                         color = Color.Transparent,
@@ -213,14 +214,29 @@ object SVInfo {
                             Column(
                                 modifier = Modifier.padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                             ) {
+
                                 Text(
                                     text = "안녕하세요 ".repeat(10),
                                     style = MaterialTheme.typography.titleMedium,
                                 )
-                                Box(
+
+                                val dividerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                                Canvas(
                                     modifier = Modifier
-                                        .fillMaxWidth()
                                         .padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
+                                        .fillMaxWidth()
+                                        .height(1.dp)
+                                ) {
+                                    drawLine(
+                                        color = dividerColor,
+                                        start = Offset(0f, 0f),
+                                        end = Offset(size.width, 0f),
+                                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f))
+                                    )
+                                }
+
+                                Box(
+                                    modifier = Modifier.fillMaxWidth()
                                 ) {
                                     TextButton(
                                         onClick = { /*TODO*/ },
@@ -251,6 +267,7 @@ object SVInfo {
                                     }
                                 }
                             }
+
                         }
                     }
 
