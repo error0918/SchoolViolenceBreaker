@@ -14,13 +14,13 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -1004,15 +1004,18 @@ object MyView {
                         }
                 )
 
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge,
+                SelectionContainer(
                     modifier = Modifier
                         .constrainAs(titleText) {
                             top.linkTo(tipIcon.bottom, margin = 10.dp)
                             start.linkTo(parent.start)
                         }
-                )
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                }
 
                 if (hasImage) {
                     var imageWidth by remember { mutableStateOf(0) }
@@ -1039,9 +1042,7 @@ object MyView {
                     )
                 }
 
-                Text(
-                    text = message,
-                    style = MaterialTheme.typography.titleMedium,
+                SelectionContainer(
                     modifier = Modifier
                         .constrainAs(messageText) {
                             top.linkTo(
@@ -1050,7 +1051,12 @@ object MyView {
                             )
                             start.linkTo(parent.start)
                         }
-                )
+                ) {
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
 
                 if (hasAction) {
                     TextButton(

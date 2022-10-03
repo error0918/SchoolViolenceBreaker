@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -215,10 +216,12 @@ object SVInfo {
                                 modifier = Modifier.padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                             ) {
 
-                                Text(
-                                    text = "안녕하세요 ".repeat(10),
-                                    style = MaterialTheme.typography.titleMedium,
-                                )
+                                SelectionContainer {
+                                    Text(
+                                        text = "안녕하세요 ".repeat(10),
+                                        style = MaterialTheme.typography.titleMedium,
+                                    )
+                                }
 
                                 val dividerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                                 Canvas(
