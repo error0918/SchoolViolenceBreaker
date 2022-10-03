@@ -1,12 +1,16 @@
 package com.taeyeon.schoolviolencebreaker
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
@@ -180,8 +185,55 @@ object SVInfo {
                     .height(IntrinsicSize.Min)
             ) {
                 val cornerRadius = getCornerSize(MaterialTheme.shapes.medium)
-                var folding by rememberSaveable { mutableStateOf(false) }
+                var isExpanded by rememberSaveable { mutableStateOf(true) }
 
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(cornerRadius)
+                ) {
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                interactionSource = rememberSaveable { MutableInteractionSource() },
+                                indication = rememberRipple(
+                                    bounded = true,
+                                    radius = getCornerSize(shape = MaterialTheme.shapes.medium)
+                                ),
+                                onClick = { isExpanded = !isExpanded }
+                            )
+                    ) {
+
+                        Text(
+                            text = "타이틀",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.align(Alignment.CenterStart)
+                        )
+
+                        IconButton(
+                            onClick = { isExpanded = !isExpanded },
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        ) {
+                            Icon(
+                                imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                                contentDescription = if (isExpanded) "닫기" else "열기"
+                            )
+                        }
+
+                    }
+
+                    AnimatedVisibility(visible = isExpanded) {
+                        Text(
+                            text = "안녕하세요 ".repeat(100),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    }
+
+                }
+
+                /*
                 ConstraintLayout(
                     modifier = Modifier
                         .fillMaxSize()
@@ -229,7 +281,7 @@ object SVInfo {
                         }
                     }
 
-                }
+                }*/
 
 
 
