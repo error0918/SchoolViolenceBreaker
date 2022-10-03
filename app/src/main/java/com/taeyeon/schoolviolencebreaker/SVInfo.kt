@@ -19,6 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
@@ -193,41 +197,37 @@ object SVInfo {
                         .padding(cornerRadius)
                 ) {
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(
-                                interactionSource = rememberSaveable { MutableInteractionSource() },
-                                indication = rememberRipple(
-                                    bounded = true,
-                                    radius = getCornerSize(shape = MaterialTheme.shapes.medium)
-                                ),
-                                onClick = { isExpanded = !isExpanded }
-                            )
+                    Surface(
+                        color = Color.Transparent,
+                        shape = MaterialTheme.shapes.medium,
+                        onClick = { isExpanded = !isExpanded }
                     ) {
-
-                        Text(
-                            text = "타이틀",
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.align(Alignment.CenterStart)
-                        )
-
-                        IconButton(
-                            onClick = { isExpanded = !isExpanded },
-                            modifier = Modifier.align(Alignment.CenterEnd)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                         ) {
+
+                            Text(
+                                text = "타이틀",
+                                style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.align(Alignment.CenterStart)
+                            )
+
                             Icon(
                                 imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                                contentDescription = if (isExpanded) "닫기" else "열기"
+                                contentDescription = if (isExpanded) "닫기" else "열기",
+                                modifier = Modifier.align(Alignment.CenterEnd)
                             )
-                        }
 
+                        }
                     }
 
                     AnimatedVisibility(visible = isExpanded) {
                         Text(
                             text = "안녕하세요 ".repeat(100),
                             style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
                         )
                     }
 
