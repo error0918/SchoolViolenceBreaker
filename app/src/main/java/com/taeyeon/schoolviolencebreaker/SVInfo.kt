@@ -224,66 +224,20 @@ object SVInfo {
                     }
 
                     AnimatedVisibility(visible = isExpanded) {
-                        Text(
-                            text = "안녕하세요 ".repeat(100),
-                            style = MaterialTheme.typography.titleMedium,
+                        Surface(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
+                            shape = MaterialTheme.shapes.medium,
                             modifier = Modifier.padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
-                        )
-                    }
-
-                }
-
-                /*
-                ConstraintLayout(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(cornerRadius)
-                ) {
-                    val (foldIconButton, titleText, messageText) = createRefs()
-
-                    IconButton(
-                        onClick = { folding = !folding },
-                        modifier = Modifier
-                            .constrainAs(foldIconButton) {
-                                top.linkTo(parent.top)
-                                end.linkTo(parent.end)
-                            }
-                    ) {
-                        Icon(
-                            imageVector = if (folding) Icons.Filled.KeyboardArrowDown else Icons.Filled.KeyboardArrowUp,
-                            contentDescription = if (folding) "열기" else "닫기"
-                        )
-                    }
-
-                    Text(
-                        text = "타이틀",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier
-                            .constrainAs(titleText) {
-                                top.linkTo(foldIconButton.top)
-                                bottom.linkTo(foldIconButton.bottom)
-                                start.linkTo(parent.start)
-                            }
-                    )
-
-                    Column(
-                        modifier = Modifier
-                            .constrainAs(messageText) {
-                                top.linkTo(titleText.bottom, margin = 10.dp)
-                                start.linkTo(parent.start)
-                            }
-                    ) {
-                        AnimatedVisibility(visible = !folding) {
+                        ) {
                             Text(
                                 text = "안녕하세요 ".repeat(100),
                                 style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                             )
                         }
                     }
 
-                }*/
-
-
+                }
 
             }
 
