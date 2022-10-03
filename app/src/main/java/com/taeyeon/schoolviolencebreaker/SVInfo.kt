@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.taeyeon.core.Core
 import com.taeyeon.core.Utils
@@ -207,7 +208,7 @@ object SVInfo {
 
                             Icon(
                                 imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                                contentDescription = if (isExpanded) "닫기" else "열기",
+                                contentDescription = if (isExpanded) stringResource(id = R.string.svinfo_fold) else stringResource(id = R.string.svinfo_unfold),
                                 modifier = Modifier.align(Alignment.CenterEnd)
                             )
 
@@ -271,7 +272,7 @@ object SVInfo {
                                     ) {
                                         Icon(
                                             imageVector = Icons.Filled.Share,
-                                            contentDescription = "공유"
+                                            contentDescription = stringResource(id = R.string.svinfo_share)
                                         )
                                     }
                                     IconButton(
@@ -280,7 +281,7 @@ object SVInfo {
                                     ) {
                                         Icon(
                                             imageVector = Icons.Filled.ContentCopy,
-                                            contentDescription = "복사"
+                                            contentDescription = stringResource(id = R.string.svinfo_copy)
                                         )
                                     }
                                 }

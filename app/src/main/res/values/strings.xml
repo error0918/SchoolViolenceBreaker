@@ -21,6 +21,10 @@
     <string name="tip">팁</string>
 
     <string name="svinfo">학교폭력 정보</string>
+    <string name="svinfo_fold">접기</string>
+    <string name="svinfo_unfold">열기</string>
+    <string name="svinfo_share">공유하기</string>
+    <string name="svinfo_copy">복사</string>
 
     <string name="solution">해결</string>
     <string name="solution_report">신고</string>

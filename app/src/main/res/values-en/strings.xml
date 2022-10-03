@@ -21,6 +21,10 @@
     <string name="tip">Tip</string>
 
     <string name="svinfo">Information</string>
+    <string name="svinfo_fold">Fold</string>
+    <string name="svinfo_unfold">Unfold</string>
+    <string name="svinfo_share">Share</string>
+    <string name="svinfo_copy">Copy</string>
 
     <string name="solution">Solution</string>
     <string name="solution_report">Report</string>
