@@ -1,5 +1,6 @@
 package com.taeyeon.schoolviolencebreaker
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
+import com.taeyeon.core.Core
+import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
 import java.util.*
 
@@ -170,6 +173,11 @@ object SVInfo {
 
             ////////////////////////////////////////////
 
+            val title = "타이틀"
+            val message = "안녕하세요 ".repeat(10)
+            val buttonTitle = "버튼"
+            val onButtonClick = {}
+
             Card(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -192,7 +200,7 @@ object SVInfo {
                         ) {
 
                             Text(
-                                text = "타이틀",
+                                text = title,
                                 style = MaterialTheme.typography.titleLarge,
                                 modifier = Modifier.align(Alignment.CenterStart)
                             )
@@ -213,12 +221,13 @@ object SVInfo {
                             modifier = Modifier.padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
                         ) {
                             Column(
+                                verticalArrangement = Arrangement.spacedBy(getCornerSize(shape = MaterialTheme.shapes.medium)),
                                 modifier = Modifier.padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                             ) {
 
                                 SelectionContainer {
                                     Text(
-                                        text = "안녕하세요 ".repeat(10),
+                                        text = message,
                                         style = MaterialTheme.typography.titleMedium,
                                     )
                                 }
@@ -226,7 +235,6 @@ object SVInfo {
                                 val dividerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                                 Canvas(
                                     modifier = Modifier
-                                        .padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
                                         .fillMaxWidth()
                                         .height(1.dp)
                                 ) {
@@ -242,30 +250,37 @@ object SVInfo {
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     TextButton(
-                                        onClick = { /*TODO*/ },
+                                        onClick = onButtonClick,
                                         contentPadding = PaddingValues(horizontal = getCornerSize(shape = MaterialTheme.shapes.small)),
                                         modifier = Modifier.align(Alignment.CenterStart)
                                     ) {
-                                        Text(text = "asffffffff")
+                                        Text(text = buttonTitle)
                                     }
                                     IconButton(
-                                        onClick = { /*TODO*/ },
+                                        onClick = {
+                                            val intent = Intent(Intent.ACTION_SEND)
+                                            intent.type = "text/plain"
+                                            intent.putExtra(Intent.EXTRA_TEXT, message)
+                                            val chooserIntent = Intent.createChooser(intent, "share")
+                                            chooserIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                                            Core.getContext().startActivity(chooserIntent)
+                                        },
                                         modifier = Modifier
                                             .align(Alignment.CenterEnd)
                                             .padding(end = 48.dp)
                                     ) {
                                         Icon(
                                             imageVector = Icons.Filled.Share,
-                                            contentDescription = null
+                                            contentDescription = "공유"
                                         )
                                     }
                                     IconButton(
-                                        onClick = { /*TODO*/ },
+                                        onClick = { Utils.copy(title, message) },
                                         modifier = Modifier.align(Alignment.CenterEnd)
                                     ) {
                                         Icon(
                                             imageVector = Icons.Filled.ContentCopy,
-                                            contentDescription = null 
+                                            contentDescription = "복사"
                                         )
                                     }
                                 }
