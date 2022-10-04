@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+
 package com.taeyeon.schoolviolencebreaker
 
 import android.Manifest
@@ -6,7 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerBasedShape
@@ -19,11 +22,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.core.content.ContextCompat
 import com.taeyeon.core.Core
 import com.taeyeon.core.Settings
@@ -192,7 +198,7 @@ object Report {
         }
 
         reporterIndex?.let { index ->
-            var leftTime by animateIntAsState(targetValue = waitTime)//by rememberSaveable { mutableStateOf(waitTime) }
+            var leftTime by rememberSaveable { mutableStateOf(waitTime) }
             if (autoReport) {
                 LaunchedEffect(leftTime) {
                     if (leftTime > 0) {
@@ -222,11 +228,64 @@ object Report {
                             bottom = if (itemIndex == reportingList.size - 1) 0.dp else 8.dp,
                         )
                     ) {
-                        MyView.ItemUnit(
-                            text = reporting.title,
-                            subText = if (itemIndex == 0 && autoReport && leftTime > 0) leftTime.toString() else "",
-                            onClick = { reportingIndex = itemIndex }
-                        )
+                        if (itemIndex == 0 && autoReport) {
+                            MyView.ItemUnit(
+                                content = {
+                                    ConstraintLayout(
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        val (t, st) = createRefs()
+
+                                        Text(
+                                            text = reporting.title,
+                                            color = MaterialTheme.colorScheme.primary,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            modifier = Modifier.constrainAs(t) {
+                                                top.linkTo(parent.top)
+                                                bottom.linkTo(parent.bottom)
+                                                start.linkTo(parent.start)
+                                                end.linkTo(st.start, margin = 8.dp)
+                                                width = Dimension.fillToConstraints
+                                            }
+                                        )
+
+
+                                        Box(
+                                            modifier = Modifier.constrainAs(st) {
+                                                top.linkTo(parent.top)
+                                                bottom.linkTo(parent.bottom)
+                                                end.linkTo(parent.end)
+                                                height = Dimension.fillToConstraints
+                                            }
+                                        ) {
+                                            AnimatedContent(
+                                                targetState = leftTime,
+                                                transitionSpec = {
+                                                        slideInVertically { height -> -height } + fadeIn() with
+                                                                slideOutVertically { height -> height } + fadeOut()
+                                                }
+                                            ) {
+                                                Text(
+                                                    text = leftTime.toString(),
+                                                    color = MaterialTheme.colorScheme.secondary,
+                                                    style = MaterialTheme.typography.bodyLarge
+                                                )
+                                            }
+                                        }
+
+                                    }
+                                },
+                                onClick = { reportingIndex = 0 },
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background)
+                            )
+                        } else {
+                            MyView.ItemUnit(
+                                text = reporting.title,
+                                onClick = { reportingIndex = itemIndex }
+                            )
+                        }
                     }
                 },
                 button = {
@@ -338,13 +397,59 @@ object Report {
                         if (reporting.type == ReportingType.Call) {
                             val hasPermission = checkPermission()
                             MyView.ItemUnit(
-                                text = "전화 열기",
-                                subText = if (autoReport && leftTime > 0) leftTime.toString() else "",
+                                content = {
+                                    ConstraintLayout(
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        val (t, st) = createRefs()
+
+                                        Text(
+                                            text = "전화 열기",
+                                            color = MaterialTheme.colorScheme.primary,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
+                                            modifier = Modifier.constrainAs(t) {
+                                                top.linkTo(parent.top)
+                                                bottom.linkTo(parent.bottom)
+                                                start.linkTo(parent.start)
+                                                end.linkTo(st.start, margin = 8.dp)
+                                                width = Dimension.fillToConstraints
+                                            }
+                                        )
+
+
+                                        Box(
+                                            modifier = Modifier.constrainAs(st) {
+                                                top.linkTo(parent.top)
+                                                bottom.linkTo(parent.bottom)
+                                                end.linkTo(parent.end)
+                                                height = Dimension.fillToConstraints
+                                            }
+                                        ) {
+                                            AnimatedContent(
+                                                targetState = leftTime,
+                                                transitionSpec = {
+                                                    slideInVertically { height -> -height } + fadeIn() with
+                                                            slideOutVertically { height -> height } + fadeOut()
+                                                }
+                                            ) {
+                                                Text(
+                                                    text = leftTime.toString(),
+                                                    color = MaterialTheme.colorScheme.secondary,
+                                                    style = MaterialTheme.typography.bodyLarge
+                                                )
+                                            }
+                                        }
+
+                                    }
+                                },
                                 onClick = {
                                     dial(reporting.shortcut)
                                     reporterIndex = null
                                     reportingIndex = null
-                                }
+                                },
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background)
                             )
                             MyView.ItemUnit(
                                 text = "전화하기",
