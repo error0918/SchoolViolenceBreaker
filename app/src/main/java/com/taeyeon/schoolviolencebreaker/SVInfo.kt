@@ -3,6 +3,7 @@
 
 package com.taeyeon.schoolviolencebreaker
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
@@ -42,10 +43,31 @@ object SVInfo {
         val hasButtonBar: Boolean = true
     )
 
-    val svInfoList = listOf(
+    private val svInfoList = listOf(
         SVInfo(
             title = "asdf",
-            message = "dsaf",
+            message = "dsaf".repeat(100),
+            buttonTitle = "dfasdafs",
+            onButtonClick = {  },
+            hasButtonBar = true
+        ),
+        SVInfo(
+            title = "asdf",
+            message = "dsaf".repeat(100),
+            buttonTitle = "dfasdafs",
+            onButtonClick = {  },
+            hasButtonBar = true
+        ),
+        SVInfo(
+            title = "asdf",
+            message = "dsaf".repeat(100),
+            buttonTitle = "dfasdafs",
+            onButtonClick = {  },
+            hasButtonBar = true
+        ),
+        SVInfo(
+            title = "asdf",
+            message = "dsaaf".repeat(100),
             buttonTitle = "dfasdafs",
             onButtonClick = {  },
             hasButtonBar = true
@@ -55,7 +77,7 @@ object SVInfo {
     @Suppress("UNUSED_VALUE")
     @Composable
     fun SVInfo(paddingValues: PaddingValues = PaddingValues()) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(
@@ -67,138 +89,151 @@ object SVInfo {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            var showTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
-            var showingTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
-            if (showTip != com.taeyeon.schoolviolencebreaker.showTip) {
-                showingTip = com.taeyeon.schoolviolencebreaker.showTip
-                showTip = com.taeyeon.schoolviolencebreaker.showTip
-            }
-
-            val tipInformationList = listOf(
-                MyView.TipInformation(
-                    title = "앱 버전",
-                    message = com.taeyeon.core.Info.getVersionName()
-                )
-            )
-
-            AnimatedVisibility(visible = showingTip) {
-                val tipInformationListSize = tipInformationList.size
-                val reporterListSize = Report.reporterList.size
-                val reportingListSize = Report.reportingList.size
-                val actionListSize by lazy {
-                    var size = 0
-                    Action.actionCategoryList.forEach { actionCategory ->
-                        size += actionCategory.actionList.size
-                    }
-                    size
+            item {
+                var showTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
+                var showingTip by rememberSaveable { mutableStateOf(com.taeyeon.schoolviolencebreaker.showTip) }
+                if (showTip != com.taeyeon.schoolviolencebreaker.showTip) {
+                    showingTip = com.taeyeon.schoolviolencebreaker.showTip
+                    showTip = com.taeyeon.schoolviolencebreaker.showTip
                 }
-                val misunderstandingListSize = Misunderstanding.misunderstandingList.size
-                val lawListSize = Law.lawList.size
-                val etcListSize = Etc.etcList.size
-                val helpfulListSize = Helpful.helpfulList.size
 
-                val tipType by rememberSaveable { mutableStateOf(Random().nextInt(tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize)) }
-                val tipInformation = if (tipType in 0 until tipInformationListSize) {
-                    tipInformationList[tipType]
-                } else if (tipType in tipInformationListSize until tipInformationListSize + reporterListSize) {
-                    val tipIndex = tipType - tipInformationListSize
+                val tipInformationList = listOf(
                     MyView.TipInformation(
-                        title = "${Report.reporterList[tipIndex]} 유의사항",
-                        message = Report.reporterNoticeList[tipIndex]
+                        title = "앱 버전",
+                        message = com.taeyeon.core.Info.getVersionName()
                     )
-                } else if (tipType in tipInformationListSize + reporterListSize until tipInformationListSize + reporterListSize + reportingListSize) {
-                    val tipIndex = tipType - (tipInformationListSize + reporterListSize)
-                    MyView.TipInformation(
-                        title = Report.reportingList[tipIndex].title,
-                        message = """
+                )
+
+                AnimatedVisibility(visible = showingTip) {
+                    val tipInformationListSize = tipInformationList.size
+                    val reporterListSize = Report.reporterList.size
+                    val reportingListSize = Report.reportingList.size
+                    val actionListSize by lazy {
+                        var size = 0
+                        Action.actionCategoryList.forEach { actionCategory ->
+                            size += actionCategory.actionList.size
+                        }
+                        size
+                    }
+                    val misunderstandingListSize = Misunderstanding.misunderstandingList.size
+                    val lawListSize = Law.lawList.size
+                    val etcListSize = Etc.etcList.size
+                    val helpfulListSize = Helpful.helpfulList.size
+
+                    val tipType by rememberSaveable {
+                        mutableStateOf(
+                            Random().nextInt(
+                                tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize
+                            )
+                        )
+                    }
+                    val tipInformation = if (tipType in 0 until tipInformationListSize) {
+                        tipInformationList[tipType]
+                    } else if (tipType in tipInformationListSize until tipInformationListSize + reporterListSize) {
+                        val tipIndex = tipType - tipInformationListSize
+                        MyView.TipInformation(
+                            title = "${Report.reporterList[tipIndex]} 유의사항",
+                            message = Report.reporterNoticeList[tipIndex]
+                        )
+                    } else if (tipType in tipInformationListSize + reporterListSize until tipInformationListSize + reporterListSize + reportingListSize) {
+                        val tipIndex = tipType - (tipInformationListSize + reporterListSize)
+                        MyView.TipInformation(
+                            title = Report.reportingList[tipIndex].title,
+                            message = """
                             기관: ${Report.reportingList[tipIndex].organization}
                             담당하는 것: ${Report.reportingList[tipIndex].receptionDetails},
                             ${Report.reportingList[tipIndex].description}
                         """.trimIndent()
-                    )
-                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize) {
-                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize)
-                    var actionPeople = ""
-                    var action = Action.Action(name = "", content = "")
-                    var finished = false
-                    var totalIndex = 0
-                    Action.actionCategoryList.forEach { actionCategory ->
-                        totalIndex += actionCategory.actionList.size
-                        if (tipIndex <= totalIndex && !finished) {
-                            actionPeople = actionCategory.name
-                            action = actionCategory.actionList[totalIndex - actionCategory.actionList.size]
-                            finished = true
+                        )
+                    } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize) {
+                        val tipIndex =
+                            tipType - (tipInformationListSize + reporterListSize + reportingListSize)
+                        var actionPeople = ""
+                        var action = Action.Action(name = "", content = "")
+                        var finished = false
+                        var totalIndex = 0
+                        Action.actionCategoryList.forEach { actionCategory ->
+                            totalIndex += actionCategory.actionList.size
+                            if (tipIndex <= totalIndex && !finished) {
+                                actionPeople = actionCategory.name
+                                action =
+                                    actionCategory.actionList[totalIndex - actionCategory.actionList.size]
+                                finished = true
+                            }
                         }
-                    }
-                    MyView.TipInformation(
-                        title = "$actionPeople 조치: ${action.name}",
-                        message = action.content
-                    )
-                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize) {
-                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize)
-                    val law = Law.lawList[tipIndex]
-                    if (law.link != null) {
                         MyView.TipInformation(
-                            title = law.name,
-                            message = "이 법에 대해 알아보시겠습니까?",
-                            actionButtonTitle = "알아보기",
+                            title = "$actionPeople 조치: ${action.name}",
+                            message = action.content
+                        )
+                    } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize) {
+                        val tipIndex =
+                            tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize)
+                        val law = Law.lawList[tipIndex]
+                        if (law.link != null) {
+                            MyView.TipInformation(
+                                title = law.name,
+                                message = "이 법에 대해 알아보시겠습니까?",
+                                actionButtonTitle = "알아보기",
+                                onActionButtonClick = {
+                                    openLink(law.link)
+                                }
+                            )
+                        } else {
+                            tipInformationList[Random().nextInt(tipInformationListSize)]
+                        }
+                    } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize) {
+                        val tipIndex =
+                            tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize)
+                        val etc = Etc.etcList[tipIndex]
+                        if (etc.link != null) {
+                            MyView.TipInformation(
+                                title = etc.name,
+                                message = "이 법에 대해 알아보시겠습니까?",
+                                actionButtonTitle = "알아보기",
+                                onActionButtonClick = {
+                                    openLink(etc.link)
+                                }
+                            )
+                        } else {
+                            tipInformationList[Random().nextInt(tipInformationListSize)]
+                        }
+                    } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + lawListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize) {
+                        val tipIndex =
+                            tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + lawListSize)
+                        val helpful = Helpful.helpfulList[tipIndex]
+                        MyView.TipInformation(
+                            title = helpful.title,
+                            message = helpful.description,
+                            imageBitmap = helpful.imageBitmap,
+                            imageBitmapBackground = helpful.imageBitmapBackground,
+                            imageBitmapDescription = helpful.title,
+                            actionButtonTitle = "방문하기",
                             onActionButtonClick = {
-                                openLink(law.link)
+                                openLink(helpful.link)
                             }
                         )
                     } else {
                         tipInformationList[Random().nextInt(tipInformationListSize)]
                     }
-                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize) {
-                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize)
-                    val etc = Etc.etcList[tipIndex]
-                    if (etc.link != null) {
-                        MyView.TipInformation(
-                            title = etc.name,
-                            message = "이 법에 대해 알아보시겠습니까?",
-                            actionButtonTitle = "알아보기",
-                            onActionButtonClick = {
-                                openLink(etc.link)
-                            }
-                        )
-                    } else {
-                        tipInformationList[Random().nextInt(tipInformationListSize)]
-                    }
-                } else if (tipType in tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + lawListSize until tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize) {
-                    val tipIndex = tipType - (tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + lawListSize)
-                    val helpful = Helpful.helpfulList[tipIndex]
-                    MyView.TipInformation(
-                        title = helpful.title,
-                        message = helpful.description,
-                        imageBitmap = helpful.imageBitmap,
-                        imageBitmapBackground = helpful.imageBitmapBackground,
-                        imageBitmapDescription = helpful.title,
-                        actionButtonTitle = "방문하기",
-                        onActionButtonClick = {
-                            openLink(helpful.link)
-                        }
-                    )
-                } else {
-                    tipInformationList[Random().nextInt(tipInformationListSize)]
-                }
 
-                Tip(
-                    tipInformation = tipInformation.run {
-                        onClose = {
-                            showingTip = false
+                    Tip(
+                        tipInformation = tipInformation.run {
+                            onClose = {
+                                showingTip = false
+                            }
+                            closeImageDescription = "닫기"
+                            modifier = Modifier.padding(top = 16.dp)
+                            this
                         }
-                        closeImageDescription = "닫기"
-                        modifier = Modifier.padding(top = 16.dp)
-                        this
-                    }
+                    )
+                }
+            }
+
+            items(svInfoList) {
+                SVInfoUnit(
+                    svInfo = it,
+                    modifier = Modifier.padding(bottom = if (svInfoList.lastIndexOf(it) == 0) 16.dp else 0.dp)
                 )
-
-                LazyColumn() {
-                    items(svInfoList) {
-                        SVInfoUnit(svInfo = it)
-                    }
-                }
-
             }
 
         }
@@ -206,33 +241,39 @@ object SVInfo {
 
     @Composable
     fun SVInfoUnit(
-        svInfo: SVInfo
+        svInfo: SVInfo,
+        modifier: Modifier = Modifier
     ) {
         SVInfoUnit(
             title = svInfo.title,
             message = svInfo.message,
             buttonTitle = svInfo.buttonTitle,
             onButtonClick = svInfo.onButtonClick,
-            hasButtonBar = svInfo.hasButtonBar
+            hasButtonBar = svInfo.hasButtonBar,
+            modifier = modifier
         )
     }
 
+    @SuppressLint("ModifierParameter")
     @Composable
     fun SVInfoUnit(
         title: String,
         message: String,
         buttonTitle: String? = null,
         onButtonClick: (() -> Unit)? = null,
-        hasButtonBar: Boolean = true
+        hasButtonBar: Boolean = true,
+        modifier: Modifier = Modifier
     ) {
         val hasButton = buttonTitle != null && onButtonClick != null
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(getCornerSize(MaterialTheme.shapes.medium))
+                modifier = Modifier.then(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(getCornerSize(MaterialTheme.shapes.medium))
+                )
             ) {
                 var isExpanded by rememberSaveable { mutableStateOf(true) }
 
