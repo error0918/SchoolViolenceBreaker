@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerBasedShape
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
@@ -190,7 +192,7 @@ object Report {
         }
 
         reporterIndex?.let { index ->
-            var leftTime by rememberSaveable { mutableStateOf(waitTime) }
+            var leftTime by animateIntAsState(targetValue = waitTime)//by rememberSaveable { mutableStateOf(waitTime) }
             if (autoReport) {
                 LaunchedEffect(leftTime) {
                     if (leftTime > 0) {

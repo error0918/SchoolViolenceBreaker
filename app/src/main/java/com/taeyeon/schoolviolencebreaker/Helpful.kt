@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
+import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -343,7 +344,9 @@ object Helpful {
                     .combinedClickable(
                         onClick = {
                             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                            Core.getActivity().startActivity(intent)
+                            Core
+                                .getActivity()
+                                .startActivity(intent)
                         },
                         onLongClick = {
                             Utils.vibrate(50)
@@ -432,11 +435,12 @@ object Helpful {
                     )
                 }
 
+                val maxLines by animateIntAsState(targetValue = if (textMoreSee) 10 else 2)
                 Text(
                     text = description,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                    maxLines = if (textMoreSee) 100 else 2,
+                    maxLines = maxLines,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textLayoutResult ->
                         didOverflowHeight = textLayoutResult.didOverflowHeight
