@@ -10,9 +10,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -67,8 +65,8 @@ object SVInfo {
         ),
         SVInfo(
             title = "asdf",
-            message = "dsaaf".repeat(100),
-            buttonTitle = "dfasdafs",
+            message = "dsaaaf".repeat(100),
+            buttonTitle = "dfasdafsa",
             onButtonClick = {  },
             hasButtonBar = true
         )
@@ -79,7 +77,6 @@ object SVInfo {
     fun SVInfo(paddingValues: PaddingValues = PaddingValues()) {
         LazyColumn(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -266,14 +263,12 @@ object SVInfo {
     ) {
         val hasButton = buttonTitle != null && onButtonClick != null
         Card(
-            modifier = Modifier.fillMaxWidth()
+            modifier = modifier.then(Modifier.fillMaxWidth())
         ) {
             Column(
-                modifier = Modifier.then(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(getCornerSize(MaterialTheme.shapes.medium))
-                )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(getCornerSize(MaterialTheme.shapes.medium))
             ) {
                 var isExpanded by rememberSaveable { mutableStateOf(true) }
 
