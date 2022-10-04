@@ -226,10 +226,10 @@ object SVInfo {
                 }
             }
 
-            items(svInfoList) {
+            items(svInfoList.size) {
                 SVInfoUnit(
-                    svInfo = it,
-                    modifier = Modifier.padding(bottom = if (svInfoList.lastIndexOf(it) == 0) 16.dp else 0.dp)
+                    svInfo = svInfoList[it],
+                    modifier = Modifier.padding(bottom = if (svInfoList.size - 1 == it) 16.dp else 0.dp)
                 )
             }
 
