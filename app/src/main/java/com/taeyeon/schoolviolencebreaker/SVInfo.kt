@@ -1,9 +1,14 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+
 package com.taeyeon.schoolviolencebreaker
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -29,7 +34,24 @@ import java.util.*
 
 object SVInfo {
 
-    @ExperimentalMaterial3Api
+    data class SVInfo(
+        val title: String,
+        val message: String,
+        val buttonTitle: String? = null,
+        val onButtonClick: (() -> Unit)? = null,
+        val hasButtonBar: Boolean = true
+    )
+
+    val svInfoList = listOf(
+        SVInfo(
+            title = "asdf",
+            message = "dsaf",
+            buttonTitle = "dfasdafs",
+            onButtonClick = {  },
+            hasButtonBar = true
+        )
+    )
+
     @Suppress("UNUSED_VALUE")
     @Composable
     fun SVInfo(paddingValues: PaddingValues = PaddingValues()) {
@@ -75,7 +97,7 @@ object SVInfo {
                 val etcListSize = Etc.etcList.size
                 val helpfulListSize = Helpful.helpfulList.size
 
-                val tipType = Random().nextInt(tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize)
+                val tipType by rememberSaveable { mutableStateOf(Random().nextInt(tipInformationListSize + reporterListSize + reportingListSize + actionListSize + misunderstandingListSize + lawListSize + etcListSize + helpfulListSize)) }
                 val tipInformation = if (tipType in 0 until tipInformationListSize) {
                     tipInformationList[tipType]
                 } else if (tipType in tipInformationListSize until tipInformationListSize + reporterListSize) {
@@ -170,68 +192,95 @@ object SVInfo {
                         this
                     }
                 )
+
+                LazyColumn() {
+                    items(svInfoList) {
+                        SVInfoUnit(svInfo = it)
+                    }
+                }
+
             }
 
-            ////////////////////////////////////////////
+        }
+    }
 
-            val title = "타이틀"
-            val message = "안녕하세요 ".repeat(10)
-            val buttonTitle = "버튼"
-            val onButtonClick = {}
+    @Composable
+    fun SVInfoUnit(
+        svInfo: SVInfo
+    ) {
+        SVInfoUnit(
+            title = svInfo.title,
+            message = svInfo.message,
+            buttonTitle = svInfo.buttonTitle,
+            onButtonClick = svInfo.onButtonClick,
+            hasButtonBar = svInfo.hasButtonBar
+        )
+    }
 
-            Card(
-                modifier = Modifier.fillMaxWidth()
+    @Composable
+    fun SVInfoUnit(
+        title: String,
+        message: String,
+        buttonTitle: String? = null,
+        onButtonClick: (() -> Unit)? = null,
+        hasButtonBar: Boolean = true
+    ) {
+        val hasButton = buttonTitle != null && onButtonClick != null
+        Card(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(getCornerSize(MaterialTheme.shapes.medium))
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(getCornerSize(MaterialTheme.shapes.medium))
+                var isExpanded by rememberSaveable { mutableStateOf(true) }
+
+                Surface(
+                    color = Color.Transparent,
+                    shape = MaterialTheme.shapes.medium,
+                    onClick = { isExpanded = !isExpanded }
                 ) {
-                    var isExpanded by rememberSaveable { mutableStateOf(true) }
-
-                    Surface(
-                        color = Color.Transparent,
-                        shape = MaterialTheme.shapes.medium,
-                        onClick = { isExpanded = !isExpanded }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(getCornerSize(shape = MaterialTheme.shapes.medium))
-                        ) {
 
-                            Text(
-                                text = title,
-                                style = MaterialTheme.typography.titleLarge,
-                                modifier = Modifier.align(Alignment.CenterStart)
-                            )
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.align(Alignment.CenterStart)
+                        )
 
-                            Icon(
-                                imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                                contentDescription = if (isExpanded) stringResource(id = R.string.svinfo_fold) else stringResource(id = R.string.svinfo_unfold),
-                                modifier = Modifier.align(Alignment.CenterEnd)
-                            )
+                        Icon(
+                            imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                            contentDescription = if (isExpanded) stringResource(id = R.string.svinfo_fold) else stringResource(id = R.string.svinfo_unfold),
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        )
 
-                        }
                     }
+                }
 
-                    AnimatedVisibility(visible = isExpanded) {
-                        Surface(
-                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
-                            shape = MaterialTheme.shapes.medium,
-                            modifier = Modifier.padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
+                AnimatedVisibility(visible = isExpanded) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier.padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
+                    ) {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(getCornerSize(shape = MaterialTheme.shapes.medium)),
+                            modifier = Modifier.padding(getCornerSize(shape = MaterialTheme.shapes.medium))
                         ) {
-                            Column(
-                                verticalArrangement = Arrangement.spacedBy(getCornerSize(shape = MaterialTheme.shapes.medium)),
-                                modifier = Modifier.padding(getCornerSize(shape = MaterialTheme.shapes.medium))
-                            ) {
 
-                                SelectionContainer {
-                                    Text(
-                                        text = message,
-                                        style = MaterialTheme.typography.titleMedium,
-                                    )
-                                }
+                            SelectionContainer {
+                                Text(
+                                    text = message,
+                                    style = MaterialTheme.typography.titleMedium,
+                                )
+                            }
+
+                            if (hasButtonBar) {
 
                                 val dividerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
                                 Canvas(
@@ -250,12 +299,14 @@ object SVInfo {
                                 Box(
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
-                                    TextButton(
-                                        onClick = onButtonClick,
-                                        contentPadding = PaddingValues(horizontal = getCornerSize(shape = MaterialTheme.shapes.small)),
-                                        modifier = Modifier.align(Alignment.CenterStart)
-                                    ) {
-                                        Text(text = buttonTitle)
+                                    if (hasButton) {
+                                        TextButton(
+                                            onClick = onButtonClick!!,
+                                            contentPadding = PaddingValues(horizontal = getCornerSize(shape = MaterialTheme.shapes.small)),
+                                            modifier = Modifier.align(Alignment.CenterStart)
+                                        ) {
+                                            Text(text = buttonTitle!!)
+                                        }
                                     }
                                     IconButton(
                                         onClick = {
@@ -288,20 +339,11 @@ object SVInfo {
                             }
 
                         }
+
                     }
-
                 }
+
             }
-
-            ///////////////////////////////////////////
-
-            Text(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 16.dp),
-                text = "정태연 ".repeat(100)
-            )
-
         }
     }
 
