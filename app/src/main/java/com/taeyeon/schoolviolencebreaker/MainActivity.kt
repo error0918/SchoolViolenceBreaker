@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
 object Main {
     var isNetworkConnected by mutableStateOf(false)
     private val snackbarHostState = SnackbarHostState()
-    private var position by mutableStateOf(0)
+    var position by mutableStateOf(0)
     private val data by lazy {
         listOf(
             Data(Icons.Filled.Info, Icons.Outlined.Info, Core.getContext().getString(R.string.svinfo)) { paddingValues -> SVInfo.SVInfo(paddingValues) },
