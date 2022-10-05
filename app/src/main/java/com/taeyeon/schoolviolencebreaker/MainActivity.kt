@@ -163,7 +163,7 @@ class MainActivity : ComponentActivity() {
 object Main {
     var isNetworkConnected by mutableStateOf(false)
     private val snackbarHostState = SnackbarHostState()
-    var position by mutableStateOf(0)
+    private var position by mutableStateOf(0)
     private val data by lazy {
         listOf(
             Data(Icons.Filled.Info, Icons.Outlined.Info, Core.getContext().getString(R.string.svinfo)) { paddingValues -> SVInfo.SVInfo(paddingValues) },
@@ -173,7 +173,7 @@ object Main {
     }
 
     lateinit var scope: CoroutineScope
-    private lateinit var pagerState: PagerState
+    lateinit var pagerState: PagerState
 
     data class Data(
         val filledIcon: ImageVector,
@@ -386,7 +386,7 @@ object Main {
             state = pagerState
         ) {
             position = this.currentPage
-            data[position].composable(paddingValues)
+            data[currentPage].composable(paddingValues)
         }
     }
 

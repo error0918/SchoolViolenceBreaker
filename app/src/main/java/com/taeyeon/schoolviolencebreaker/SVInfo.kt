@@ -1,5 +1,5 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
+@file:Suppress("OPT_IN_IS_NOT_ENABLED", "OPT_IN_USAGE_FUTURE_ERROR")
 
 package com.taeyeon.schoolviolencebreaker
 
@@ -25,9 +25,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.taeyeon.core.Core
 import com.taeyeon.core.Utils
 import com.taeyeon.schoolviolencebreaker.MyView.Tip
+import kotlinx.coroutines.launch
 import java.util.*
 
 object SVInfo {
@@ -83,14 +85,22 @@ object SVInfo {
             title = "추가 정보",
             message = "신고 절차, 오해, 학교폭력실태조사 등의 추가 정보가 필요하신가요?",
             buttonTitle = "해결",
-            onButtonClick = { Main.position = 1 },
+            onButtonClick = {
+                Main.scope.launch {
+                    Main.pagerState.scrollToPage(1)
+                }
+            },
             hasButtonBar = true
         ),
         SVInfo(
             title = "도움되는 곳",
             message = "도움을 받고 싶으신가요?",
             buttonTitle = "도움되는 곳",
-            onButtonClick = { Main.position = 2 },
+            onButtonClick = {
+                Main.scope.launch {
+                    Main.pagerState.scrollToPage(2)
+                }
+            },
             hasButtonBar = true
         )
     )
