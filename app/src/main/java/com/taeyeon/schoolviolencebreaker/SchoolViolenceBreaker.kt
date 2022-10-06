@@ -630,7 +630,7 @@ object Action {
 
             MyView.ListDialog(
                 onDismissRequest = { index = null },
-                icon = { Icon(imageVector = Icons.Filled.Category, contentDescription = actionCategory.name) },
+                icon = { Icon(imageVector = Icons.Filled.Handshake, contentDescription = actionCategory.name) },
                 title = { Text(text = actionCategory.name) },
                 items = actionCategory.actionList,
                 itemContent = { itemIndex, action ->
@@ -772,7 +772,7 @@ object Misunderstanding {
 
             MyView.MessageDialog(
                 onDismissRequest = { index = null },
-                icon = { Icon(imageVector = Icons.Filled.Book, contentDescription = null) },
+                icon = { Icon(imageVector = Icons.Filled.Error, contentDescription = null) },
                 title = { Text(text = misunderstanding.name) },
                 text = {
                     val scrollState = rememberScrollState()

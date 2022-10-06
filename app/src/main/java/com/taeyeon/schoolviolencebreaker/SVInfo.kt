@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -333,7 +334,7 @@ object SVInfo {
 
                 AnimatedVisibility(visible = isExpanded) {
                     Surface(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background),
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier.padding(top = getCornerSize(shape = MaterialTheme.shapes.medium))
                     ) {
