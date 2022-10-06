@@ -396,61 +396,72 @@ object Report {
 
                         if (reporting.type == ReportingType.Call) {
                             val hasPermission = checkPermission()
-                            MyView.ItemUnit(
-                                content = {
-                                    ConstraintLayout(
-                                        modifier = Modifier.fillMaxWidth()
-                                    ) {
-                                        val (t, st) = createRefs()
-
-                                        Text(
-                                            text = "전화 열기",
-                                            color = MaterialTheme.colorScheme.primary,
-                                            style = MaterialTheme.typography.bodyLarge,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis,
-                                            modifier = Modifier.constrainAs(t) {
-                                                top.linkTo(parent.top)
-                                                bottom.linkTo(parent.bottom)
-                                                start.linkTo(parent.start)
-                                                end.linkTo(st.start, margin = 8.dp)
-                                                width = Dimension.fillToConstraints
-                                            }
-                                        )
-
-
-                                        Box(
-                                            modifier = Modifier.constrainAs(st) {
-                                                top.linkTo(parent.top)
-                                                bottom.linkTo(parent.bottom)
-                                                end.linkTo(parent.end)
-                                                height = Dimension.fillToConstraints
-                                            }
+                            if (autoReport) {
+                                MyView.ItemUnit(
+                                    content = {
+                                        ConstraintLayout(
+                                            modifier = Modifier.fillMaxWidth()
                                         ) {
-                                            AnimatedContent(
-                                                targetState = leftTime,
-                                                transitionSpec = {
-                                                    slideInVertically { height -> -height } + fadeIn() with
-                                                            slideOutVertically { height -> height } + fadeOut()
+                                            val (t, st) = createRefs()
+
+                                            Text(
+                                                text = "전화 열기",
+                                                color = MaterialTheme.colorScheme.primary,
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis,
+                                                modifier = Modifier.constrainAs(t) {
+                                                    top.linkTo(parent.top)
+                                                    bottom.linkTo(parent.bottom)
+                                                    start.linkTo(parent.start)
+                                                    end.linkTo(st.start, margin = 8.dp)
+                                                    width = Dimension.fillToConstraints
+                                                }
+                                            )
+
+
+                                            Box(
+                                                modifier = Modifier.constrainAs(st) {
+                                                    top.linkTo(parent.top)
+                                                    bottom.linkTo(parent.bottom)
+                                                    end.linkTo(parent.end)
+                                                    height = Dimension.fillToConstraints
                                                 }
                                             ) {
-                                                Text(
-                                                    text = leftTime.toString(),
-                                                    color = MaterialTheme.colorScheme.secondary,
-                                                    style = MaterialTheme.typography.bodyLarge
-                                                )
+                                                AnimatedContent(
+                                                    targetState = leftTime,
+                                                    transitionSpec = {
+                                                        slideInVertically { height -> -height } + fadeIn() with
+                                                                slideOutVertically { height -> height } + fadeOut()
+                                                    }
+                                                ) {
+                                                    Text(
+                                                        text = leftTime.toString(),
+                                                        color = MaterialTheme.colorScheme.secondary,
+                                                        style = MaterialTheme.typography.bodyLarge
+                                                    )
+                                                }
                                             }
-                                        }
 
+                                        }
+                                    },
+                                    onClick = {
+                                        dial(reporting.shortcut)
+                                        reporterIndex = null
+                                        reportingIndex = null
+                                    },
+                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background)
+                                )
+                            } else {
+                                MyView.ItemUnit(
+                                    text = "전화 열기",
+                                    onClick = {
+                                        dial(reporting.shortcut)
+                                        reporterIndex = null
+                                        reportingIndex = null
                                     }
-                                },
-                                onClick = {
-                                    dial(reporting.shortcut)
-                                    reporterIndex = null
-                                    reportingIndex = null
-                                },
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f).compositeOver(MaterialTheme.colorScheme.background)
-                            )
+                                )
+                            }
                             MyView.ItemUnit(
                                 text = "전화하기",
                                 onClick = if (hasPermission)
@@ -669,7 +680,7 @@ object Action {
     ) {
         MyView.MessageDialog(
             onDismissRequest = onDismissRequest,
-            icon = { Icon(imageVector = Icons.Filled.PlayArrow, contentDescription = null) },
+            icon = { Icon(imageVector = Icons.Filled.Handshake, contentDescription = null) },
             title = { Text(text = action.name) },
             text = {
                 val scrollState = rememberScrollState()
