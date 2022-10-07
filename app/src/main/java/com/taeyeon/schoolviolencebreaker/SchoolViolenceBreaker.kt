@@ -1,5 +1,8 @@
 @file:OptIn(ExperimentalAnimationApi::class)
-@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+@file:Suppress(
+    "OPT_IN_IS_NOT_ENABLED",
+    "EXPERIMENTAL_IS_NOT_ENABLED"
+)
 
 package com.taeyeon.schoolviolencebreaker
 
@@ -268,7 +271,7 @@ object Report {
                                                 }
                                             ) {
                                                 Text(
-                                                    text = leftTime.toString(),
+                                                    text = if (leftTime <= 0) "" else leftTime.toString(),
                                                     color = MaterialTheme.colorScheme.secondary,
                                                     style = MaterialTheme.typography.bodyLarge
                                                 )
@@ -436,7 +439,7 @@ object Report {
                                                     }
                                                 ) {
                                                     Text(
-                                                        text = leftTime.toString(),
+                                                        text = if (leftTime <= 0) "" else leftTime.toString(),
                                                         color = MaterialTheme.colorScheme.secondary,
                                                         style = MaterialTheme.typography.bodyLarge
                                                     )

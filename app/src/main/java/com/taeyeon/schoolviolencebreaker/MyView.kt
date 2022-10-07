@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -1218,6 +1219,10 @@ object MyView {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color =MaterialTheme.colorScheme.onSurface
+                    ),
                     modifier = modifier.then(
                         Modifier
                             .padding(20.dp)
