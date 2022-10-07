@@ -208,7 +208,7 @@ object Report {
                         delay(1000)
                         leftTime--
                     } else {
-                        reportingIndex = 0
+                        if (reportingIndex == null) reportingIndex = 0
                     }
                 }
             }
@@ -271,7 +271,7 @@ object Report {
                                                 }
                                             ) {
                                                 Text(
-                                                    text = if (leftTime <= 0) "" else leftTime.toString(),
+                                                    text = if (leftTime <= 0 || reportingIndex != null) "" else leftTime.toString(),
                                                     color = MaterialTheme.colorScheme.secondary,
                                                     style = MaterialTheme.typography.bodyLarge
                                                 )
