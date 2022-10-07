@@ -11,10 +11,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
@@ -1203,6 +1200,11 @@ object MyView {
                                         ),
                                         shape = RoundedCornerShape(10.dp)
                                     )
+                                    .border(
+                                        width = 1.dp,
+                                        shape = RoundedCornerShape(10.dp),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
                                     .padding(10.dp)
                                     .align(
                                         when (dismissState.progress.to) {
@@ -1221,7 +1223,7 @@ object MyView {
                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
                     border = BorderStroke(
                         width = 1.dp,
-                        color =MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface
                     ),
                     modifier = modifier.then(
                         Modifier
