@@ -1203,7 +1203,7 @@ object MyView {
                                     .border(
                                         width = 1.dp,
                                         shape = RoundedCornerShape(10.dp),
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                                     )
                                     .padding(10.dp)
                                     .align(
@@ -1223,7 +1223,7 @@ object MyView {
                     color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.8f),
                     border = BorderStroke(
                         width = 1.dp,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                     ),
                     modifier = modifier.then(
                         Modifier
