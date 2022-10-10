@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">학교폭력 브레이커</string>
-    <string name="app_explanation">TODO</string>
+    <string name="app_explanation">
+        학교 폭력을 예방과 대응에 대한 종합 도우미입니다!\n
+        학교 폭력이 무엇인지에 관해 알 수 있고, 학교 폭력을 해결할 수 있는 직접적인 해결책과 관련 정보를 제공해주고, 도움이 될만한 웹사이트를 소개해줍니다.
+    </string>
 
     <string name="main_subtitle">학교폭력 브레이커 - 20616 정태연</string>
 
@@ -124,6 +127,7 @@
 
     <string name="settings_title_about_application">앱에 관해서</string>
     <string name="settings_title_system_settings">시스템 설정</string>
+    <string name="settings_title_github">깃허브</string>
 
     <string name="license">라이선스</string>
 

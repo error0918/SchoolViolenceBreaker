@@ -437,6 +437,12 @@ object Settings {
                             }
                         },
                         {
+                            SettingsUnit.TextUnit(title = stringResource(id = R.string.settings_title_github)) {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/error0918/SchoolViolenceBreaker"))
+                                Core.getActivity().startActivity(intent)
+                            }
+                        },
+                        {
                             SettingsUnit.TextUnit(title = stringResource(id = R.string.license)) {
                                 val intent =
                                     Intent(Core.getContext(), LicenseActivity::class.java)

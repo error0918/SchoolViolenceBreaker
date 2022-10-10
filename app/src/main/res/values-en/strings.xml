@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">School Violence Breaker</string>
-    <string name="app_explanation">TODO</string>
+    <string name="app_explanation">
+         It is a comprehensive helper for preventing and responding to school violence!\n
+         Find out what school violence is, provide you with direct solutions and relevant information to tackle school violence, and refer to websites that can help.
+    </string>
 
     <string name="main_subtitle">School Violence Breaker - 20616 Jeong Taeyeon</string>
 
@@ -125,6 +128,7 @@
 
     <string name="settings_title_about_application">About App</string>
     <string name="settings_title_system_settings">System Settings</string>
+    <string name="settings_title_github">Github</string>
 
     <string name="license">License</string>
 
