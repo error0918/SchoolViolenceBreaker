@@ -55,11 +55,45 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 class MainActivity : ComponentActivity() {
-    var shakeTime = 0L
-    var shake = 0
+    private lateinit var sensorManager: SensorManager
+    private lateinit var accelerometer: Sensor
+    private val sensorListener = object: SensorEventListener {
+        override fun onSensorChanged(sensorEvent: SensorEvent?) {
+            if (sensorEvent != null && sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                val x = sensorEvent.values[0] / SensorManager.GRAVITY_EARTH
+                val y = sensorEvent.values[1] / SensorManager.GRAVITY_EARTH
+                val z = sensorEvent.values[2] / SensorManager.GRAVITY_EARTH
+
+                val accel = (x * y * z).pow(2)
+
+                if (accel * 0.9f + accel - lastAccel > 30) {
+                    val currentTime = System.currentTimeMillis()
+                    if (shakeTime + 300L <= currentTime) {
+                        Utils.vibrate(10)
+                        if (++shake >= com.taeyeon.schoolviolencebreaker.shakeTime) {
+                            if (shakeToReport) {
+                                Utils.vibrate(50)
+                                Report.reporter = 0
+                                Report.autoReport = true
+                                Report.reporting = true
+                            }
+                            shake = 0
+                        }
+                        shakeTime = currentTime
+                    }
+                }
+
+                lastAccel = accel
+            }
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor?, p1: Int) { }
+    }
+    private var shakeTime = 0L
+    private var shake = 0
+    private var lastAccel = 0f
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +122,9 @@ class MainActivity : ComponentActivity() {
 
         Main.isNetworkConnected = getSystemService<ConnectivityManager>()?.activeNetworkInfo?.isConnectedOrConnecting ?: false  // Check Network Connected
 
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
         setContent {
             load()
             Main.scope = rememberCoroutineScope()
@@ -97,40 +134,8 @@ class MainActivity : ComponentActivity() {
                 Solution.solutionList
                 Helpful.helpfulList // 초기화
 
-                val sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-                val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-
                 sensorManager.registerListener(
-                    object: SensorEventListener {
-                        override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                            if (sensorEvent != null && sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-                                val x = sensorEvent.values[0] / SensorManager.GRAVITY_EARTH
-                                val y = sensorEvent.values[1] / SensorManager.GRAVITY_EARTH
-                                val z = sensorEvent.values[2] / SensorManager.GRAVITY_EARTH
-
-                                val f = (x * y * z).pow(2)
-                                val g = sqrt(f)
-
-                                if (g > 2.7f) {
-                                    val currentTime = System.currentTimeMillis()
-                                    if (shakeTime + 500f <= currentTime) {
-                                        shakeTime = currentTime
-                                        if (++shake >= shakeTime) {
-                                            if (shakeToReport) {
-                                                Utils.vibrate(50)
-                                                Report.reporter = 0
-                                                Report.autoReport = true
-                                                Report.reporting = true
-                                            }
-                                            shake = 0
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        override fun onAccuracyChanged(sensor: Sensor?, p1: Int) { }
-                    },
+                    sensorListener,
                     accelerometer,
                     SensorManager.SENSOR_DELAY_NORMAL
                 )
@@ -157,6 +162,20 @@ class MainActivity : ComponentActivity() {
     override fun onRestart() {
         super.onRestart()
         Core.activityCreated(this)
+    }
+
+    override fun onPause() {
+        sensorManager.unregisterListener(sensorListener)
+        super.onPause()
+    }
+
+    override fun onResume() {
+        sensorManager.registerListener(
+            sensorListener,
+            accelerometer,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
+        super.onResume()
     }
 }
 
