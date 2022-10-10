@@ -7,7 +7,7 @@
 
 
 
-[Ver. Developing]()
+[Ver. 1.0.0](https://github.com/error0918/SchoolViolenceBreaker/raw/master/RESOURCES/APK/SchoolViolenceBreaker%201.0.0.apk)
 
 </div>
 
@@ -75,9 +75,7 @@
 
 <div align=center>
 
-[Ver 1.0.0]()
-
-❗ 제공 예정 ❗
+[Ver 1.0.0](https://github.com/error0918/SchoolViolenceBreaker/raw/master/RESOURCES/APK/SchoolViolenceBreaker%201.0.0.apk)
 
 </div>
 
