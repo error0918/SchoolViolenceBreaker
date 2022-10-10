@@ -571,7 +571,7 @@ object Settings {
                         checked = checked,
                         onCheckedChange = { onCheckedChange(!checked) },
                         modifier = Modifier
-                            .height(16.8888888888888888888888888888888888.dp)
+                            .height(16.88888888888889.dp)
                             .align(Alignment.CenterEnd)
                     )
                 }
