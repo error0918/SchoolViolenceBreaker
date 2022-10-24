@@ -75,11 +75,12 @@ private val DarkColorScheme = darkColorScheme(
     //surfaceTint = md_theme_dark_surfaceTint,
 )
 
+@Suppress("DEPRECATION")
 @Composable
 fun SchoolViolenceBreakerTheme(
   darkTheme: Boolean = isSystemInDarkTheme(),
   dynamicColor: Boolean = true,
-  content: @Composable() () -> Unit
+  content: @Composable () -> Unit
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
