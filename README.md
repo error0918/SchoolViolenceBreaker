@@ -2,7 +2,7 @@
 
 ![School Violence Breaker](https://github.com/error0918/SchoolViolenceBreaker/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png?raw=true)
   
-### 🚨 SchoolViolenceBreaker 🚨
+### 🚨 SchoolViolenceBreaker 🚨 <br/> 학교폭력 브레이커
 학교폭력 예방와 대응에 대한 종합 도우미!
 
 
