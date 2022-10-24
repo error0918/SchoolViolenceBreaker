@@ -62,6 +62,12 @@
 |---|---|---|
 |![Image 4](https://raw.githubusercontent.com/error0918/SchoolViolenceBreaker/master/RESOURCES/IMAGE/Image%204.png)|![Image 5](https://raw.githubusercontent.com/error0918/SchoolViolenceBreaker/master/RESOURCES/IMAGE/Image%205.png)|![Image 6](https://raw.githubusercontent.com/error0918/SchoolViolenceBreaker/master/RESOURCES/IMAGE/Image%206.png)|
 
+<div align=center>
+
+[사용 동영상](https://www.youtube.com/watch?v=aja2uKTcNK0)
+
+</div>
+  
 ---
 
 # 🦄 사용된 것
